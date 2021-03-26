@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "oenik_prog4_2021_1_eg6bpp_jatfmq/1.0.0": {
+        "runtime": {
+          "oenik_prog4_2021_1_eg6bpp_jatfmq.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "oenik_prog4_2021_1_eg6bpp_jatfmq/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

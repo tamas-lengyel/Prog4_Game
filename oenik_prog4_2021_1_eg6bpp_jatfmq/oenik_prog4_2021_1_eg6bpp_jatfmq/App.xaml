@@ -1,0 +1,9 @@
+﻿<Application x:Class="oenik_prog4_2021_1_eg6bpp_jatfmq.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:oenik_prog4_2021_1_eg6bpp_jatfmq"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>
