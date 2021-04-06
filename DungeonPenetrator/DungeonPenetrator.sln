@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "oenik_prog4_2021_1_eg6bpp_jatfmq", "oenik_prog4_2021_1_eg6bpp_jatfmq\oenik_prog4_2021_1_eg6bpp_jatfmq.csproj", "{43AEA17F-34C1-45BF-852A-25FC3EF71E64}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DungeonPenetrator", "DungeonPenetrator\DungeonPenetrator.csproj", "{43AEA17F-34C1-45BF-852A-25FC3EF71E64}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{E2BA8CE2-7931-4EE2-9A2F-379284C2B8AD}"
 EndProject
