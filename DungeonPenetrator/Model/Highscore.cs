@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace Model
 {
-    public interface IGameObjects
+    public class Highscore
     {
-        Point Cords { get; set; } 
+        string Name { get; set; }
+        int Level { get; set; }
     }
 }

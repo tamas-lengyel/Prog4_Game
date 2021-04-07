@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Model
+namespace Model.Passive
 {
-    public interface IGameObjects
+    public class WaterProp : PassiveGameObjects
     {
-        Point Cords { get; set; } 
+        public override Point Cords { get; set; }
     }
 }
