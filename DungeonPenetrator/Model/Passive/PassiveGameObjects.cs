@@ -7,8 +7,8 @@ using System.Windows;
 
 namespace Model
 {
-    public interface IGameObjects
+    public abstract class PassiveGameObjects : GameObjects
     {
-        Point Cords { get; set; } 
+        public abstract override Point Cords { get; set; }
     }
 }
