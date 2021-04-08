@@ -15,13 +15,12 @@ namespace Model
         public double GameHeight { get; set; }
         public double TileSize { get; set; }
         public Point LevelExit { get; set; }
-        public int PlayerHealhBar { get; set; }
         public int LevelCounter { get; set; }
         public BossEnemy Boss { get; set; }
         public Player MyPlayer { get; set; }
-        public List<FlyingEnemy> FlyingFucker { get; set; }
-        public List<ShootingEnemy> ShootingFucker { get; set; }
-        public List<TrackingEnemy> TrackingFucker { get; set; }
+        public List<FlyingEnemy> FlyingMonster { get; set; }
+        public List<ShootingEnemy> ShootingMonster { get; set; }
+        public List<TrackingEnemy> TrackingMonster { get; set; }
         public List<LavaProp> Lava { get; set; }
         public List<WaterProp> Water { get; set; }
         public List<WallProp> Wall { get; set; }
