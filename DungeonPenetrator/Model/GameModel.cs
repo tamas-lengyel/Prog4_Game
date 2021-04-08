@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace Model
 {
-    class GameModel : IGameModel
+    public class GameModel : IGameModel
     {
         public double GameWidth { get; set; }
         public double GameHeight { get; set; }
