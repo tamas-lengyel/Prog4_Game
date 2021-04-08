@@ -8,7 +8,7 @@ namespace Model
 {
     public class Highscore
     {
-        string Name { get; set; }
-        int Level { get; set; }
+        public string Name { get; set; }
+        public int Level { get; set; }
     }
 }

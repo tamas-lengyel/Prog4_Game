@@ -8,6 +8,6 @@ namespace Repository
 {
     public interface IHighscoreRepository<T> : IStorageRepository<T> where T : class
     {
-
+        IQueryable<T> GetAll();
     }
 }
