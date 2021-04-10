@@ -5,4 +5,8 @@
 	  <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NUnit" Version="3.13.1" />
+  </ItemGroup>
+
 </Project>
