@@ -7,6 +7,10 @@ using System.Windows;
 
 namespace Model
 {
+    public enum ProjectileType
+    {
+        Enemy,Player
+    };
     public class Projectile
     {
         public int Speed { get; set; }
@@ -16,5 +20,6 @@ namespace Model
         {
             this.direction = new Point(From.X - To.X, From.Y - To.Y);
         }
+        public ProjectileType Type { get; set; }
     }
 }

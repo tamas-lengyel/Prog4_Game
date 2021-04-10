@@ -8,10 +8,10 @@ namespace Model
 {
     public interface IGameModel
     {
-        double GameWidth { get; set; }
-        double GameHeight { get; set; }
-        double TileSize { get; set; }
-        Point LevelExit { get; set; }
+        double GameWidth { get; }
+        double GameHeight { get; }
+        double TileSize { get; }
+        Point LevelExit { get; }
         int LevelCounter { get; set; }
 
         BossEnemy Boss { get; set; }

@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Repository
 {
-    public class HighscoreRepository : StorageRepository<Highscore>, IHighscoreRepository<Highscore>
+    public class HighscoreRepository : StorageRepository<Highscore>, IHighscoreRepository
     {
         string filename;
         public HighscoreRepository() : base()
