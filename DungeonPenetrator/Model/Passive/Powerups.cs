@@ -17,7 +17,5 @@ namespace Model.Passive
         public override Point Cords { get; set; }
         public PowerupType Type;
         public int ModifyRate;
-
-        public EventHandler ModifiyPlayerStats;
     }
 }

@@ -12,7 +12,5 @@ namespace Model.Active
         public override Point Cords { get; set; }
         public override int Health { get; set; }
         public override int Damage { get; set; }
-
-        public EventHandler MoveToPlayer;
     }
 }

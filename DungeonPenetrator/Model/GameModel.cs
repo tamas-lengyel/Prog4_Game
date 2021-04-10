@@ -26,6 +26,8 @@ namespace Model
         public List<WallProp> Wall { get; set; }
         public List<Powerups> Powerup { get; set; }
 
+        public bool LevelFinished { get; set; }
+
         public GameModel(double w, double h)
         {
             GameHeight = h;

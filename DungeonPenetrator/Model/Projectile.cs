@@ -11,7 +11,6 @@ namespace Model
     {
         public int Speed { get; set; }
         public Point direction;
-        public EventHandler ProjetileLifeSpanEvent;
 
         public Projectile(Point From, Point To)
         {
