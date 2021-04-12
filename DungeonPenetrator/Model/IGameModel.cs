@@ -23,7 +23,7 @@ namespace Model
         List<WaterProp> Water { get; set; }
         List<WallProp> Wall { get; set; }
         List<Powerups> Powerup { get; set; }
-
+        char[,] GameAreaChar { get; set; }
         bool LevelFinished { get; set; }
     }
 }

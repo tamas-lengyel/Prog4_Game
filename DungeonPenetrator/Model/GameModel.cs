@@ -14,7 +14,7 @@ namespace Model
         public double GameWidth => 700;
         public double GameHeight => 1000;
         public double TileSize => 100;
-        public Point LevelExit => new Point(GameWidth / 2, 0);
+        public Point LevelExit => new Point((int)(GameWidth / 2), 0);
         public int LevelCounter { get; set; }
         public BossEnemy Boss { get; set; }
         public Player MyPlayer { get; set; }
@@ -25,7 +25,7 @@ namespace Model
         public List<WaterProp> Water { get; set; }
         public List<WallProp> Wall { get; set; }
         public List<Powerups> Powerup { get; set; }
-
+        public char[,] GameAreaChar { get; set; }
         public bool LevelFinished{ get; set; }
     }
 }

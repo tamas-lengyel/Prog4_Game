@@ -42,20 +42,21 @@ namespace Logic
                 gameModel.MyPlayer.Health = 100;
                 gameModel.LevelCounter = 0; // Gets raised to one, must be zero
             }
-            char[,] gameArea = new char[(int)(gameModel.GameWidth / gameModel.TileSize), (int)(gameModel.GameHeight / gameModel.TileSize)];
+            gameModel.GameAreaChar = new char[(int)(gameModel.GameWidth / gameModel.TileSize), (int)(gameModel.GameHeight / gameModel.TileSize)];
             gameModel.LevelCounter++;
             gameModel.MyPlayer.Cords = new Point(
                 (int)gameModel.GameWidth / gameModel.TileSize,
                 (int)(gameModel.GameHeight / gameModel.TileSize) - 1);
             gameModel.LevelFinished = false;
 
-            GenerateProps(ref gameArea);
-            GenerateBasicEnemiesAndCollectables(ref gameArea);
-            for (int y = 0; y < gameArea.GetLength(1); y++)
+            GenerateInitializedEmptyMap();
+            GenerateProps();
+            GenerateBasicEnemiesAndCollectables();
+            for (int y = 0; y < gameModel.GameAreaChar.GetLength(1); y++)
             {
-                for (int x = 0; x < gameArea.GetLength(0); x++)
+                for (int x = 0; x < gameModel.GameAreaChar.GetLength(0); x++)
                 {
-                    switch (gameArea[x,y]) // Some parts here shall not be hardcoded.
+                    switch (gameModel.GameAreaChar[x,y]) // Some parts here shall not be hardcoded.
                     {
                         case 'W':
                             gameModel.Wall.Add(new WallProp { Cords = new Point(x, y) });
@@ -93,7 +94,19 @@ namespace Logic
 
         }
 
-        private void GenerateBasicEnemiesAndCollectables(ref char[,] gameArea)
+        private void GenerateInitializedEmptyMap()
+        {
+            for (int y = 0; y < gameModel.GameAreaChar.GetLength(1); y++)
+            {
+                for (int x = 0; x < gameModel.GameAreaChar.GetLength(0); x++)
+                {
+                    gameModel.GameAreaChar[x, y] = 'E'; // Generates Empty Cell
+                }
+            }
+            gameModel.GameAreaChar[(int)gameModel.MyPlayer.Cords.X,(int)gameModel.MyPlayer.Cords.Y] = 'C'; // Sets Character->Player pos
+            gameModel.GameAreaChar[(int)gameModel.LevelExit.X, (int)gameModel.LevelExit.Y] = 'G'; // Sets Goal->LevelExit pos
+        }
+        private void GenerateBasicEnemiesAndCollectables()
         {
             int rndObjectNum = rnd.Next(rnd.Next(0, (int)(gameModel.GameWidth / gameModel.TileSize) * (int)(gameModel.GameHeight / gameModel.TileSize)));
             for (int i = 0; i < rndObjectNum; i++)
@@ -106,34 +119,34 @@ namespace Logic
                     switch (randomObject)
                     {
                         case 0:
-                            gameArea[rndCord.Item1, rndCord.Item2] = 'H'; // Generates HP powerup
+                            gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'H'; // Generates HP powerup
                             break;
                         case 1:
-                            gameArea[rndCord.Item1, rndCord.Item2] = 'D'; // Generates Damage powerup
+                            gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'D'; // Generates Damage powerup
                             break;
                         case 2:
-                            gameArea[rndCord.Item1, rndCord.Item2] = 'R'; // Generates "Reload speed" firing powerup
+                            gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'R'; // Generates "Reload speed" firing powerup
                             break;
                         case 3:
-                            gameArea[rndCord.Item1, rndCord.Item2] = 'F'; // Generates Flying monster
+                            gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'F'; // Generates Flying monster
                             break;
                         case 4:
-                            gameArea[rndCord.Item1, rndCord.Item2] = 'T'; // Generates Tracking monster
+                            gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'T'; // Generates Tracking monster
                             break;
                         case 5:
-                            gameArea[rndCord.Item1, rndCord.Item2] = 'S'; // Generates shooting monster
+                            gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'S'; // Generates shooting monster
                             break;
                     }
                 }
             }
         }
 
-        private void GenerateProps(ref char[,] gameArea)
+        private void GenerateProps()
         {
-            for (int y = 1; y < gameArea.GetLength(1) - 1; y += 2)
+            for (int y = 1; y < gameModel.GameAreaChar.GetLength(1) - 1; y += 2)
             {
                 int[] EmptySpaceCords = GenerateEmptySpacesForRow();
-                for (int x = 0; x < gameArea.GetLength(0); x++)
+                for (int x = 0; x < gameModel.GameAreaChar.GetLength(0); x++)
                 {
                     if (!EmptySpaceCords.Contains(x))
                     {
@@ -141,13 +154,13 @@ namespace Logic
                         switch (randomProp)
                         {
                             case 0:
-                                gameArea[x, y] = 'W'; // Generates Wall
+                                gameModel.GameAreaChar[x, y] = 'W'; // Generates Wall
                                 break;
                             case 1:
-                                gameArea[x, y] = 'P'; // Generates "Puddle" (Water)
+                                gameModel.GameAreaChar[x, y] = 'P'; // Generates "Puddle" (Water)
                                 break;
                             case 2:
-                                gameArea[x, y] = 'L'; // Generates Lava
+                                gameModel.GameAreaChar[x, y] = 'L'; // Generates Lava
                                 break;
                         }
                     }

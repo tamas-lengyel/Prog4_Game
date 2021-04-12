@@ -99,6 +99,7 @@ namespace Logic
                 && gameModel.Wall.Where(x=>x.Cords.X==newX && x.Cords.Y == newY).FirstOrDefault() == null)
             {
                 gameModel.MyPlayer.Cords = new Point(newX, newY);
+                gameModel.GameAreaChar[(int)gameModel.MyPlayer.Cords.X, (int)gameModel.MyPlayer.Cords.Y] = 'C'; // Sets Character->Player pos
             }
         }
 
