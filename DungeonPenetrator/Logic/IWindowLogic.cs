@@ -9,11 +9,11 @@ namespace Logic
 {
     public interface IWindowLogic
     {
-        public void EndGame(string name);
-        public void GenerateMap();
-        public IQueryable<Highscore> GetHighscores();
-        public void NextLevel();
-        public IGameModel Play();
+        void EndGame(string name);
+        void GenerateMap();
+        IQueryable<Highscore> GetHighscores();
+        void NextLevel();
+        IGameModel Play();
 
     }
 }
