@@ -8,14 +8,16 @@ namespace Logic
     public interface IGameLogic
     {
         // Playerwise
-        public void MovePlayer(int dx, int dy);
-        public Projectile PlayerShoot(Point mousePos, int speed);
+        void MovePlayer(int dx, int dy);
+        Projectile PlayerShoot(Point mousePos, int speed);
 
         // Enemywise
-        public void MoveEnemy();
-        public Projectile EnemyShoot(Point enemyLocation, Point playerLoc, int speed);
+        void MoveEnemy();
+        Projectile EnemyShoot(Point enemyLocation, Point playerLoc, int speed);
+        void DisposeEnemy(ActiveGameObjects activeGameObject);
 
-        public List<Point> GetEmptyTileSpaces();
+        List<Point> GetEmptyTileSpaces();
+        void DropRandomCollectable();
 
     }
 }

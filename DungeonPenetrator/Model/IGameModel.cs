@@ -24,6 +24,6 @@ namespace Model
         List<WallProp> Wall { get; set; }
         List<Powerups> Powerup { get; set; }
 
-        public bool LevelFinished { get; set; }
+        bool LevelFinished { get; set; }
     }
 }
