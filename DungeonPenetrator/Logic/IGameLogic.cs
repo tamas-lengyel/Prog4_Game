@@ -18,6 +18,7 @@ namespace Logic
         Projectile EnemyShoot(Point enemyLocation, Point playerLoc, int speed);
         void DisposeEnemy(ActiveGameObjects activeGameObject);
 
+        void DamageActiveGameObject(ActiveGameObjects activeGameObjects, int damage);
         void DisposeBullet(Projectile projectile);
         void DropRandomCollectable();
 

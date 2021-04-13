@@ -42,7 +42,6 @@ namespace Logic
                     gameModel.Powerup.Add(new Powerups { Cords = emptyTiles[rnd.Next(0, emptyTiles.Count())], Type = PowerupType.FiringSpeed, ModifyRate = 5 });
                     break;
             }
-
         }
         private List<Point> GetEmptyTileSpaces()
         {
@@ -215,6 +214,58 @@ namespace Logic
                     activeGameObjects.Cords =
                         new Point(activeGameObjects.Cords.X + gameModel.FlyingTrackingPath[activeGameObjects.Cords].X,
                         activeGameObjects.Cords.Y + gameModel.FlyingTrackingPath[activeGameObjects.Cords].Y);
+                    break;
+                default:
+                    break;
+            }
+        }
+        public void DamageActiveGameObject(ActiveGameObjects activeGameObjects,int damage)
+        {
+            switch (activeGameObjects)
+            {
+                case BossEnemy:
+                    if (activeGameObjects.Health-damage<=0)
+                    {
+                        gameModel.Boss.Health = 0;
+                        gameModel.Boss = null;
+                        break;
+                    }
+                    gameModel.Boss.Health  -= damage;
+                    break;
+                case FlyingEnemy:
+                    if (activeGameObjects.Health - damage <= 0)
+                    {
+                        gameModel.FlyingMonster.Find(x=>x==activeGameObjects).Health = 0;
+                        DisposeEnemy(activeGameObjects);
+                        break;
+                    }
+                    gameModel.FlyingMonster.Find(x => x == activeGameObjects).Health -= damage;
+                    break;
+                case TrackingEnemy:
+                    if (activeGameObjects.Health - damage <= 0)
+                    {
+                        gameModel.TrackingMonster.Find(x => x == activeGameObjects).Health = 0;
+                        DisposeEnemy(activeGameObjects);
+                        break;
+                    }
+                    gameModel.TrackingMonster.Find(x => x == activeGameObjects).Health -= damage;
+                    break;
+                case ShootingEnemy:
+                    if (activeGameObjects.Health - damage <= 0)
+                    {
+                        gameModel.ShootingMonster.Find(x => x == activeGameObjects).Health = 0;
+                        DisposeEnemy(activeGameObjects);
+                        break;
+                    }
+                    gameModel.ShootingMonster.Find(x => x == activeGameObjects).Health -= damage;
+                    break;
+                case Player:
+                    if (activeGameObjects.Health - damage <= 0)
+                    {
+                        gameModel.MyPlayer.Health = 0;
+                        break;
+                    }
+                    gameModel.MyPlayer.Health -= damage;
                     break;
                 default:
                     break;
