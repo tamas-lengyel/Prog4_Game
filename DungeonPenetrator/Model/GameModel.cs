@@ -27,5 +27,7 @@ namespace Model
         public List<Powerups> Powerup { get; set; }
         public char[,] GameAreaChar { get; set; }
         public bool LevelFinished{ get; set; }
+        public Dictionary<Point,Point> BasicTrackingPath { get; set; } // Key tilecord-> Value->DirectionVector
+        public Dictionary<Point, Point> FlyingTrackingPath { get; set; } // Key tilecord-> Value->DirectionVector
     }
 }

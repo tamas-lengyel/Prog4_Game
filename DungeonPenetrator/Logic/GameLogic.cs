@@ -67,10 +67,76 @@ namespace Logic
             }
             return emptyTiles;
         }
-        public void MoveEnemy()
+        private Dictionary<Point,Point> BreadthFirstSearch(Func<Point, List<Point>> getNeighbours)
         {
-            throw new NotImplementedException();
+            List<Point> frontiner = new List<Point>();
+            frontiner.Add(gameModel.MyPlayer.Cords);
+            Dictionary<Point, Point> path = new Dictionary<Point, Point>();
+            path.Add(gameModel.MyPlayer.Cords, new Point(0, 0)); // player's cord
+            while (frontiner.Count>0)
+            {
+                Point current = frontiner[0];
+                frontiner.RemoveAt(0);
+                var neighbours = getNeighbours(current);
+                foreach (var next in neighbours)
+                {
+                    if (!path.ContainsKey(next))
+                    {
+                        frontiner.Add(next);
+                        path[next] = new Point(current.X - next.X, current.Y - next.Y); // generate direction vector to the next tile
+                    }
+                }
+            }
+            return path;
         }
+        private List<Point> GetRegularEnemyNeighbours(Point current)
+        {
+            List<Point> neighbours = new List<Point>();
+            neighbours.Add(new Point(1, 0));
+            neighbours.Add(new Point(-1, 0));
+            neighbours.Add(new Point(0, 1));
+            neighbours.Add(new Point(0, -1));
+            List<Point> rmList = new List<Point>();
+            foreach (var item in neighbours)
+            {
+                Point check = new Point(current.X + item.X, current.Y + item.Y);
+                if ((check.X < 0 || check.X >= gameModel.GameWidth/gameModel.TileSize) || (check.Y < 0 || check.Y >= gameModel.GameHeight / gameModel.TileSize))
+                {
+                    rmList.Add(item);
+                }
+                else if(gameModel.GameAreaChar[(int)check.X, (int)check.Y] == 'W' ||
+                        gameModel.GameAreaChar[(int)check.X, (int)check.Y] == 'P' ||
+                        gameModel.GameAreaChar[(int)check.X, (int)check.Y] == 'G') // Basic tracking -> cant move through walls,water,goal
+                {
+                    rmList.Add(item);
+                }
+            }
+            return neighbours;
+        }
+        private List<Point> GetFlyingEnemyNeighbours(Point current)
+        {
+            List<Point> neighbours = new List<Point>();
+            neighbours.Add(new Point(1, 0));
+            neighbours.Add(new Point(-1, 0));
+            neighbours.Add(new Point(0, 1));
+            neighbours.Add(new Point(0, -1));
+            List<Point> rmList = new List<Point>();
+            foreach (var item in neighbours)
+            {
+                Point check = new Point(current.X + item.X, current.Y + item.Y);
+                if ((check.X < 0 || check.X >= gameModel.GameWidth / gameModel.TileSize) || (check.Y < 0 || check.Y >= gameModel.GameHeight / gameModel.TileSize))
+                {
+                    rmList.Add(item);
+                }
+                else if (gameModel.GameAreaChar[(int)check.X, (int)check.Y] == 'W' ||
+                        gameModel.GameAreaChar[(int)check.X, (int)check.Y] == 'G') // Fly tracking -> cant move through walls,goal
+                {
+                    rmList.Add(item);
+                }
+            }
+            return neighbours;
+        }
+
         public void DisposeEnemy(ActiveGameObjects activeGameObject)
         {
             switch (activeGameObject)
@@ -96,10 +162,13 @@ namespace Logic
             int newX = (int)(gameModel.MyPlayer.Cords.X + dx);
             int newY = (int)(gameModel.MyPlayer.Cords.Y + dy);
             if (newX >= 0 && newY >= 0 && newX < gameModel.GameWidth && newY < gameModel.GameHeight
-                && gameModel.Wall.Where(x=>x.Cords.X==newX && x.Cords.Y == newY).FirstOrDefault() == null)
+                && (gameModel.GameAreaChar[newX,newY] != 'W' ||
+                gameModel.GameAreaChar[newX, newY] != 'P' ))
             {
                 gameModel.MyPlayer.Cords = new Point(newX, newY);
                 gameModel.GameAreaChar[(int)gameModel.MyPlayer.Cords.X, (int)gameModel.MyPlayer.Cords.Y] = 'C'; // Sets Character->Player pos
+                gameModel.FlyingTrackingPath=BreadthFirstSearch(GetFlyingEnemyNeighbours);
+                gameModel.BasicTrackingPath = BreadthFirstSearch(GetRegularEnemyNeighbours);
             }
         }
 
@@ -109,6 +178,32 @@ namespace Logic
             projectile.Type = ProjectileType.Player;
             projectile.Speed = speed; 
             return projectile;
+        }
+
+        public void MoveFlyingEnemy(FlyingEnemy flyingEnemy)
+        {
+            flyingEnemy.Cords =
+                new Point(flyingEnemy.Cords.X + gameModel.FlyingTrackingPath[flyingEnemy.Cords].X,
+                flyingEnemy.Cords.Y + gameModel.FlyingTrackingPath[flyingEnemy.Cords].Y);
+        }
+
+        public void MoveRegularEnemy(ActiveGameObjects activeGameObjects)
+        {
+            switch (activeGameObjects)
+            {
+                case TrackingEnemy:
+                    activeGameObjects.Cords =
+                        new Point(activeGameObjects.Cords.X + gameModel.FlyingTrackingPath[activeGameObjects.Cords].X,
+                        activeGameObjects.Cords.Y + gameModel.FlyingTrackingPath[activeGameObjects.Cords].Y);
+                    break;
+                case BossEnemy:
+                    activeGameObjects.Cords =
+                        new Point(activeGameObjects.Cords.X + gameModel.FlyingTrackingPath[activeGameObjects.Cords].X,
+                        activeGameObjects.Cords.Y + gameModel.FlyingTrackingPath[activeGameObjects.Cords].Y);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

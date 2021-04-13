@@ -1,4 +1,5 @@
 ﻿using Model;
+using Model.Active;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -12,7 +13,8 @@ namespace Logic
         Projectile PlayerShoot(Point mousePos, int speed);
 
         // Enemywise
-        void MoveEnemy();
+        void MoveFlyingEnemy(FlyingEnemy flyingEnemy);
+        void MoveRegularEnemy(ActiveGameObjects activeGameObjects);
         Projectile EnemyShoot(Point enemyLocation, Point playerLoc, int speed);
         void DisposeEnemy(ActiveGameObjects activeGameObject);
 
