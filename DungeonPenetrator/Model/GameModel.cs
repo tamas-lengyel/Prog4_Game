@@ -18,6 +18,7 @@ namespace Model
         public int LevelCounter { get; set; }
         public BossEnemy Boss { get; set; }
         public Player MyPlayer { get; set; }
+        public List<Projectile> Projectiles { get; set; }
         public List<FlyingEnemy> FlyingMonster { get; set; }
         public List<ShootingEnemy> ShootingMonster { get; set; }
         public List<TrackingEnemy> TrackingMonster { get; set; }

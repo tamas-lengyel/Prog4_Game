@@ -18,7 +18,7 @@ namespace Logic
         Projectile EnemyShoot(Point enemyLocation, Point playerLoc, int speed);
         void DisposeEnemy(ActiveGameObjects activeGameObject);
 
-        List<Point> GetEmptyTileSpaces();
+        void DisposeBullet(Projectile projectile);
         void DropRandomCollectable();
 
     }

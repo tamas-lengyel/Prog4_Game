@@ -16,6 +16,7 @@ namespace Model
 
         BossEnemy Boss { get; set; }
         Player MyPlayer { get; set; }
+        List<Projectile> Projectiles { get; set; }
         List<FlyingEnemy> FlyingMonster { get; set; }
         List<ShootingEnemy> ShootingMonster { get; set; }
         List<TrackingEnemy> TrackingMonster { get; set; }

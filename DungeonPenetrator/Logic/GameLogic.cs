@@ -44,7 +44,7 @@ namespace Logic
             }
 
         }
-        public List<Point> GetEmptyTileSpaces()
+        private List<Point> GetEmptyTileSpaces()
         {
             List<Point> emptyTiles = new List<Point>();
             for (int y = 0; y < (int)(gameModel.GameHeight / gameModel.TileSize); y++)
@@ -156,6 +156,21 @@ namespace Logic
                 default:
                     break;
             }
+        }
+        public void DisposeBullet(Projectile projectile)
+        {
+            gameModel.Projectiles.Remove(projectile);
+        }
+        public void MoveProjectile(Projectile projectile)
+        {
+            double newX = projectile.Cords.X  + projectile.direction.X;
+            double newY = projectile.Cords.Y + projectile.direction.Y;
+            if ((newX < 0 || newX >= gameModel.GameWidth) || (newY < 0 || newY >= gameModel.GameHeight))
+            {
+                gameModel.Projectiles.Remove(projectile);
+                return;
+            }
+            gameModel.Projectiles.Find(x => x.Equals(projectile)).Cords = new Point(newX, newY);
         }
         public void MovePlayer(int dx,int dy)
         {
