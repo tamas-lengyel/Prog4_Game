@@ -11,14 +11,14 @@ using System.Windows;
 
 namespace Logic
 {
-    public class WindowLogic : IWindowLogic
+    public class LoadingLogic : ILoadingLogic
     {
         Random rnd = new Random();
         IGameModel gameModel;
         ISaveGameRepository saveGameRepository;
         IHighscoreRepository highscoreRepository;
 
-        public WindowLogic(IGameModel gameModel, ISaveGameRepository saveGameRepository, IHighscoreRepository highscoreRepository)
+        public LoadingLogic(IGameModel gameModel, ISaveGameRepository saveGameRepository, IHighscoreRepository highscoreRepository)
         {
             this.gameModel = gameModel;
             this.saveGameRepository = saveGameRepository;
@@ -68,22 +68,22 @@ namespace Logic
                             gameModel.Water.Add(new WaterProp { Cords = new Point(x, y)});
                             break;
                         case 'H':
-                            gameModel.Powerup.Add(new Powerups { Cords = new Point(x, y), Type = PowerupType.Health, ModifyRate = 5 });
+                            gameModel.Powerup.Add(new Powerups { Cords = new Point(x, y), Type = PowerupType.Health});
                             break;
                         case 'D':
-                            gameModel.Powerup.Add(new Powerups { Cords = new Point(x, y), Type = PowerupType.Damage, ModifyRate = 5 });
+                            gameModel.Powerup.Add(new Powerups { Cords = new Point(x, y), Type = PowerupType.Damage});
                             break;
                         case 'R':
-                            gameModel.Powerup.Add(new Powerups { Cords = new Point(x, y), Type = PowerupType.FiringSpeed, ModifyRate = 5 });
+                            gameModel.Powerup.Add(new Powerups { Cords = new Point(x, y), Type = PowerupType.FiringSpeed});
                             break;
                         case 'F':
                             gameModel.FlyingMonster.Add(new FlyingEnemy { Cords = new Point(x, y), Damage = 10, Health = 30 });
                             break;
                         case 'T':
-                            gameModel.TrackingMonster.Add(new TrackingEnemy { Cords = new Point(x, y), Damage = 5, Health = 50 });
+                            gameModel.TrackingMonster.Add(new TrackingEnemy { Cords = new Point(x, y), Damage = 5, Health = 60 });
                             break;
                         case 'S':
-                            gameModel.ShootingMonster.Add(new ShootingEnemy { Cords = new Point(x, y), Damage = 5, Health = 75 });
+                            gameModel.ShootingMonster.Add(new ShootingEnemy { Cords = new Point(x, y), Damage = 5, Health = 40 });
                             break;
                         case 'B':
                             gameModel.Boss = new BossEnemy { Cords = new Point(x, y), Damage = 10, Health = 100 };
@@ -143,7 +143,7 @@ namespace Logic
 
         private void GenerateProps()
         {
-            for (int y = 1; y < gameModel.GameAreaChar.GetLength(1) - 1; y += 2)
+            for (int y = 1; y <= gameModel.GameAreaChar.GetLength(1) - 1; y += 2)
             {
                 int[] EmptySpaceCords = GenerateEmptySpacesForRow();
                 for (int x = 0; x < gameModel.GameAreaChar.GetLength(0); x++)

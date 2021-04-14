@@ -1,5 +1,6 @@
 ﻿using Model;
 using Model.Active;
+using Model.Passive;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -15,9 +16,10 @@ namespace Logic
         // Enemywise
         void MoveFlyingEnemy(FlyingEnemy flyingEnemy);
         void MoveRegularEnemy(ActiveGameObjects activeGameObjects);
-        Projectile EnemyShoot(Point enemyLocation, Point playerLoc, int speed);
+        public Projectile EnemyShoot(Point enemyLocation, int speed, int damage);
         void DisposeEnemy(ActiveGameObjects activeGameObject);
 
+        void CollectPowerup(Powerups powerups);
         void DamageActiveGameObject(ActiveGameObjects activeGameObjects, int damage);
         void DisposeBullet(Projectile projectile);
         void DropRandomCollectable();

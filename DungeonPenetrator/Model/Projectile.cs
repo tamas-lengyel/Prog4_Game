@@ -16,7 +16,7 @@ namespace Model
         public int Speed { get; set; }
         public Point Cords { get; set; }
         public Point direction;
-
+        public int Damage { get; set; }
         public Projectile(Point From, Point To)
         {
             this.Cords = From;

@@ -17,29 +17,52 @@ namespace Logic
         public GameLogic(IGameModel gameModel)
         {
             this.gameModel = gameModel;
+            gameModel.FlyingTrackingPath = BreadthFirstSearch(GetFlyingEnemyNeighbours);
+            gameModel.BasicTrackingPath = BreadthFirstSearch(GetRegularEnemyNeighbours);
         }
 
-        public Projectile EnemyShoot(Point enemyLocation,Point playerLoc,int speed)
+        public Projectile EnemyShoot(Point enemyLocation, int speed, int damage)
         {
-            Projectile projectile = new Projectile(enemyLocation, playerLoc);
+            Projectile projectile = new Projectile(enemyLocation, gameModel.MyPlayer.Cords);
             projectile.Type = ProjectileType.Enemy;
+            projectile.Damage = damage;
             projectile.Speed = speed; 
             return projectile;
         }
-
+        public void CollectPowerup(Powerups powerups)
+        {
+            switch (powerups.Type)
+            {
+                case PowerupType.Health:
+                    if (gameModel.MyPlayer.Health+powerups.ModifyRate<100) // If player's maxhealth will be modified this should not be hardcoded like this
+                    {
+                        gameModel.MyPlayer.Health += powerups.ModifyRate;
+                        break;
+                    }
+                    gameModel.MyPlayer.Health = 100;
+                    break;
+                case PowerupType.Damage:
+                    gameModel.MyPlayer.Damage += powerups.ModifyRate;
+                    break;
+                case PowerupType.FiringSpeed: // max value should be 50 needs param
+                    break;
+                default:
+                    break;
+            }
+        }
         public void DropRandomCollectable()
         {
             List<Point> emptyTiles = GetEmptyTileSpaces();
             switch(rnd.Next(0, 3))
             {
                 case 0:
-                    gameModel.Powerup.Add(new Powerups { Cords = emptyTiles[rnd.Next(0,emptyTiles.Count())], Type = PowerupType.Health, ModifyRate = 5 });
+                    gameModel.Powerup.Add(new Powerups { Cords = emptyTiles[rnd.Next(0,emptyTiles.Count())], Type = PowerupType.Health });
                     break;
                 case 1:
-                    gameModel.Powerup.Add(new Powerups { Cords = emptyTiles[rnd.Next(0, emptyTiles.Count())], Type = PowerupType.Damage, ModifyRate = 5 });
+                    gameModel.Powerup.Add(new Powerups { Cords = emptyTiles[rnd.Next(0, emptyTiles.Count())], Type = PowerupType.Damage});
                     break;
                 case 2:
-                    gameModel.Powerup.Add(new Powerups { Cords = emptyTiles[rnd.Next(0, emptyTiles.Count())], Type = PowerupType.FiringSpeed, ModifyRate = 5 });
+                    gameModel.Powerup.Add(new Powerups { Cords = emptyTiles[rnd.Next(0, emptyTiles.Count())], Type = PowerupType.FiringSpeed});
                     break;
             }
         }
@@ -99,7 +122,7 @@ namespace Logic
             foreach (var item in neighbours)
             {
                 Point check = new Point(current.X + item.X, current.Y + item.Y);
-                if ((check.X < 0 || check.X >= gameModel.GameWidth/gameModel.TileSize) || (check.Y < 0 || check.Y >= gameModel.GameHeight / gameModel.TileSize))
+                if ((check.X < 0 || check.X >= (int)(gameModel.GameWidth/gameModel.TileSize)) || (check.Y < 0 || check.Y >= (int)(gameModel.GameHeight / gameModel.TileSize)))
                 {
                     rmList.Add(item);
                 }
@@ -109,6 +132,14 @@ namespace Logic
                 {
                     rmList.Add(item);
                 }
+            }
+            foreach (var item in rmList)
+            {
+                neighbours.Remove(item);
+            }
+            for (int i = 0; i < neighbours.Count; i++)
+            {
+                neighbours[i] = new Point(current.X + neighbours[i].X, current.Y + neighbours[i].Y);
             }
             return neighbours;
         }
@@ -123,7 +154,7 @@ namespace Logic
             foreach (var item in neighbours)
             {
                 Point check = new Point(current.X + item.X, current.Y + item.Y);
-                if ((check.X < 0 || check.X >= gameModel.GameWidth / gameModel.TileSize) || (check.Y < 0 || check.Y >= gameModel.GameHeight / gameModel.TileSize))
+                if ((check.X < 0 || check.X >= (int)(gameModel.GameWidth / gameModel.TileSize)) || (check.Y < 0 || check.Y >= (int)(gameModel.GameHeight / gameModel.TileSize)))
                 {
                     rmList.Add(item);
                 }
@@ -132,6 +163,14 @@ namespace Logic
                 {
                     rmList.Add(item);
                 }
+            }
+            foreach (var item in rmList)
+            {
+                neighbours.Remove(item);
+            }
+            for (int i = 0; i < neighbours.Count; i++)
+            {
+                neighbours[i] = new Point(current.X + neighbours[i].X, current.Y + neighbours[i].Y);
             }
             return neighbours;
         }
@@ -175,7 +214,7 @@ namespace Logic
         {
             int newX = (int)(gameModel.MyPlayer.Cords.X + dx);
             int newY = (int)(gameModel.MyPlayer.Cords.Y + dy);
-            if (newX >= 0 && newY >= 0 && newX < gameModel.GameWidth && newY < gameModel.GameHeight
+            if (newX >= 0 && newY >= 0 && newX < gameModel.GameWidth/gameModel.TileSize && newY < gameModel.GameHeight/gameModel.TileSize
                 && (gameModel.GameAreaChar[newX,newY] != 'W' ||
                 gameModel.GameAreaChar[newX, newY] != 'P' ))
             {
@@ -188,7 +227,7 @@ namespace Logic
 
         public Projectile PlayerShoot(Point mousePos,int speed)
         {
-            Projectile projectile = new Projectile(gameModel.MyPlayer.Cords, mousePos);
+            Projectile projectile = new Projectile(gameModel.MyPlayer.Cords, mousePos); // Player Cords should be converted to not regular cords not tilewise
             projectile.Type = ProjectileType.Player;
             projectile.Speed = speed; 
             return projectile;

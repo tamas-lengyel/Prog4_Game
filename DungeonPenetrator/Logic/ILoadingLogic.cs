@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    public interface IWindowLogic
+    public interface ILoadingLogic
     {
         void EndGame(string name);
         void GenerateMap();

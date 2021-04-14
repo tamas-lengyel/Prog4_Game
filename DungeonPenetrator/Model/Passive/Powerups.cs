@@ -16,6 +16,21 @@ namespace Model.Passive
     {
         public override Point Cords { get; set; }
         public PowerupType Type;
-        public int ModifyRate;
+        public int ModifyRate { get; }
+        public Powerups()
+        {
+            switch (Type)
+            {
+                case PowerupType.Health:
+                    ModifyRate = 20;
+                    break;
+                case PowerupType.Damage:
+                    ModifyRate = 5;
+                    break;
+                case PowerupType.FiringSpeed:
+                    ModifyRate = 2;
+                    break;
+            }
+        }
     }
 }
