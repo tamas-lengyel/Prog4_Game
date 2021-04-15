@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Repository
 {
-    public class HighscoreRepository : StorageRepository<Highscore>, IHighscoreRepository<Highscore>
+    public class HighscoreRepository : StorageRepository<Highscore>, IHighscoreRepository
     {
         string filename;
         public HighscoreRepository() : base()
@@ -19,7 +19,7 @@ namespace Repository
                 .Location).Parent.Parent.Parent.Parent + @"\Repository" + $@"\Saves\{filename}"))
             {
                 File.Create(Directory.GetParent(Assembly.GetExecutingAssembly()
-                    .Location).Parent.Parent.Parent.Parent + @"\Repository" + $@"\Saves\{filename}");
+                    .Location).Parent.Parent.Parent.Parent + @"\Repository" + $@"\Saves\{filename}").Close();
             }
         }
 

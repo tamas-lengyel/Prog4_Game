@@ -18,7 +18,7 @@ namespace Repository
             this.filename = "savegame.json";
             if (!File.Exists(Directory.GetParent(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.Parent + @"\Repository" + $@"\Saves\{filename}"))
             {
-                File.Create(Directory.GetParent(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.Parent + @"\Repository" + $@"\Saves\{filename}");
+                File.Create(Directory.GetParent(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.Parent + @"\Repository" + $@"\Saves\{filename}").Close();
             }
         }
 

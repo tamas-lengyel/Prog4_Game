@@ -11,13 +11,14 @@ namespace Model
 {
     public class GameModel : IGameModel
     {
-        public double GameWidth { get; set; }
-        public double GameHeight { get; set; }
-        public double TileSize { get; set; }
-        public Point LevelExit { get; set; }
+        public double GameWidth => 700;
+        public double GameHeight => 1000;
+        public double TileSize => 100;
+        public Point LevelExit => new Point(0,(int)(GameWidth/TileSize/ 2));
         public int LevelCounter { get; set; }
         public BossEnemy Boss { get; set; }
         public Player MyPlayer { get; set; }
+        public List<Projectile> Projectiles { get; set; }
         public List<FlyingEnemy> FlyingMonster { get; set; }
         public List<ShootingEnemy> ShootingMonster { get; set; }
         public List<TrackingEnemy> TrackingMonster { get; set; }
@@ -25,13 +26,9 @@ namespace Model
         public List<WaterProp> Water { get; set; }
         public List<WallProp> Wall { get; set; }
         public List<Powerups> Powerup { get; set; }
-
-        public GameModel(double w, double h)
-        {
-            GameHeight = h;
-            GameWidth = w;
-
-            LevelExit = new Point(w / 2, 0);
-        }
+        public char[,] GameAreaChar { get; set; }
+        public bool LevelFinished{ get; set; }
+        public Dictionary<Point,Point> BasicTrackingPath { get; set; } // Key tilecord-> Value->DirectionVector
+        public Dictionary<Point, Point> FlyingTrackingPath { get; set; } // Key tilecord-> Value->DirectionVector
     }
 }
