@@ -43,62 +43,62 @@ namespace LogicTest
 
 
             // Walls
-            gameModelMock.Object.Wall = new List<WallProp>();
-            gameModelMock.Object.Wall.Add(new WallProp { Cords = new Point(0, 1) });
-            gameModelMock.Object.Wall.Add(new WallProp { Cords = new Point(6, 1) });
-            gameModelMock.Object.Wall.Add(new WallProp { Cords = new Point(2, 3) });
-            gameModelMock.Object.Wall.Add(new WallProp { Cords = new Point(5, 3) });
-            gameModelMock.Object.Wall.Add(new WallProp { Cords = new Point(6, 3) });
-            gameModelMock.Object.Wall.Add(new WallProp { Cords = new Point(0, 5) });
-            gameModelMock.Object.Wall.Add(new WallProp { Cords = new Point(6, 5) });
-            gameModelMock.Object.Wall.Add(new WallProp { Cords = new Point(1, 7) });
-            gameModelMock.Object.Wall.Add(new WallProp { Cords = new Point(3, 7) });
-            gameModelMock.Object.Wall.Add(new WallProp { Cords = new Point(5, 7) });
-            gameModelMock.Object.Wall.Add(new WallProp { Cords = new Point(6, 7) });
-            foreach (var item in gameModelMock.Object.Wall)
+            gameModelMock.Object.Walls = new List<WallProp>();
+            gameModelMock.Object.Walls.Add(new WallProp { Cords = new Point(0, 1) });
+            gameModelMock.Object.Walls.Add(new WallProp { Cords = new Point(6, 1) });
+            gameModelMock.Object.Walls.Add(new WallProp { Cords = new Point(2, 3) });
+            gameModelMock.Object.Walls.Add(new WallProp { Cords = new Point(5, 3) });
+            gameModelMock.Object.Walls.Add(new WallProp { Cords = new Point(6, 3) });
+            gameModelMock.Object.Walls.Add(new WallProp { Cords = new Point(0, 5) });
+            gameModelMock.Object.Walls.Add(new WallProp { Cords = new Point(6, 5) });
+            gameModelMock.Object.Walls.Add(new WallProp { Cords = new Point(1, 7) });
+            gameModelMock.Object.Walls.Add(new WallProp { Cords = new Point(3, 7) });
+            gameModelMock.Object.Walls.Add(new WallProp { Cords = new Point(5, 7) });
+            gameModelMock.Object.Walls.Add(new WallProp { Cords = new Point(6, 7) });
+            foreach (var item in gameModelMock.Object.Walls)
             {
                 gameModelMock.Object.GameAreaChar[(int)item.Cords.X, (int)item.Cords.Y] = 'W';
             }
-            gameModelMock.Object.Water = new List<WaterProp>();
-            gameModelMock.Object.Water.Add(new WaterProp { Cords = new Point(0, 2) });
-            gameModelMock.Object.Water.Add(new WaterProp { Cords = new Point(1, 3) });
-            gameModelMock.Object.Water.Add(new WaterProp { Cords = new Point(3, 5) });
-            foreach (var item in gameModelMock.Object.Water)
+            gameModelMock.Object.Waters = new List<WaterProp>();
+            gameModelMock.Object.Waters.Add(new WaterProp { Cords = new Point(0, 2) });
+            gameModelMock.Object.Waters.Add(new WaterProp { Cords = new Point(1, 3) });
+            gameModelMock.Object.Waters.Add(new WaterProp { Cords = new Point(3, 5) });
+            foreach (var item in gameModelMock.Object.Waters)
             {
                 gameModelMock.Object.GameAreaChar[(int)item.Cords.X, (int)item.Cords.Y] = 'P';
             }
-            gameModelMock.Object.Lava = new List<LavaProp>();
-            gameModelMock.Object.Lava.Add(new LavaProp { Cords = new Point(2, 1), Damage = 5 });
-            gameModelMock.Object.Lava.Add(new LavaProp { Cords = new Point(4, 1), Damage = 5 });
-            gameModelMock.Object.Lava.Add(new LavaProp { Cords = new Point(0, 3), Damage = 5 });
-            foreach (var item in gameModelMock.Object.Lava)
+            gameModelMock.Object.Lavas = new List<LavaProp>();
+            gameModelMock.Object.Lavas.Add(new LavaProp { Cords = new Point(2, 1), Damage = 5 });
+            gameModelMock.Object.Lavas.Add(new LavaProp { Cords = new Point(4, 1), Damage = 5 });
+            gameModelMock.Object.Lavas.Add(new LavaProp { Cords = new Point(0, 3), Damage = 5 });
+            foreach (var item in gameModelMock.Object.Lavas)
             {
                 gameModelMock.Object.GameAreaChar[(int)item.Cords.X, (int)item.Cords.Y] = 'L';
             }
-            gameModelMock.Object.ShootingMonster = new List<ShootingEnemy>();
-            gameModelMock.Object.ShootingMonster.Add(new ShootingEnemy { Cords = new Point(1, 4), Damage = 5, Health = 40 });
-            foreach (var item in gameModelMock.Object.ShootingMonster)
+            gameModelMock.Object.ShootingMonsters = new List<ShootingEnemy>();
+            gameModelMock.Object.ShootingMonsters.Add(new ShootingEnemy { Cords = new Point(1, 4), Damage = 5, Health = 40 });
+            foreach (var item in gameModelMock.Object.ShootingMonsters)
             {
                 gameModelMock.Object.GameAreaChar[(int)item.Cords.X, (int)item.Cords.Y] = 'S';
             }
-            gameModelMock.Object.TrackingMonster = new List<TrackingEnemy>();
-            gameModelMock.Object.TrackingMonster.Add(new TrackingEnemy { Cords = new Point(2, 5), Damage = 5, Health = 60 });
-            foreach (var item in gameModelMock.Object.TrackingMonster)
+            gameModelMock.Object.TrackingMonsters = new List<TrackingEnemy>();
+            gameModelMock.Object.TrackingMonsters.Add(new TrackingEnemy { Cords = new Point(2, 5), Damage = 5, Health = 60 });
+            foreach (var item in gameModelMock.Object.TrackingMonsters)
             {
                 gameModelMock.Object.GameAreaChar[(int)item.Cords.X, (int)item.Cords.Y] = 'T';
             }
-            gameModelMock.Object.FlyingMonster = new List<FlyingEnemy>();
-            gameModelMock.Object.FlyingMonster.Add(new FlyingEnemy { Cords = new Point(4, 3), Damage = 10, Health = 30 });
-            foreach (var item in gameModelMock.Object.FlyingMonster)
+            gameModelMock.Object.FlyingMonsters = new List<FlyingEnemy>();
+            gameModelMock.Object.FlyingMonsters.Add(new FlyingEnemy { Cords = new Point(4, 3), Damage = 10, Health = 30 });
+            foreach (var item in gameModelMock.Object.FlyingMonsters)
             {
                 gameModelMock.Object.GameAreaChar[(int)item.Cords.X, (int)item.Cords.Y] = 'F';
             }
 
-            gameModelMock.Object.Powerup = new List<Powerups>();
-            gameModelMock.Object.Powerup.Add(new Powerups { Cords = new Point(0, 2), Type = PowerupType.Health });
-            gameModelMock.Object.Powerup.Add(new Powerups { Cords = new Point(2, 2), Type = PowerupType.Damage });
-            gameModelMock.Object.Powerup.Add(new Powerups { Cords = new Point(5, 2), Type = PowerupType.FiringSpeed });
-            foreach (var item in gameModelMock.Object.Powerup)
+            gameModelMock.Object.Powerups = new List<Powerups>();
+            gameModelMock.Object.Powerups.Add(new Powerups { Cords = new Point(0, 2), Type = PowerupType.Health });
+            gameModelMock.Object.Powerups.Add(new Powerups { Cords = new Point(2, 2), Type = PowerupType.Damage });
+            gameModelMock.Object.Powerups.Add(new Powerups { Cords = new Point(5, 2), Type = PowerupType.FiringSpeed });
+            foreach (var item in gameModelMock.Object.Powerups)
             {
                 switch (item.Type)
                 {
@@ -130,10 +130,10 @@ namespace LogicTest
         [Test]
         public void DamageActiveGameObject()
         {
-            FlyingEnemy f = gameModelMock.Object.FlyingMonster[0];
-            int damagedHealth = gameModelMock.Object.FlyingMonster[0].Health - 10;
+            FlyingEnemy f = gameModelMock.Object.FlyingMonsters[0];
+            int damagedHealth = gameModelMock.Object.FlyingMonsters[0].Health - 10;
             gameLogicTest.DamageActiveGameObject(f, 10);
-            Assert.That(gameModelMock.Object.FlyingMonster[0].Health, Is.EqualTo(damagedHealth));
+            Assert.That(gameModelMock.Object.FlyingMonsters[0].Health, Is.EqualTo(damagedHealth));
         }
         [Test]
         public void DisposeBullet()
@@ -150,34 +150,34 @@ namespace LogicTest
         public void DisposeEnemy()
         {
             ShootingEnemy s = new ShootingEnemy();
-            gameModelMock.Object.ShootingMonster.Add(s);
+            gameModelMock.Object.ShootingMonsters.Add(s);
             gameLogicTest.DisposeEnemy(s);
-            Assert.That(gameModelMock.Object.ShootingMonster, Does.Not.Contain(s));
+            Assert.That(gameModelMock.Object.ShootingMonsters, Does.Not.Contain(s));
         }
         [Test]
         public void MoveFlyingEnemy()
         {
-            FlyingEnemy f = gameModelMock.Object.FlyingMonster[0];
+            FlyingEnemy f = gameModelMock.Object.FlyingMonsters[0];
             Point nextStep = new Point(4, 4);
             gameLogicTest.MoveFlyingEnemy(f);
 
-            Assert.That(gameModelMock.Object.FlyingMonster[0].Cords, Is.EqualTo(nextStep));
+            Assert.That(gameModelMock.Object.FlyingMonsters[0].Cords, Is.EqualTo(nextStep));
         }
         [Test]
         public void MoveRegularEnemy()
         {
-            TrackingEnemy t = gameModelMock.Object.TrackingMonster[0];
+            TrackingEnemy t = gameModelMock.Object.TrackingMonsters[0];
             Point nextStep = new Point(2, 6);
             gameLogicTest.MoveRegularEnemy(t);
 
-            Assert.That(gameModelMock.Object.TrackingMonster[0].Cords, Is.EqualTo(nextStep));
+            Assert.That(gameModelMock.Object.TrackingMonsters[0].Cords, Is.EqualTo(nextStep));
         }
         [Test]
         public void CollectHealthPotion()
         {
             gameModelMock.Object.MyPlayer.Health = 50;
             int entryHealth = 50;
-            Powerups healthPotion = gameModelMock.Object.Powerup[0];
+            Powerups healthPotion = gameModelMock.Object.Powerups[0];
             gameLogicTest.CollectPowerup(healthPotion);
             Assert.That(gameModelMock.Object.MyPlayer.Health, Is.EqualTo(entryHealth + healthPotion.ModifyRate));
         }
@@ -186,7 +186,7 @@ namespace LogicTest
         {
             gameModelMock.Object.MyPlayer.Damage = 10;
             int entryDamage = 10;
-            Powerups damagePotion = gameModelMock.Object.Powerup[1];
+            Powerups damagePotion = gameModelMock.Object.Powerups[1];
             gameLogicTest.CollectPowerup(damagePotion);
             Assert.That(gameModelMock.Object.MyPlayer.Damage, Is.EqualTo(entryDamage + damagePotion.ModifyRate));
         }
@@ -195,7 +195,7 @@ namespace LogicTest
         {
             gameModelMock.Object.MyPlayer.FiringSpeed = 10;
             int entryFiringSpeed = 10;
-            Powerups firingSpeedPotion = gameModelMock.Object.Powerup[2];
+            Powerups firingSpeedPotion = gameModelMock.Object.Powerups[2];
             gameLogicTest.CollectPowerup(firingSpeedPotion);
 
             Assert.That(gameModelMock.Object.MyPlayer.FiringSpeed, Is.EqualTo(entryFiringSpeed + firingSpeedPotion.ModifyRate));
@@ -203,10 +203,10 @@ namespace LogicTest
         [Test]
         public void DropRandomCollectable()
         {
-            int collectables = gameModelMock.Object.Powerup.Count;
+            int collectables = gameModelMock.Object.Powerups.Count;
             int expectedCollectableNumbers = collectables+1;
             gameLogicTest.DropRandomCollectable();
-            Assert.That(gameModelMock.Object.Powerup.Count, Is.EqualTo(expectedCollectableNumbers));
+            Assert.That(gameModelMock.Object.Powerups.Count, Is.EqualTo(expectedCollectableNumbers));
         }
         [Test]
         public void PlayerShoot()

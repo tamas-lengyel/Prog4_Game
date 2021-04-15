@@ -59,31 +59,31 @@ namespace Logic
                     switch (gameModel.GameAreaChar[x,y]) // Some parts here shall not be hardcoded.
                     {
                         case 'W':
-                            gameModel.Wall.Add(new WallProp { Cords = new Point(x, y) });
+                            gameModel.Walls.Add(new WallProp { Cords = new Point(x, y) });
                             break;
                         case 'L':
-                            gameModel.Lava.Add(new LavaProp { Cords = new Point(x, y), Damage = 5 }); 
+                            gameModel.Lavas.Add(new LavaProp { Cords = new Point(x, y), Damage = 5 }); 
                             break;
                         case 'P':
-                            gameModel.Water.Add(new WaterProp { Cords = new Point(x, y)});
+                            gameModel.Waters.Add(new WaterProp { Cords = new Point(x, y)});
                             break;
                         case 'H':
-                            gameModel.Powerup.Add(new Powerups { Cords = new Point(x, y), Type = PowerupType.Health});
+                            gameModel.Powerups.Add(new Powerups { Cords = new Point(x, y), Type = PowerupType.Health});
                             break;
                         case 'D':
-                            gameModel.Powerup.Add(new Powerups { Cords = new Point(x, y), Type = PowerupType.Damage});
+                            gameModel.Powerups.Add(new Powerups { Cords = new Point(x, y), Type = PowerupType.Damage});
                             break;
                         case 'R':
-                            gameModel.Powerup.Add(new Powerups { Cords = new Point(x, y), Type = PowerupType.FiringSpeed});
+                            gameModel.Powerups.Add(new Powerups { Cords = new Point(x, y), Type = PowerupType.FiringSpeed});
                             break;
                         case 'F':
-                            gameModel.FlyingMonster.Add(new FlyingEnemy { Cords = new Point(x, y), Damage = 10, Health = 30 });
+                            gameModel.FlyingMonsters.Add(new FlyingEnemy { Cords = new Point(x, y), Damage = 10, Health = 30 });
                             break;
                         case 'T':
-                            gameModel.TrackingMonster.Add(new TrackingEnemy { Cords = new Point(x, y), Damage = 5, Health = 60 });
+                            gameModel.TrackingMonsters.Add(new TrackingEnemy { Cords = new Point(x, y), Damage = 5, Health = 60 });
                             break;
                         case 'S':
-                            gameModel.ShootingMonster.Add(new ShootingEnemy { Cords = new Point(x, y), Damage = 5, Health = 40 });
+                            gameModel.ShootingMonsters.Add(new ShootingEnemy { Cords = new Point(x, y), Damage = 5, Health = 40 });
                             break;
                         case 'B':
                             gameModel.Boss = new BossEnemy { Cords = new Point(x, y), Damage = 10, Health = 100 };

@@ -62,13 +62,13 @@ namespace Logic
             switch(rnd.Next(0, 3))
             {
                 case 0:
-                    gameModel.Powerup.Add(new Powerups { Cords = emptyTiles[rnd.Next(0,emptyTiles.Count())], Type = PowerupType.Health });
+                    gameModel.Powerups.Add(new Powerups { Cords = emptyTiles[rnd.Next(0,emptyTiles.Count())], Type = PowerupType.Health });
                     break;
                 case 1:
-                    gameModel.Powerup.Add(new Powerups { Cords = emptyTiles[rnd.Next(0, emptyTiles.Count())], Type = PowerupType.Damage});
+                    gameModel.Powerups.Add(new Powerups { Cords = emptyTiles[rnd.Next(0, emptyTiles.Count())], Type = PowerupType.Damage});
                     break;
                 case 2:
-                    gameModel.Powerup.Add(new Powerups { Cords = emptyTiles[rnd.Next(0, emptyTiles.Count())], Type = PowerupType.FiringSpeed});
+                    gameModel.Powerups.Add(new Powerups { Cords = emptyTiles[rnd.Next(0, emptyTiles.Count())], Type = PowerupType.FiringSpeed});
                     break;
             }
         }
@@ -83,11 +83,11 @@ namespace Logic
                     if (current != gameModel.MyPlayer.Cords &&
                         current != gameModel.LevelExit &&
                         (gameModel.Boss == default ||  current != gameModel.Boss.Cords) &&
-                        (gameModel.Wall == default || !(gameModel.Wall.Select(x => x.Cords).Contains(current))) &&
-                        (gameModel.Water == default || !(gameModel.Water.Select(x => x.Cords).Contains(current))) &&
-                        (gameModel.Lava == default || !(gameModel.Lava.Select(x => x.Cords).Contains(current))) &&
-                        (gameModel.Powerup == default || !(gameModel.Powerup.Select(x => x.Cords).Contains(current))) &&
-                        (gameModel.ShootingMonster == default || !(gameModel.ShootingMonster.Select(x => x.Cords).Contains(current))))
+                        (gameModel.Walls == default || !(gameModel.Walls.Select(x => x.Cords).Contains(current))) &&
+                        (gameModel.Waters == default || !(gameModel.Waters.Select(x => x.Cords).Contains(current))) &&
+                        (gameModel.Lavas == default || !(gameModel.Lavas.Select(x => x.Cords).Contains(current))) &&
+                        (gameModel.Powerups == default || !(gameModel.Powerups.Select(x => x.Cords).Contains(current))) &&
+                        (gameModel.ShootingMonsters == default || !(gameModel.ShootingMonsters.Select(x => x.Cords).Contains(current))))
                     {
                         emptyTiles.Add(current);
                     }
@@ -186,13 +186,13 @@ namespace Logic
             switch (activeGameObject)
             {
                 case FlyingEnemy:
-                    gameModel.FlyingMonster.Remove((activeGameObject as FlyingEnemy));
+                    gameModel.FlyingMonsters.Remove((activeGameObject as FlyingEnemy));
                     break;
                 case ShootingEnemy:
-                    gameModel.ShootingMonster.Remove((activeGameObject as ShootingEnemy));
+                    gameModel.ShootingMonsters.Remove((activeGameObject as ShootingEnemy));
                     break;
                 case TrackingEnemy:
-                    gameModel.TrackingMonster.Remove((activeGameObject as TrackingEnemy));
+                    gameModel.TrackingMonsters.Remove((activeGameObject as TrackingEnemy));
                     break;
                 case BossEnemy:
                     gameModel.Boss = null;
@@ -292,29 +292,29 @@ namespace Logic
                 case FlyingEnemy:
                     if (activeGameObjects.Health - damage <= 0)
                     {
-                        gameModel.FlyingMonster.Find(x=>x==activeGameObjects).Health = 0;
+                        gameModel.FlyingMonsters.Find(x=>x==activeGameObjects).Health = 0;
                         DisposeEnemy(activeGameObjects);
                         break;
                     }
-                    gameModel.FlyingMonster.Find(x => x == activeGameObjects).Health -= damage;
+                    gameModel.FlyingMonsters.Find(x => x == activeGameObjects).Health -= damage;
                     break;
                 case TrackingEnemy:
                     if (activeGameObjects.Health - damage <= 0)
                     {
-                        gameModel.TrackingMonster.Find(x => x == activeGameObjects).Health = 0;
+                        gameModel.TrackingMonsters.Find(x => x == activeGameObjects).Health = 0;
                         DisposeEnemy(activeGameObjects);
                         break;
                     }
-                    gameModel.TrackingMonster.Find(x => x == activeGameObjects).Health -= damage;
+                    gameModel.TrackingMonsters.Find(x => x == activeGameObjects).Health -= damage;
                     break;
                 case ShootingEnemy:
                     if (activeGameObjects.Health - damage <= 0)
                     {
-                        gameModel.ShootingMonster.Find(x => x == activeGameObjects).Health = 0;
+                        gameModel.ShootingMonsters.Find(x => x == activeGameObjects).Health = 0;
                         DisposeEnemy(activeGameObjects);
                         break;
                     }
-                    gameModel.ShootingMonster.Find(x => x == activeGameObjects).Health -= damage;
+                    gameModel.ShootingMonsters.Find(x => x == activeGameObjects).Health -= damage;
                     break;
                 case Player:
                     if (activeGameObjects.Health - damage <= 0)
