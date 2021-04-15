@@ -1,12 +1,10 @@
-﻿<Window x:Class="oenik_prog4_2021_1_eg6bpp_jatfmq.MainWindow"
+﻿<Window x:Class="DungeonPenetrator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:oenik_prog4_2021_1_eg6bpp_jatfmq"
+        xmlns:local="clr-namespace:DungeonPenetrator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+        Title="MainWindow" Height="1100" Width="800">
+    <local:Control/>
 </Window>

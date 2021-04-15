@@ -3,10 +3,11 @@ using Model;
 using System.Windows.Media;
 using System.Windows;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Renderer
 {
-    public class Renderer
+    public class GameRenderer
     {
         IGameModel model;
 
@@ -24,16 +25,16 @@ namespace Renderer
         Drawing oldBoss;
 
         Point oldBossPosition;
-        List<Point> oldTrackingMonstersPosition;
-        List<Point> oldShootingMonstersPosition;
-        List<Point> oldFlyingMonstersPosition;
-        List<Point> oldProjectilePosition;
+        List<Point> oldTrackingMonstersPosition = new List<Point>();
+        List<Point> oldShootingMonstersPosition = new List<Point>();
+        List<Point> oldFlyingMonstersPosition = new List<Point>();
+        List<Point> oldProjectilePosition = new List<Point>();
         Point oldPlayerPosition;
 
 
         Pen Is = new Pen(Brushes.Black, 1);
 
-        public Renderer(IGameModel model)
+        public GameRenderer(IGameModel model)
         {
             this.model = model;
         }
@@ -50,7 +51,7 @@ namespace Renderer
             dg.Children.Add(GetTrackingMonsters());
             dg.Children.Add(GetPowerups());
             dg.Children.Add(GetFlyingMonsters());
-            dg.Children.Add(GetBoss());
+            //dg.Children.Add(GetBoss());
             dg.Children.Add(GetProjectiles());
             dg.Children.Add(GetPlayer());
 
@@ -73,7 +74,7 @@ namespace Renderer
             {
                 Geometry g = new RectangleGeometry(new Rect(model.LevelExit.X * model.TileSize, 
                     model.LevelExit.Y * model.TileSize, model.TileSize, model.TileSize));
-                oldLevelExit = new GeometryDrawing(Brushes.HotPink, Is, g);
+                oldLevelExit = new GeometryDrawing(Brushes.Pink, Is, g);
             }
             return oldLevelExit;
         }
@@ -154,7 +155,7 @@ namespace Renderer
                     g.Children.Add(box);
                 }
             }
-            oldTrackingMonsters = new GeometryDrawing(Brushes.Brown, Is, g);
+            oldTrackingMonsters = new GeometryDrawing(Brushes.DarkRed, Is, g);
             return oldTrackingMonsters;
         }
 
@@ -162,31 +163,49 @@ namespace Renderer
         {
             if (oldPowerups == null)
             {
-                GeometryGroup g = new GeometryGroup();
+                DrawingGroup g = new DrawingGroup();
                 foreach (var powerup in model.Powerups)
                 {
-                    Geometry box = new RectangleGeometry(new Rect(powerup.Cords.X * model.TileSize,
-                        powerup.Cords.Y * model.TileSize, model.TileSize, model.TileSize));
+                    GeometryDrawing box = new GeometryDrawing(Brushes.Purple, Is, new RectangleGeometry(new Rect(powerup.Cords.X * model.TileSize,
+                           powerup.Cords.Y * model.TileSize, model.TileSize, model.TileSize)));
+
+                    FormattedText text = new FormattedText("H", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black);
+                    text.TextAlignment = TextAlignment.Center;
+                    Geometry geo = text.BuildGeometry(new Point((powerup.Cords.X * model.TileSize) + (model.TileSize / 2), (powerup.Cords.Y * model.TileSize) + (model.TileSize / 3)));
+                    GeometryDrawing textGeo = new GeometryDrawing(Brushes.Black, null, geo);
+
                     g.Children.Add(box);
+                    g.Children.Add(textGeo);
                 }
-                oldPowerups = new GeometryDrawing(Brushes.Purple, Is, g);
+                oldPowerups = g;
             }
             return oldPowerups;
         }
 
         private Drawing GetFlyingMonsters()
         {
-            GeometryGroup g = new GeometryGroup();
+            DrawingGroup g = new DrawingGroup();
             foreach (var enemy in model.FlyingMonsters)
             {
                 if (oldFlyingMonsters == null || !oldFlyingMonstersPosition.Contains(enemy.Cords))
                 {
-                    Geometry box = new RectangleGeometry(new Rect(enemy.Cords.X * model.TileSize,
-                           enemy.Cords.Y * model.TileSize, model.TileSize, model.TileSize));
+                    //Geometry box = new RectangleGeometry(new Rect(enemy.Cords.X * model.TileSize,
+                    //       enemy.Cords.Y * model.TileSize, model.TileSize, model.TileSize));
+
+                    GeometryDrawing box = new GeometryDrawing(Brushes.Blue, Is, new RectangleGeometry(new Rect(enemy.Cords.X * model.TileSize,
+                           enemy.Cords.Y * model.TileSize, model.TileSize, model.TileSize)));
+
+                    FormattedText text = new FormattedText("F", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black);
+                    text.TextAlignment = TextAlignment.Center;
+                    Geometry geo = text.BuildGeometry(new Point((enemy.Cords.X * model.TileSize) + (model.TileSize /2), (enemy.Cords.Y * model.TileSize) + (model.TileSize / 3)));
+                    GeometryDrawing textGeo = new GeometryDrawing(Brushes.Black, null, geo);
+
+                    //g.Children.Add(box);
                     g.Children.Add(box);
+                    g.Children.Add(textGeo);
                 }
             }
-            oldFlyingMonsters = new GeometryDrawing(Brushes.LightCyan, Is, g);
+            oldFlyingMonsters = g;
             return oldFlyingMonsters;
         }
 
@@ -194,10 +213,10 @@ namespace Renderer
         {
             if (oldBoss == null || oldBossPosition != model.Boss.Cords)
             {
-                Geometry g = new RectangleGeometry(new Rect(model.Boss.Cords.X * model.TileSize, 
-                    model.Boss.Cords.Y * model.TileSize, model.TileSize, model.TileSize));
-                oldBoss = new GeometryDrawing(Brushes.Chocolate, Is, g);
-                oldBossPosition = model.Boss.Cords;
+                //Geometry g = new RectangleGeometry(new Rect(model.Boss.Cords.X * model.TileSize, 
+                //    model.Boss.Cords.Y * model.TileSize, model.TileSize, model.TileSize));
+                //oldBoss = new GeometryDrawing(Brushes.Chocolate, Is, g);
+                //oldBossPosition = model.Boss.Cords;
             }
             return oldBoss;
         }

@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace oenik_prog4_2021_1_eg6bpp_jatfmq
+namespace DungeonPenetrator
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

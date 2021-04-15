@@ -36,8 +36,19 @@ namespace Logic
 
         public void GenerateMap()
         {
-            if (gameModel.Equals(default)) // static starting values of a newly created map
+            if (gameModel == null) // static starting values of a newly created map
             {
+                gameModel = new GameModel();
+                gameModel.MyPlayer = new Player();
+                gameModel.Projectiles = new List<Projectile>();
+                gameModel.Powerups = new List<Powerups>();
+                gameModel.FlyingMonsters = new List<FlyingEnemy>();
+                gameModel.ShootingMonsters = new List<ShootingEnemy>();
+                gameModel.TrackingMonsters = new List<TrackingEnemy>();
+                gameModel.Lavas = new List<LavaProp>();
+                gameModel.Walls = new List<WallProp>();
+                gameModel.Waters = new List<WaterProp>();
+
                 gameModel.MyPlayer.Damage = 5;
                 gameModel.MyPlayer.Health = 100;
                 gameModel.LevelCounter = 0; // Gets raised to one, must be zero
@@ -45,7 +56,7 @@ namespace Logic
             gameModel.GameAreaChar = new char[(int)(gameModel.GameWidth / gameModel.TileSize), (int)(gameModel.GameHeight / gameModel.TileSize)];
             gameModel.LevelCounter++;
             gameModel.MyPlayer.Cords = new Point(
-                (int)gameModel.GameWidth / gameModel.TileSize,
+                (int)(gameModel.GameWidth / gameModel.TileSize / 2),
                 (int)(gameModel.GameHeight / gameModel.TileSize) - 1);
             gameModel.LevelFinished = false;
 
@@ -111,7 +122,7 @@ namespace Logic
             int rndObjectNum = rnd.Next(rnd.Next(0, (int)(gameModel.GameWidth / gameModel.TileSize) * (int)(gameModel.GameHeight / gameModel.TileSize)));
             for (int i = 0; i < rndObjectNum; i++)
             {
-                Tuple<int, int> rndCord = new Tuple<int, int>((int)(gameModel.GameWidth / gameModel.TileSize), (int)(gameModel.GameHeight / gameModel.TileSize));
+                Tuple<int, int> rndCord = new Tuple<int, int>(rnd.Next((int)(gameModel.GameWidth / gameModel.TileSize)), rnd.Next((int)(gameModel.GameHeight / gameModel.TileSize)));
                 if (!(rndCord.Item1 == gameModel.MyPlayer.Cords.X && rndCord.Item2 == gameModel.MyPlayer.Cords.Y)
                     && !(rndCord.Item1 == gameModel.LevelExit.X && rndCord.Item2 == gameModel.LevelExit.Y))
                 {
@@ -143,7 +154,7 @@ namespace Logic
 
         private void GenerateProps()
         {
-            for (int y = 1; y <= gameModel.GameAreaChar.GetLength(1) - 1; y += 2)
+            for (int y = 1; y <= gameModel.GameAreaChar.GetLength(1) - 2; y += 2)
             {
                 int[] EmptySpaceCords = GenerateEmptySpacesForRow();
                 for (int x = 0; x < gameModel.GameAreaChar.GetLength(0); x++)
@@ -173,7 +184,7 @@ namespace Logic
             int[] EmptySpaceCords = new int[rnd.Next(0, (int)(gameModel.GameWidth / gameModel.TileSize) - 1)];
             for (int i = 0; i < EmptySpaceCords.Length; i++)
             {
-                EmptySpaceCords[i] = rnd.Next(0, (int)(gameModel.GameWidth / gameModel.TileSize) - 1);
+                EmptySpaceCords[i] = rnd.Next(1, (int)(gameModel.GameWidth / gameModel.TileSize));
             }
 
             return EmptySpaceCords;
@@ -192,7 +203,7 @@ namespace Logic
         public IGameModel Play()
         {
             gameModel = saveGameRepository.GetSaveGame();
-            if (gameModel.Equals(default))
+            if (gameModel == null)
             {
                 GenerateMap();
                 return gameModel;
