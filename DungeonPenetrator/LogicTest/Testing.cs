@@ -96,6 +96,8 @@ namespace LogicTest
 
             gameModelMock.Object.Powerup = new List<Powerups>();
             gameModelMock.Object.Powerup.Add(new Powerups { Cords = new Point(0, 2), Type = PowerupType.Health });
+            gameModelMock.Object.Powerup.Add(new Powerups { Cords = new Point(2, 2), Type = PowerupType.Damage });
+            gameModelMock.Object.Powerup.Add(new Powerups { Cords = new Point(5, 2), Type = PowerupType.FiringSpeed });
             foreach (var item in gameModelMock.Object.Powerup)
             {
                 switch (item.Type)
@@ -162,6 +164,15 @@ namespace LogicTest
             Assert.That(gameModelMock.Object.FlyingMonster[0].Cords, Is.EqualTo(nextStep));
         }
         [Test]
+        public void MoveRegularEnemy()
+        {
+            TrackingEnemy t = gameModelMock.Object.TrackingMonster[0];
+            Point nextStep = new Point(2, 6);
+            gameLogicTest.MoveRegularEnemy(t);
+
+            Assert.That(gameModelMock.Object.TrackingMonster[0].Cords, Is.EqualTo(nextStep));
+        }
+        [Test]
         public void CollectHealthPotion()
         {
             gameModelMock.Object.MyPlayer.Health = 50;
@@ -169,6 +180,46 @@ namespace LogicTest
             Powerups healthPotion = gameModelMock.Object.Powerup[0];
             gameLogicTest.CollectPowerup(healthPotion);
             Assert.That(gameModelMock.Object.MyPlayer.Health, Is.EqualTo(entryHealth + healthPotion.ModifyRate));
+        }
+        [Test]
+        public void CollectDamagePowerup()
+        {
+            gameModelMock.Object.MyPlayer.Damage = 10;
+            int entryDamage = 10;
+            Powerups damagePotion = gameModelMock.Object.Powerup[1];
+            gameLogicTest.CollectPowerup(damagePotion);
+            Assert.That(gameModelMock.Object.MyPlayer.Damage, Is.EqualTo(entryDamage + damagePotion.ModifyRate));
+        }
+        [Test]
+        public void CollectFiringSpeed()
+        {
+            gameModelMock.Object.MyPlayer.FiringSpeed = 10;
+            int entryFiringSpeed = 10;
+            Powerups firingSpeedPotion = gameModelMock.Object.Powerup[2];
+            gameLogicTest.CollectPowerup(firingSpeedPotion);
+
+            Assert.That(gameModelMock.Object.MyPlayer.FiringSpeed, Is.EqualTo(entryFiringSpeed + firingSpeedPotion.ModifyRate));
+        }
+        [Test]
+        public void DropRandomCollectable()
+        {
+            int collectables = gameModelMock.Object.Powerup.Count;
+            int expectedCollectableNumbers = collectables+1;
+            gameLogicTest.DropRandomCollectable();
+            Assert.That(gameModelMock.Object.Powerup.Count, Is.EqualTo(expectedCollectableNumbers));
+        }
+        [Test]
+        public void PlayerShoot()
+        {
+            Point shootTo = new Point(200, 500);
+            int shootingSpeed = 10;
+            Point playercords = new Point(gameModelMock.Object.MyPlayer.Cords.X * gameModelMock.Object.TileSize, gameModelMock.Object.MyPlayer.Cords.Y * gameModelMock.Object.TileSize);
+            Projectile expectedProjectile = new Projectile(playercords, shootTo);
+            expectedProjectile.Type = ProjectileType.Player;
+            expectedProjectile.Speed = shootingSpeed;
+            Projectile shootProjectile = gameLogicTest.PlayerShoot(shootTo, shootingSpeed);
+            Assert.That(shootProjectile,Is.EqualTo(expectedProjectile));
+           
         }
     }
 }

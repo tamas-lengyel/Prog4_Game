@@ -23,5 +23,24 @@ namespace Model
             this.direction = new Point(From.X - To.X, From.Y - To.Y);
         }
         public ProjectileType Type { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Projectile)
+            {
+                Projectile prj = obj as Projectile;
+                return this.Cords == prj.Cords &&
+                    this.Damage == prj.Damage &&
+                    this.direction == prj.direction &&
+                    this.Speed == prj.Speed;
+
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return 0;
+        }
     }
 }

@@ -21,9 +21,11 @@ namespace Logic
             gameModel.BasicTrackingPath = BreadthFirstSearch(GetRegularEnemyNeighbours);
         }
 
-        public Projectile EnemyShoot(Point enemyLocation, int speed, int damage)
+        public Projectile EnemyShoot(Point enemyLocation, int speed, int damage) 
         {
-            Projectile projectile = new Projectile(enemyLocation, gameModel.MyPlayer.Cords);
+            Point enemLocationCord = new Point(enemLocationCord.X * gameModel.TileSize, enemLocationCord.Y * gameModel.TileSize);
+            Point playerLocationCord = new Point(gameModel.MyPlayer.Cords.X * gameModel.TileSize, gameModel.MyPlayer.Cords.Y * gameModel.TileSize);
+            Projectile projectile = new Projectile(enemLocationCord, playerLocationCord);
             projectile.Type = ProjectileType.Enemy;
             projectile.Damage = damage;
             projectile.Speed = speed; 
@@ -45,6 +47,10 @@ namespace Logic
                     gameModel.MyPlayer.Damage += powerups.ModifyRate;
                     break;
                 case PowerupType.FiringSpeed: // max value should be 50 needs param
+                    if (gameModel.MyPlayer.FiringSpeed<50)
+                    {
+                        gameModel.MyPlayer.FiringSpeed += powerups.ModifyRate;
+                    }
                     break;
                 default:
                     break;
@@ -76,12 +82,12 @@ namespace Logic
                     Point current = new Point(x, y);
                     if (current != gameModel.MyPlayer.Cords &&
                         current != gameModel.LevelExit &&
-                        current != gameModel.Boss.Cords &&
-                        !(gameModel.Wall.Select(x => x.Cords).Contains(current)) &&
-                        !(gameModel.Water.Select(x => x.Cords).Contains(current)) &&
-                        !(gameModel.Lava.Select(x => x.Cords).Contains(current)) &&
-                        !(gameModel.Powerup.Select(x => x.Cords).Contains(current)) &&
-                        !(gameModel.ShootingMonster.Select(x => x.Cords).Contains(current)))
+                        (gameModel.Boss == default ||  current != gameModel.Boss.Cords) &&
+                        (gameModel.Wall == default || !(gameModel.Wall.Select(x => x.Cords).Contains(current))) &&
+                        (gameModel.Water == default || !(gameModel.Water.Select(x => x.Cords).Contains(current))) &&
+                        (gameModel.Lava == default || !(gameModel.Lava.Select(x => x.Cords).Contains(current))) &&
+                        (gameModel.Powerup == default || !(gameModel.Powerup.Select(x => x.Cords).Contains(current))) &&
+                        (gameModel.ShootingMonster == default || !(gameModel.ShootingMonster.Select(x => x.Cords).Contains(current))))
                     {
                         emptyTiles.Add(current);
                     }
@@ -201,8 +207,18 @@ namespace Logic
         }
         public void MoveProjectile(Projectile projectile)
         {
-            double newX = projectile.Cords.X  + projectile.direction.X;
-            double newY = projectile.Cords.Y + projectile.direction.Y;
+            double x = projectile.direction.X;
+            double y = projectile.direction.Y;
+            if (projectile.direction.X <100)
+            {
+                x = projectile.direction.X / gameModel.TileSize;
+            }
+            if (projectile.direction.Y < 100)
+            {
+                y = projectile.direction.Y / gameModel.TileSize;
+            }
+            double newX =  x+projectile.Speed;
+            double newY = y+projectile.Speed;
             if ((newX < 0 || newX >= gameModel.GameWidth) || (newY < 0 || newY >= gameModel.GameHeight))
             {
                 gameModel.Projectiles.Remove(projectile);
@@ -227,7 +243,9 @@ namespace Logic
 
         public Projectile PlayerShoot(Point mousePos,int speed)
         {
-            Projectile projectile = new Projectile(gameModel.MyPlayer.Cords, mousePos); // Player Cords should be converted to not regular cords not tilewise
+
+            Point playerLocationCord = new Point(gameModel.MyPlayer.Cords.X * gameModel.TileSize, gameModel.MyPlayer.Cords.Y * gameModel.TileSize);
+            Projectile projectile = new Projectile(playerLocationCord, mousePos);
             projectile.Type = ProjectileType.Player;
             projectile.Speed = speed; 
             return projectile;
@@ -312,3 +330,4 @@ namespace Logic
         }
     }
 }
+
