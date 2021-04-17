@@ -49,6 +49,9 @@ namespace Logic
                 gameModel.Walls = new List<WallProp>();
                 gameModel.Waters = new List<WaterProp>();
 
+
+                gameModel.MyPlayer.IsReloading = false;
+                gameModel.MyPlayer.FiringSpeed = 1;
                 gameModel.MyPlayer.Damage = 5;
                 gameModel.MyPlayer.Health = 100;
                 gameModel.LevelCounter = 0; // Gets raised to one, must be zero
@@ -62,7 +65,8 @@ namespace Logic
 
             GenerateInitializedEmptyMap();
             GenerateProps();
-            GenerateBasicEnemiesAndCollectables();
+            GenerateCollectables();
+            GenerateBasicEnemies();
             for (int y = 0; y < gameModel.GameAreaChar.GetLength(1); y++)
             {
                 for (int x = 0; x < gameModel.GameAreaChar.GetLength(0); x++)
@@ -103,6 +107,8 @@ namespace Logic
                 }
             }
 
+            ;
+
         }
 
         private void GenerateInitializedEmptyMap()
@@ -117,16 +123,41 @@ namespace Logic
             gameModel.GameAreaChar[(int)gameModel.MyPlayer.Cords.X,(int)gameModel.MyPlayer.Cords.Y] = 'C'; // Sets Character->Player pos
             gameModel.GameAreaChar[(int)gameModel.LevelExit.X, (int)gameModel.LevelExit.Y] = 'G'; // Sets Goal->LevelExit pos
         }
-        private void GenerateBasicEnemiesAndCollectables()
+        private void GenerateBasicEnemies()
         {
-            int rndObjectNum = rnd.Next(rnd.Next(0, (int)(gameModel.GameWidth / gameModel.TileSize) * (int)(gameModel.GameHeight / gameModel.TileSize)));
+            int rndObjectNum = rnd.Next(15, (int)((int)(gameModel.GameWidth / gameModel.TileSize) * (int)(gameModel.GameHeight / gameModel.TileSize) / (gameModel.TileSize/5)));
+            for (int i = 0; i < rndObjectNum; i++)
+            {
+                Tuple<int, int> rndCord = new Tuple<int, int>(rnd.Next(2,(int)(gameModel.GameWidth / gameModel.TileSize)-2), rnd.Next(3,(int)(gameModel.GameHeight / gameModel.TileSize)-3));
+                if (!(rndCord.Item1 == gameModel.MyPlayer.Cords.X && rndCord.Item2 == gameModel.MyPlayer.Cords.Y)
+                    && !(rndCord.Item1 == gameModel.LevelExit.X && rndCord.Item2 == gameModel.LevelExit.Y))
+                {
+                    int randomObject = rnd.Next(0, 100);
+                    switch (randomObject)
+                    {
+                        case <75:
+                            gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'T'; // Generates Tracking monster
+                            break;
+                        case >75 and <87:
+                            gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'F'; // Generates Flying monster
+                            break;
+                        case >87:
+                            gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'S'; // Generates shooting monster
+                            break;
+                    }
+                }
+            }
+        }
+        private void GenerateCollectables()
+        {
+            int rndObjectNum = rnd.Next(2,(int)((int)(gameModel.GameWidth / gameModel.TileSize) * (int)(gameModel.GameHeight / gameModel.TileSize) / (gameModel.TileSize/5)));
             for (int i = 0; i < rndObjectNum; i++)
             {
                 Tuple<int, int> rndCord = new Tuple<int, int>(rnd.Next((int)(gameModel.GameWidth / gameModel.TileSize)), rnd.Next((int)(gameModel.GameHeight / gameModel.TileSize)));
                 if (!(rndCord.Item1 == gameModel.MyPlayer.Cords.X && rndCord.Item2 == gameModel.MyPlayer.Cords.Y)
                     && !(rndCord.Item1 == gameModel.LevelExit.X && rndCord.Item2 == gameModel.LevelExit.Y))
                 {
-                    int randomObject = rnd.Next(0, 6);
+                    int randomObject = rnd.Next(0, 3);
                     switch (randomObject)
                     {
                         case 0:
@@ -137,15 +168,6 @@ namespace Logic
                             break;
                         case 2:
                             gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'R'; // Generates "Reload speed" firing powerup
-                            break;
-                        case 3:
-                            gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'F'; // Generates Flying monster
-                            break;
-                        case 4:
-                            gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'T'; // Generates Tracking monster
-                            break;
-                        case 5:
-                            gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'S'; // Generates shooting monster
                             break;
                     }
                 }
@@ -161,16 +183,16 @@ namespace Logic
                 {
                     if (!EmptySpaceCords.Contains(x))
                     {
-                        int randomProp = rnd.Next(0, 3);
+                        int randomProp = rnd.Next(0, 200);
                         switch (randomProp)
                         {
-                            case 0:
+                            case <150:
                                 gameModel.GameAreaChar[x, y] = 'W'; // Generates Wall
                                 break;
-                            case 1:
+                            case >150 and <180:
                                 gameModel.GameAreaChar[x, y] = 'P'; // Generates "Puddle" (Water)
                                 break;
-                            case 2:
+                            case >180 and <200:
                                 gameModel.GameAreaChar[x, y] = 'L'; // Generates Lava
                                 break;
                         }
@@ -181,10 +203,10 @@ namespace Logic
 
         private int[] GenerateEmptySpacesForRow()
         {
-            int[] EmptySpaceCords = new int[rnd.Next(0, (int)(gameModel.GameWidth / gameModel.TileSize) - 1)];
+            int[] EmptySpaceCords = new int[rnd.Next(3, (int)(gameModel.GameWidth / gameModel.TileSize) - 1)];
             for (int i = 0; i < EmptySpaceCords.Length; i++)
             {
-                EmptySpaceCords[i] = rnd.Next(1, (int)(gameModel.GameWidth / gameModel.TileSize));
+                EmptySpaceCords[i] = rnd.Next(0, (int)(gameModel.GameWidth / gameModel.TileSize));
             }
 
             return EmptySpaceCords;

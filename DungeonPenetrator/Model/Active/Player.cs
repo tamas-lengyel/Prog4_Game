@@ -13,5 +13,6 @@ namespace Model.Active
         public override int Health { get; set; }
         public override int Damage { get; set; }
         public int FiringSpeed { get; set; }
+        public bool IsReloading { get; set; }
     }
 }

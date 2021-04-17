@@ -23,8 +23,8 @@ namespace Logic
 
         public Projectile EnemyShoot(Point enemyLocation, int speed, int damage) 
         {
-            Point enemLocationCord = new Point(enemLocationCord.X * gameModel.TileSize, enemLocationCord.Y * gameModel.TileSize);
-            Point playerLocationCord = new Point(gameModel.MyPlayer.Cords.X * gameModel.TileSize, gameModel.MyPlayer.Cords.Y * gameModel.TileSize);
+            Point enemLocationCord = new Point((enemyLocation.X * gameModel.TileSize) + gameModel.TileSize / 2, (enemyLocation.Y * gameModel.TileSize) + gameModel.TileSize / 2);
+            Point playerLocationCord = new Point((gameModel.MyPlayer.Cords.X * gameModel.TileSize) + gameModel.TileSize / 2, (gameModel.MyPlayer.Cords.Y * gameModel.TileSize) + gameModel.TileSize / 2);
             Projectile projectile = new Projectile(enemLocationCord, playerLocationCord);
             projectile.Type = ProjectileType.Enemy;
             projectile.Damage = damage;
@@ -209,19 +209,19 @@ namespace Logic
         {
             double x = projectile.direction.X;
             double y = projectile.direction.Y;
-            if (projectile.direction.X <100)
-            {
-                x = projectile.direction.X / gameModel.TileSize;
-            }
-            if (projectile.direction.Y < 100)
-            {
-                y = projectile.direction.Y / gameModel.TileSize;
-            }
-            double newX =  x+projectile.Speed;
-            double newY = y+projectile.Speed;
+            /*double magnetude = Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
+            double ux = x / magnetude;
+            double uy = y / magnetude;
+            double newX = projectile.Cords.X + (ux*projectile.Speed);
+            double newY = projectile.Cords.Y + (uy*projectile.Speed);*/
+
+
+            double newX = projectile.Cords.X + (projectile.direction.X * projectile.Speed);
+            double newY = projectile.Cords.Y + (projectile.direction.Y * projectile.Speed);
             if ((newX < 0 || newX >= gameModel.GameWidth) || (newY < 0 || newY >= gameModel.GameHeight))
             {
                 gameModel.Projectiles.Remove(projectile);
+                projectile = null;
                 return;
             }
             gameModel.Projectiles.Find(x => x.Equals(projectile)).Cords = new Point(newX, newY);
@@ -231,7 +231,7 @@ namespace Logic
             int newX = (int)(gameModel.MyPlayer.Cords.X + dx);
             int newY = (int)(gameModel.MyPlayer.Cords.Y + dy);
             if (newX >= 0 && newY >= 0 && newX < gameModel.GameWidth/gameModel.TileSize && newY < gameModel.GameHeight/gameModel.TileSize
-                && (gameModel.GameAreaChar[newX,newY] != 'W' ||
+                && (gameModel.GameAreaChar[newX,newY] != 'W' &&
                 gameModel.GameAreaChar[newX, newY] != 'P' ))
             {
                 gameModel.MyPlayer.Cords = new Point(newX, newY);
@@ -243,10 +243,10 @@ namespace Logic
 
         public Projectile PlayerShoot(Point mousePos,int speed)
         {
-
-            Point playerLocationCord = new Point(gameModel.MyPlayer.Cords.X * gameModel.TileSize, gameModel.MyPlayer.Cords.Y * gameModel.TileSize);
+            Point playerLocationCord = new Point((gameModel.MyPlayer.Cords.X*gameModel.TileSize) + gameModel.TileSize/2, (gameModel.MyPlayer.Cords.Y * gameModel.TileSize) + gameModel.TileSize / 2);
             Projectile projectile = new Projectile(playerLocationCord, mousePos);
             projectile.Type = ProjectileType.Player;
+            projectile.Damage = gameModel.MyPlayer.Damage;
             projectile.Speed = speed; 
             return projectile;
         }

@@ -19,6 +19,7 @@ namespace Logic
         public Projectile EnemyShoot(Point enemyLocation, int speed, int damage);
         void DisposeEnemy(ActiveGameObjects activeGameObject);
 
+        public void MoveProjectile(Projectile projectile);
         void CollectPowerup(Powerups powerups);
         void DamageActiveGameObject(ActiveGameObjects activeGameObjects, int damage);
         void DisposeBullet(Projectile projectile);

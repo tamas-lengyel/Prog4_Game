@@ -20,11 +20,17 @@ namespace Model
         public Projectile(Point From, Point To)
         {
             this.Cords = From;
-            this.direction = new Point(From.X - To.X, From.Y - To.Y);
+
+            //this.direction = new Point(To.X-From.X, To.Y-From.Y );
+            double x = To.X - From.X;
+            double y = To.Y - From.Y;
+            double magnetude = (Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2)));
+            this.direction = new Point( x/magnetude, y / magnetude);
+
         }
         public ProjectileType Type { get; set; }
 
-        public override bool Equals(object obj)
+        /*public override bool Equals(object obj)
         {
             if (obj is Projectile)
             {
@@ -41,6 +47,6 @@ namespace Model
         public override int GetHashCode()
         {
             return 0;
-        }
+        }*/
     }
 }
