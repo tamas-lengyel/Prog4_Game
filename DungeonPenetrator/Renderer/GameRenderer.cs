@@ -108,10 +108,13 @@ namespace Renderer
         {
             if (oldBackground == null)
             {
-                Geometry g = new RectangleGeometry(new Rect(0, 0, model.GameWidth, model.GameHeight));
+                //Geometry g = new RectangleGeometry(new Rect(0, 0, model.GameWidth, model.GameHeight));
+                GeometryDrawing box = new GeometryDrawing(Brushes.Green, Is, new RectangleGeometry(new Rect(0,
+                           0, model.GameWidth, model.GameHeight)));
                 //ImageDrawing background = new ImageDrawing(BackgroundBrush, new Rect(0, 0, model.GameWidth, model.GameHeight));
-                oldBackground = new GeometryDrawing(BackgroundBrush, null, g);
-                //oldBackground = background;
+                //oldBackground = new GeometryDrawing(BackgroundBrush, null, g);
+
+                oldBackground = box;
             }
             
             return oldBackground;

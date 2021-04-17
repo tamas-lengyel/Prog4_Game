@@ -3,7 +3,7 @@ using Model;
 using Renderer;
 using Repository;
 using System;
-using System.Threading;
+using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -22,6 +22,7 @@ namespace DungeonPenetrator
         private Random rnd = new Random();
         private bool canmove = true;
 
+        Timer updateTimer;
         public Control()
         {
             Loaded += Control_Loaded;
@@ -36,27 +37,28 @@ namespace DungeonPenetrator
             model = loadigLogic.Play();
             gameLogic = new GameLogic(model);
             renderer = new GameRenderer(model);
-
             Window win = Window.GetWindow(this);
             if (win != null)
             {
                 win.KeyDown += Win_KeyDown;
-                MouseLeftButtonDown += Left_MouseButtonDown;
+                win.MouseLeftButtonDown += this.Left_MouseButtonDown;
             }
             MoveEnemies();
             ShootingEnemies();
 
-            DispatcherTimer updateTimer = new DispatcherTimer();
-            updateTimer.Interval = TimeSpan.FromMilliseconds(20);
-            updateTimer.Tick += UpdateScreen;
-            updateTimer.Start();
+            updateTimer = new Timer();
+            updateTimer.Elapsed += new ElapsedEventHandler(this.UpdateScreen);
+            updateTimer.Interval = 20;
+            updateTimer.AutoReset = true;
+            updateTimer.Enabled = true;
 
             //InvalidateVisual();
         }
 
         private void UpdateScreen(object sender, EventArgs e)
         {
-            InvalidateVisual();
+            try { this.Dispatcher.Invoke(() => this.InvalidateVisual()); } // update screen
+            catch (Exception) { }
         }
 
         protected override void OnRender(DrawingContext drawingContext)
@@ -91,35 +93,37 @@ namespace DungeonPenetrator
                     Projectile enemyProjectile = gameLogic.EnemyShoot(item.Cords, rnd.Next(2, 4), item.Damage);
 
                     model.Projectiles.Add(enemyProjectile);
-                    DispatcherTimer playerProjectileTimer = new DispatcherTimer();
-                    playerProjectileTimer.Interval = TimeSpan.FromMilliseconds(20);
-                    playerProjectileTimer.Tick += delegate
+                    enemyProjectile.Timer= new DispatcherTimer(DispatcherPriority.Send);
+                    //DispatcherTimer playerProjectileTimer = new DispatcherTimer();
+                    enemyProjectile.Timer.Interval = TimeSpan.FromMilliseconds(20);
+                    enemyProjectile.Timer.Tick += delegate
                     {
-                        gameLogic.MoveProjectile(enemyProjectile);
+                        gameLogic.MoveProjectile(ref enemyProjectile);
                     };
-                    playerProjectileTimer.Start();
+                    enemyProjectile.Timer.Start();
                 };
                 shootOneEnemy.Interval = TimeSpan.FromMilliseconds(rnd.Next(3000, 5000));
                 shootOneEnemy.Start();
             }
         }
 
-        private void Left_MouseButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Left_MouseButtonDown(object sender,MouseButtonEventArgs e)
         {
             DispatcherTimer playerProjectileTimer = new DispatcherTimer();
             DispatcherTimer reloadTimer = new DispatcherTimer();
             if (!model.MyPlayer.IsReloading)
             {
-                Point mousePos = e.GetPosition(this);
+                //Point mousePos = e.GetPosition(this);
+                Point mousePos = new Point(e.GetPosition((IInputElement)sender).X, e.GetPosition((IInputElement)sender).Y);
                 model.MyPlayer.IsReloading = true;
-                Projectile newProjectile = gameLogic.PlayerShoot(mousePos, 10);
-                model.Projectiles.Add(newProjectile);
+                gameLogic.PlayerShoot(mousePos, 10);
+                /*model.Projectiles.Add(newProjectile);
 
                 playerProjectileTimer.Interval = TimeSpan.FromMilliseconds(15);
                
                 playerProjectileTimer.Tick += new EventHandler((sender, e) => PlayerProjectileTimer_Tick(this, e, newProjectile));
                 playerProjectileTimer.Start();
-
+                */
                 reloadTimer.Tick += delegate
                 {
                     model.MyPlayer.IsReloading = false;
@@ -132,7 +136,7 @@ namespace DungeonPenetrator
 
         private void PlayerProjectileTimer_Tick(object sender, EventArgs e, Projectile projectile)
         {
-            gameLogic.MoveProjectile(projectile);
+            gameLogic.MoveProjectile(ref projectile);
         }
 
         private void Win_KeyDown(object sender, KeyEventArgs e)
