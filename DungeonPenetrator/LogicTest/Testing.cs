@@ -29,7 +29,7 @@ namespace LogicTest
 
             gameModelMock.Object.MyPlayer = new Player { Cords = new Point(3, 9), Damage = 5, Health = 100 };
             gameModelMock.Object.LevelCounter = 0;
-            gameModelMock.Object.GameAreaChar = new char[(int)(gameModelMock.Object.GameWidth / gameModelMock.Object.TileSize), (int)(gameModelMock.Object.GameHeight / gameModelMock.Object.TileSize)];
+            gameModelMock.Object.GameAreaChar = new char[(int)(gameModelMock.Object.GameWidth / GameModel.TileSize), (int)(gameModelMock.Object.GameHeight / GameModel.TileSize)];
             for (int y = 0; y < gameModelMock.Object.GameAreaChar.GetLength(1); y++)
             {
                 for (int x = 0; x < gameModelMock.Object.GameAreaChar.GetLength(0); x++)
@@ -213,7 +213,7 @@ namespace LogicTest
         {
             Point shootTo = new Point(200, 500);
             int shootingSpeed = 10;
-            Point playercords = new Point(gameModelMock.Object.MyPlayer.Cords.X * gameModelMock.Object.TileSize, gameModelMock.Object.MyPlayer.Cords.Y * gameModelMock.Object.TileSize);
+            Point playercords = new Point(gameModelMock.Object.MyPlayer.Cords.X * GameModel.TileSize, gameModelMock.Object.MyPlayer.Cords.Y * GameModel.TileSize);
             Projectile expectedProjectile = new Projectile(playercords, shootTo);
             expectedProjectile.Type = ProjectileType.Player;
             expectedProjectile.Speed = shootingSpeed;

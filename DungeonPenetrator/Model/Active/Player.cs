@@ -14,5 +14,7 @@ namespace Model.Active
         public override int Damage { get; set; }
         public int FiringSpeed { get; set; }
         public bool IsReloading { get; set; }
+
+        public Rect Area { get { return new Rect(Cords.X * GameModel.TileSize, Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize); }}
     }
 }

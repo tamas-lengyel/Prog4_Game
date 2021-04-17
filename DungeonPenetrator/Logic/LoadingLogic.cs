@@ -56,11 +56,11 @@ namespace Logic
                 gameModel.MyPlayer.Health = 100;
                 gameModel.LevelCounter = 0; // Gets raised to one, must be zero
             }
-            gameModel.GameAreaChar = new char[(int)(gameModel.GameWidth / gameModel.TileSize), (int)(gameModel.GameHeight / gameModel.TileSize)];
+            gameModel.GameAreaChar = new char[(int)(gameModel.GameWidth / GameModel.TileSize), (int)(gameModel.GameHeight / GameModel.TileSize)];
             gameModel.LevelCounter++;
             gameModel.MyPlayer.Cords = new Point(
-                (int)(gameModel.GameWidth / gameModel.TileSize / 2),
-                (int)(gameModel.GameHeight / gameModel.TileSize) - 1);
+                (int)(gameModel.GameWidth / GameModel.TileSize / 2),
+                (int)(gameModel.GameHeight / GameModel.TileSize) - 1);
             gameModel.LevelFinished = false;
 
             GenerateInitializedEmptyMap();
@@ -125,10 +125,10 @@ namespace Logic
         }
         private void GenerateBasicEnemies()
         {
-            int rndObjectNum = rnd.Next(15, (int)((int)(gameModel.GameWidth / gameModel.TileSize) * (int)(gameModel.GameHeight / gameModel.TileSize) / (gameModel.TileSize/5)));
+            int rndObjectNum = rnd.Next(15, (int)((int)(gameModel.GameWidth / GameModel.TileSize) * (int)(gameModel.GameHeight / GameModel.TileSize) / (GameModel.TileSize/5)));
             for (int i = 0; i < rndObjectNum; i++)
             {
-                Tuple<int, int> rndCord = new Tuple<int, int>(rnd.Next(2,(int)(gameModel.GameWidth / gameModel.TileSize)-2), rnd.Next(3,(int)(gameModel.GameHeight / gameModel.TileSize)-3));
+                Tuple<int, int> rndCord = new Tuple<int, int>(rnd.Next(2,(int)(gameModel.GameWidth / GameModel.TileSize)-2), rnd.Next(3,(int)(gameModel.GameHeight / GameModel.TileSize)-3));
                 if (!(rndCord.Item1 == gameModel.MyPlayer.Cords.X && rndCord.Item2 == gameModel.MyPlayer.Cords.Y)
                     && !(rndCord.Item1 == gameModel.LevelExit.X && rndCord.Item2 == gameModel.LevelExit.Y))
                 {
@@ -150,10 +150,10 @@ namespace Logic
         }
         private void GenerateCollectables()
         {
-            int rndObjectNum = rnd.Next(2,(int)((int)(gameModel.GameWidth / gameModel.TileSize) * (int)(gameModel.GameHeight / gameModel.TileSize) / (gameModel.TileSize/5)));
+            int rndObjectNum = rnd.Next(2,(int)((int)(gameModel.GameWidth / GameModel.TileSize) * (int)(gameModel.GameHeight / GameModel.TileSize) / (GameModel.TileSize/5)));
             for (int i = 0; i < rndObjectNum; i++)
             {
-                Tuple<int, int> rndCord = new Tuple<int, int>(rnd.Next((int)(gameModel.GameWidth / gameModel.TileSize)), rnd.Next((int)(gameModel.GameHeight / gameModel.TileSize)));
+                Tuple<int, int> rndCord = new Tuple<int, int>(rnd.Next((int)(gameModel.GameWidth / GameModel.TileSize)), rnd.Next((int)(gameModel.GameHeight / GameModel.TileSize)));
                 if (!(rndCord.Item1 == gameModel.MyPlayer.Cords.X && rndCord.Item2 == gameModel.MyPlayer.Cords.Y)
                     && !(rndCord.Item1 == gameModel.LevelExit.X && rndCord.Item2 == gameModel.LevelExit.Y))
                 {
@@ -203,10 +203,10 @@ namespace Logic
 
         private int[] GenerateEmptySpacesForRow()
         {
-            int[] EmptySpaceCords = new int[rnd.Next(3, (int)(gameModel.GameWidth / gameModel.TileSize) - 1)];
+            int[] EmptySpaceCords = new int[rnd.Next(3, (int)(gameModel.GameWidth / GameModel.TileSize) - 1)];
             for (int i = 0; i < EmptySpaceCords.Length; i++)
             {
-                EmptySpaceCords[i] = rnd.Next(0, (int)(gameModel.GameWidth / gameModel.TileSize));
+                EmptySpaceCords[i] = rnd.Next(0, (int)(gameModel.GameWidth / GameModel.TileSize));
             }
 
             return EmptySpaceCords;

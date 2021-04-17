@@ -13,7 +13,7 @@ namespace Model
     {
         public double GameWidth => 650;
         public double GameHeight => 800;
-        public double TileSize => 50;
+        static public double TileSize => 50;
         public Point LevelExit => new Point((int)(GameWidth/TileSize/ 2),0);
         public int LevelCounter { get; set; }
         public BossEnemy Boss { get; set; }

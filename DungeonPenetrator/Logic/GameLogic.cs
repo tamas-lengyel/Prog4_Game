@@ -23,8 +23,8 @@ namespace Logic
 
         public Projectile EnemyShoot(Point enemyLocation, int speed, int damage) 
         {
-            Point enemLocationCord = new Point((enemyLocation.X * gameModel.TileSize) + gameModel.TileSize / 2, (enemyLocation.Y * gameModel.TileSize) + gameModel.TileSize / 2);
-            Point playerLocationCord = new Point((gameModel.MyPlayer.Cords.X * gameModel.TileSize) + gameModel.TileSize / 2, (gameModel.MyPlayer.Cords.Y * gameModel.TileSize) + gameModel.TileSize / 2);
+            Point enemLocationCord = new Point((enemyLocation.X * GameModel.TileSize) + GameModel.TileSize / 2, (enemyLocation.Y * GameModel.TileSize) + GameModel.TileSize / 2);
+            Point playerLocationCord = new Point((gameModel.MyPlayer.Cords.X * GameModel.TileSize) + GameModel.TileSize / 2, (gameModel.MyPlayer.Cords.Y * GameModel.TileSize) + GameModel.TileSize / 2);
             Projectile projectile = new Projectile(enemLocationCord, playerLocationCord);
             projectile.Type = ProjectileType.Enemy;
             projectile.Damage = damage;
@@ -75,9 +75,9 @@ namespace Logic
         private List<Point> GetEmptyTileSpaces()
         {
             List<Point> emptyTiles = new List<Point>();
-            for (int y = 0; y < (int)(gameModel.GameHeight / gameModel.TileSize); y++)
+            for (int y = 0; y < (int)(gameModel.GameHeight / GameModel.TileSize); y++)
             {
-                for (int x = 0; x < (int)(gameModel.GameWidth / gameModel.TileSize); x++)
+                for (int x = 0; x < (int)(gameModel.GameWidth / GameModel.TileSize); x++)
                 {
                     Point current = new Point(x, y);
                     if (current != gameModel.MyPlayer.Cords &&
@@ -128,7 +128,7 @@ namespace Logic
             foreach (var item in neighbours)
             {
                 Point check = new Point(current.X + item.X, current.Y + item.Y);
-                if ((check.X < 0 || check.X >= (int)(gameModel.GameWidth/gameModel.TileSize)) || (check.Y < 0 || check.Y >= (int)(gameModel.GameHeight / gameModel.TileSize)))
+                if ((check.X < 0 || check.X >= (int)(gameModel.GameWidth/GameModel.TileSize)) || (check.Y < 0 || check.Y >= (int)(gameModel.GameHeight / GameModel.TileSize)))
                 {
                     rmList.Add(item);
                 }
@@ -160,7 +160,7 @@ namespace Logic
             foreach (var item in neighbours)
             {
                 Point check = new Point(current.X + item.X, current.Y + item.Y);
-                if ((check.X < 0 || check.X >= (int)(gameModel.GameWidth / gameModel.TileSize)) || (check.Y < 0 || check.Y >= (int)(gameModel.GameHeight / gameModel.TileSize)))
+                if ((check.X < 0 || check.X >= (int)(gameModel.GameWidth / GameModel.TileSize)) || (check.Y < 0 || check.Y >= (int)(gameModel.GameHeight / GameModel.TileSize)))
                 {
                     rmList.Add(item);
                 }
@@ -230,7 +230,7 @@ namespace Logic
         {
             int newX = (int)(gameModel.MyPlayer.Cords.X + dx);
             int newY = (int)(gameModel.MyPlayer.Cords.Y + dy);
-            if (newX >= 0 && newY >= 0 && newX < gameModel.GameWidth/gameModel.TileSize && newY < gameModel.GameHeight/gameModel.TileSize
+            if (newX >= 0 && newY >= 0 && newX < gameModel.GameWidth/GameModel.TileSize && newY < gameModel.GameHeight/GameModel.TileSize
                 && (gameModel.GameAreaChar[newX,newY] != 'W' &&
                 gameModel.GameAreaChar[newX, newY] != 'P' ))
             {
@@ -243,7 +243,7 @@ namespace Logic
 
         public Projectile PlayerShoot(Point mousePos,int speed)
         {
-            Point playerLocationCord = new Point((gameModel.MyPlayer.Cords.X*gameModel.TileSize) + gameModel.TileSize/2, (gameModel.MyPlayer.Cords.Y * gameModel.TileSize) + gameModel.TileSize / 2);
+            Point playerLocationCord = new Point((gameModel.MyPlayer.Cords.X * GameModel.TileSize) + GameModel.TileSize/2, (gameModel.MyPlayer.Cords.Y * GameModel.TileSize) + GameModel.TileSize / 2);
             Projectile projectile = new Projectile(playerLocationCord, mousePos);
             projectile.Type = ProjectileType.Player;
             projectile.Damage = gameModel.MyPlayer.Damage;

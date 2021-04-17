@@ -10,7 +10,7 @@ namespace Model
     {
         double GameWidth { get; }
         double GameHeight { get; }
-        double TileSize { get; }
+        static double TileSize { get; }
         Point LevelExit { get; }
         int LevelCounter { get; set; }
 
