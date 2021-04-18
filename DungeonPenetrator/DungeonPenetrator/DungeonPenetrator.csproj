@@ -8,28 +8,36 @@
 
   <ItemGroup>
     <None Remove="Images\bg3.png" />
+    <None Remove="Images\bluepotion.png" />
     <None Remove="Images\characterblue100.png" />
     <None Remove="Images\ct100big.png" />
+    <None Remove="Images\error-icon-32.png" />
     <None Remove="Images\hoodtracker.gif" />
     <None Remove="Images\hoodtracker100100.png" />
     <None Remove="Images\lava.png" />
     <None Remove="Images\missle100.png" />
+    <None Remove="Images\redpotion.png" />
     <None Remove="Images\rock100.png" />
     <None Remove="Images\snowy.jpg" />
     <None Remove="Images\water.png" />
+    <None Remove="Images\yellowpotion.png" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Images\bg3.png" />
+    <EmbeddedResource Include="Images\bluepotion.png" />
     <EmbeddedResource Include="Images\characterblue100.png" />
     <EmbeddedResource Include="Images\ct100big.png" />
+    <EmbeddedResource Include="Images\error-icon-32.png" />
     <EmbeddedResource Include="Images\hoodtracker.gif" />
     <EmbeddedResource Include="Images\hoodtracker100100.png" />
     <EmbeddedResource Include="Images\lava.png" />
     <EmbeddedResource Include="Images\missle100.png" />
+    <EmbeddedResource Include="Images\redpotion.png" />
     <EmbeddedResource Include="Images\rock100.png" />
     <EmbeddedResource Include="Images\snowy.jpg" />
     <EmbeddedResource Include="Images\water.png" />
+    <EmbeddedResource Include="Images\yellowpotion.png" />
   </ItemGroup>
 
   <ItemGroup>

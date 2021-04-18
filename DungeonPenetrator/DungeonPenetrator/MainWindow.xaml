@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DungeonPenetrator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="850" Width="700"
+        Title="MainWindow" Height="1080" Width="750"
         >
     <local:Control/>
 </Window>

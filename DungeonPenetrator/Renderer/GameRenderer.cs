@@ -62,6 +62,7 @@ namespace Renderer
             bmp.BeginInit();
             bmp.StreamSource = Assembly.LoadFrom("DungeonPenetrator").GetManifestResourceStream("DungeonPenetrator.Images." + fileName);
             bmp.EndInit();
+            //bmp.Rotation = Rotation.Rotate90;
             return bmp;
         }
 
@@ -214,49 +215,28 @@ namespace Renderer
                 DrawingGroup g = new DrawingGroup();
                 foreach (var powerup in model.Powerups)
                 {
-                    FormattedText text;
-                    GeometryDrawing box;
-                    Geometry geo;
-                    GeometryDrawing textGeo;
+                    ImageDrawing drawing;
                     switch (powerup.Type)
                     {
                         case Model.Passive.PowerupType.Health:
-                            box = new GeometryDrawing(Brushes.Purple, Is, new RectangleGeometry(new Rect(powerup.Cords.X * GameModel.TileSize,
-                           powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize)));
-                            text = new FormattedText("H", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black);
-                            text.TextAlignment = TextAlignment.Center;
-                            geo = text.BuildGeometry(new Point((powerup.Cords.X * GameModel.TileSize) + (GameModel.TileSize / 2), (powerup.Cords.Y * GameModel.TileSize) + (GameModel.TileSize / 3)));
-                            textGeo = new GeometryDrawing(Brushes.Black, null, geo);
+                            drawing = new ImageDrawing(GetImage("redpotion.png"), new Rect(powerup.Cords.X * GameModel.TileSize,
+                                powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                             break;
                         case Model.Passive.PowerupType.Damage:
-                            box = new GeometryDrawing(Brushes.Purple, Is, new RectangleGeometry(new Rect(powerup.Cords.X * GameModel.TileSize,
-                           powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize)));
-                            text = new FormattedText("D", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black);
-                            text.TextAlignment = TextAlignment.Center;
-                            geo = text.BuildGeometry(new Point((powerup.Cords.X * GameModel.TileSize) + (GameModel.TileSize / 2), (powerup.Cords.Y * GameModel.TileSize) + (GameModel.TileSize / 3)));
-                            textGeo = new GeometryDrawing(Brushes.Black, null, geo);
+                            drawing = new ImageDrawing(GetImage("bluepotion.png"), new Rect(powerup.Cords.X * GameModel.TileSize,
+                                powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                             break;
                         case Model.Passive.PowerupType.FiringSpeed:
-                            box = new GeometryDrawing(Brushes.Purple, Is, new RectangleGeometry(new Rect(powerup.Cords.X * GameModel.TileSize,
-                           powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize)));
-                            text = new FormattedText("R", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black);
-                            text.TextAlignment = TextAlignment.Center;
-                            geo = text.BuildGeometry(new Point((powerup.Cords.X * GameModel.TileSize) + (GameModel.TileSize / 2), (powerup.Cords.Y * GameModel.TileSize) + (GameModel.TileSize / 3)));
-                            textGeo = new GeometryDrawing(Brushes.Black, null, geo);
+                            drawing = new ImageDrawing(GetImage("yellowpotion.png"), new Rect(powerup.Cords.X * GameModel.TileSize,
+                                powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                             break;
                         default:
-                            box = new GeometryDrawing(Brushes.Purple, Is, new RectangleGeometry(new Rect(powerup.Cords.X * GameModel.TileSize,
-                         powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize)));
-                            text = new FormattedText("ERROR", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black);
-                            text.TextAlignment = TextAlignment.Center;
-                            geo = text.BuildGeometry(new Point((powerup.Cords.X * GameModel.TileSize) + (GameModel.TileSize / 2), (powerup.Cords.Y * GameModel.TileSize) + (GameModel.TileSize / 3)));
-                            textGeo = new GeometryDrawing(Brushes.Black, null, geo);
+                            drawing = new ImageDrawing(GetImage("error-icon-32.png"), new Rect(powerup.Cords.X * GameModel.TileSize,
+                                powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                             break;
                     }
 
-
-                    g.Children.Add(box);
-                    g.Children.Add(textGeo);
+                    g.Children.Add(drawing);
                 }
                 oldPowerups = g;
             }
