@@ -37,49 +37,23 @@ namespace Renderer
 
         Pen Is = new Pen(Brushes.Black, 1);
 
-        Brush BackgroundBrush { get { return GetBrush("snowy.png", true); } }
+        Brush BackgroundBrush { get { return GetBrush("snowy.jpg", false); } }
 
         Brush GetBrush(string fname, bool isTiled)
         {
             if (!brushes.ContainsKey(fname))
             {
-                //ImageBrush ib= new ImageBrush(new BitmapImage(new Uri(xxxx)));
+                //ImageBrush ib = new ImageBrush(new BitmapImage(new Uri(xxxx)));
                 BitmapImage bmp = new BitmapImage();
                 bmp.BeginInit();
                 bmp.StreamSource = Assembly.LoadFrom("DungeonPenetrator").GetManifestResourceStream("DungeonPenetrator.Images." + fname);
                 bmp.EndInit();
                 ImageBrush ib = new ImageBrush(bmp);
 
-                if (isTiled)
-                {
-                    ib.TileMode = TileMode.Tile;
-                    ib.Viewport = new Rect(0, 0, GameModel.TileSize, GameModel.TileSize);
-                    ib.ViewboxUnits = BrushMappingMode.Absolute;
-                    // ib.ViewBox - ine img = many textures
-                }
-
                 brushes.Add(fname, ib);
             }
             return brushes[fname];
         }
-
-        //internal static BitmapImage GetImage(string fileName, bool isTiled)
-        //{
-        //    BitmapImage bmp = new BitmapImage();
-        //    bmp.BeginInit();
-        //    bmp.StreamSource = Assembly.LoadFrom("DungeonPenetrator").GetManifestResourceStream("DungeonPenetrator.Images." + fileName);
-        //    bmp.EndInit();
-        //    ImageBrush ib = new ImageBrush(bmp);
-
-        //    if (isTiled)
-        //    {
-        //        ib.TileMode = TileMode.Tile;
-        //        ib.Viewport = new Rect(0, 0, GameModel.TileSize, GameModel.TileSize);
-        //        ib.ViewboxUnits = BrushMappingMode.Absolute;
-        //        // ib.ViewBox - ine img = many textures
-        //    }
-        //    return bmp;
-        //}
 
         public GameRenderer(IGameModel model)
         {
@@ -109,9 +83,7 @@ namespace Renderer
             if (oldBackground == null)
             {
                 Geometry g = new RectangleGeometry(new Rect(0, 0, model.GameWidth, model.GameHeight));
-                //ImageDrawing background = new ImageDrawing(BackgroundBrush, new Rect(0, 0, model.GameWidth, model.GameHeight));
                 oldBackground = new GeometryDrawing(BackgroundBrush, null, g);
-                //oldBackground = background;
             }
             
             return oldBackground;
