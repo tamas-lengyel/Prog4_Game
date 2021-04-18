@@ -37,7 +37,8 @@ namespace Renderer
 
         Pen Is = new Pen(Brushes.Black, 1);
 
-        Brush BackgroundBrush { get { return GetBrush("snowy.jpg", false); } }
+        Brush BackgroundBrush { get { return GetBrush("bg3.png", false); } }
+        Brush PlayerBrush { get { return GetBrush("characterblue100.png", false); } }
 
         Brush GetBrush(string fname, bool isTiled)
         {
@@ -53,6 +54,15 @@ namespace Renderer
                 brushes.Add(fname, ib);
             }
             return brushes[fname];
+        }
+
+        internal static BitmapImage GetImage(string fileName)
+        {
+            BitmapImage bmp = new BitmapImage();
+            bmp.BeginInit();
+            bmp.StreamSource = Assembly.LoadFrom("DungeonPenetrator").GetManifestResourceStream("DungeonPenetrator.Images." + fileName);
+            bmp.EndInit();
+            return bmp;
         }
 
         public GameRenderer(IGameModel model)
@@ -111,14 +121,16 @@ namespace Renderer
         {
             if (oldLavas == null)
             {
-                GeometryGroup g = new GeometryGroup();
+                DrawingGroup g = new DrawingGroup();
                 foreach (var lava in model.Lavas)
                 {
-                    Geometry box = new RectangleGeometry(new Rect(lava.Cords.X * GameModel.TileSize,
+                    //Geometry box = new RectangleGeometry(new Rect(lava.Cords.X * GameModel.TileSize,
+                    //    lava.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                    ImageDrawing drawing = new ImageDrawing(GetImage("lava.png"), new Rect(lava.Cords.X * GameModel.TileSize,
                         lava.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                    g.Children.Add(box);
+                    g.Children.Add(drawing);
                 }
-                oldLavas = new GeometryDrawing(Brushes.Orange, Is, g);
+                oldLavas = g;
             }
             return oldLavas;
         }
@@ -127,14 +139,16 @@ namespace Renderer
         {
             if (oldWaters == null)
             {
-                GeometryGroup g = new GeometryGroup();
+                DrawingGroup g = new DrawingGroup();
                 foreach (var water in model.Waters)
                 {
-                    Geometry box = new RectangleGeometry(new Rect(water.Cords.X * GameModel.TileSize,
+                    //Geometry box = new RectangleGeometry(new Rect(water.Cords.X * GameModel.TileSize,
+                    //    water.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                    ImageDrawing drawing = new ImageDrawing(GetImage("water.png"), new Rect(water.Cords.X * GameModel.TileSize,
                         water.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                    g.Children.Add(box);
+                    g.Children.Add(drawing);
                 }
-                oldWaters = new GeometryDrawing(Brushes.LightBlue, Is, g);
+                oldWaters = g;
             }
             return oldWaters;
         }
@@ -143,47 +157,53 @@ namespace Renderer
         {
             if (oldWalls == null)
             {
-                GeometryGroup g = new GeometryGroup();
+                DrawingGroup g = new DrawingGroup();
                 foreach (var wall in model.Walls)
                 {
-                    Geometry box = new RectangleGeometry(new Rect(wall.Cords.X * GameModel.TileSize,
+                    //Geometry box = new RectangleGeometry(new Rect(wall.Cords.X * GameModel.TileSize,
+                    //    wall.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                    ImageDrawing drawing = new ImageDrawing(GetImage("rock100.png"), new Rect(wall.Cords.X * GameModel.TileSize,
                         wall.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                    g.Children.Add(box);
+                    g.Children.Add(drawing);
                 }
-                oldWalls = new GeometryDrawing(Brushes.Gray, Is, g);
+                oldWalls = g;
             }
             return oldWalls;
         }
 
         private Drawing GetShootingMonsters()
         {
-            GeometryGroup g = new GeometryGroup();
+            DrawingGroup g = new DrawingGroup();
             foreach (var enemy in model.ShootingMonsters)
             {
                 if (oldShootingMonsters == null || !oldShootingMonstersPosition.Contains(enemy.Cords))
                 {
-                    Geometry box = new RectangleGeometry(new Rect(enemy.Cords.X * GameModel.TileSize,
+                    //Geometry box = new RectangleGeometry(new Rect(enemy.Cords.X * GameModel.TileSize,
+                    //    enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                    ImageDrawing drawing = new ImageDrawing(GetImage("ct100big.png"), new Rect(enemy.Cords.X * GameModel.TileSize,
                         enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                    g.Children.Add(box);
+                    g.Children.Add(drawing);
                 }
             }
-            oldShootingMonsters = new GeometryDrawing(Brushes.Yellow, Is, g);
+            oldShootingMonsters = g;
             return oldShootingMonsters;
         }
 
         private Drawing GetTrackingMonsters()
         {
-            GeometryGroup g = new GeometryGroup();
+            DrawingGroup g = new DrawingGroup();
             foreach (var enemy in model.TrackingMonsters)
             {
                 if (oldTrackingMonsters == null || !oldTrackingMonstersPosition.Contains(enemy.Cords))
                 {
-                    Geometry box = new RectangleGeometry(new Rect(enemy.Cords.X * GameModel.TileSize,
+                    //Geometry box = new RectangleGeometry(new Rect(enemy.Cords.X * GameModel.TileSize,
+                    //    enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                    ImageDrawing drawing = new ImageDrawing(GetImage("hoodtracker100100.png"), new Rect(enemy.Cords.X * GameModel.TileSize,
                         enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                    g.Children.Add(box);
+                    g.Children.Add(drawing);
                 }
             }
-            oldTrackingMonsters = new GeometryDrawing(Brushes.DarkRed, Is, g);
+            oldTrackingMonsters = g;
             return oldTrackingMonsters;
         }
 
@@ -250,16 +270,11 @@ namespace Renderer
             {
                 if (oldFlyingMonsters == null || !oldFlyingMonstersPosition.Contains(enemy.Cords))
                 {
-                    GeometryDrawing box = new GeometryDrawing(Brushes.Blue, Is, new RectangleGeometry(new Rect(enemy.Cords.X * GameModel.TileSize,
-                           enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize)));
-
-                    FormattedText text = new FormattedText("F", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black);
-                    text.TextAlignment = TextAlignment.Center;
-                    Geometry geo = text.BuildGeometry(new Point((enemy.Cords.X * GameModel.TileSize) + (GameModel.TileSize / 2), (enemy.Cords.Y * GameModel.TileSize) + (GameModel.TileSize / 3)));
-                    GeometryDrawing textGeo = new GeometryDrawing(Brushes.Black, null, geo);
-
-                    g.Children.Add(box);
-                    g.Children.Add(textGeo);
+                    //GeometryDrawing box = new GeometryDrawing(Brushes.Blue, Is, new RectangleGeometry(new Rect(enemy.Cords.X * GameModel.TileSize,
+                    //       enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize)));
+                    ImageDrawing drawing = new ImageDrawing(GetImage("missle100.png"), new Rect(enemy.Cords.X * GameModel.TileSize,
+                        enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                    g.Children.Add(drawing);
                 }
             }
             oldFlyingMonsters = g;
@@ -302,7 +317,7 @@ namespace Renderer
             {
                 Geometry g = new RectangleGeometry(new Rect(model.MyPlayer.Cords.X * GameModel.TileSize,
                     model.MyPlayer.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                oldPlayer = new GeometryDrawing(Brushes.Red, Is, g);
+                oldPlayer = new GeometryDrawing(PlayerBrush, null, g);
                 oldPlayerPosition = model.MyPlayer.Cords;
             }
             return oldPlayer;
