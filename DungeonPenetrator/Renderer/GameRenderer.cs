@@ -32,6 +32,7 @@ namespace Renderer
         List<Point> oldFlyingMonstersPosition = new List<Point>();
         List<Point> oldProjectilePosition = new List<Point>();
         Point oldPlayerPosition;
+        Point oldMousePosition;
 
         Dictionary<string, Brush> brushes = new Dictionary<string, Brush>();
 
@@ -179,11 +180,21 @@ namespace Renderer
             {
                 if (oldShootingMonsters == null || !oldShootingMonstersPosition.Contains(enemy.Cords))
                 {
-                    //Geometry box = new RectangleGeometry(new Rect(enemy.Cords.X * GameModel.TileSize,
-                    //    enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                    ImageDrawing drawing = new ImageDrawing(GetImage("ct100big.png"), new Rect(enemy.Cords.X * GameModel.TileSize,
+                    Point p = new Point((model.MyPlayer.Cords.X * GameModel.TileSize) - (enemy.Cords.X * GameModel.TileSize), (model.MyPlayer.Cords.Y * GameModel.TileSize) - (enemy.Cords.Y * GameModel.TileSize));
+                    double rotation = Math.Atan2(p.Y, p.X) * 180 / Math.PI;
+                    BitmapImage bmp = GetImage("ct100big.png");
+                    TransformedBitmap tb = new TransformedBitmap();
+                    tb.BeginInit();
+                    tb.Source = bmp;
+                    tb.Transform = new RotateTransform(90);
+                    tb.EndInit();
+
+                    ImageDrawing drawing = new ImageDrawing(tb, new Rect(enemy.Cords.X * GameModel.TileSize,
                         enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                    g.Children.Add(drawing);
+
+                    RotateTransform rotate = new RotateTransform(rotation, (enemy.Cords.X * GameModel.TileSize) + GameModel.TileSize/2 , (enemy.Cords.Y * GameModel.TileSize) + GameModel.TileSize / 2);
+
+                    g.Children.Add(new DrawingGroup() { Children = { drawing }, Transform = rotate });
                 }
             }
             oldShootingMonsters = g;
@@ -197,10 +208,32 @@ namespace Renderer
             {
                 if (oldTrackingMonsters == null || !oldTrackingMonstersPosition.Contains(enemy.Cords))
                 {
-                    //Geometry box = new RectangleGeometry(new Rect(enemy.Cords.X * GameModel.TileSize,
-                    //    enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                    ImageDrawing drawing = new ImageDrawing(GetImage("hoodtracker100100.png"), new Rect(enemy.Cords.X * GameModel.TileSize,
+                    BitmapImage bmp = GetImage("hoodtracker100100.png");
+                    TransformedBitmap tb = new TransformedBitmap();
+                    tb.BeginInit();
+                    tb.Source = bmp;
+                    switch (model.BasicTrackingPath[enemy.Cords])
+                    {
+                        case { } Point when Point == new Point(1, 0):
+                            tb.Transform = new RotateTransform(270);
+                            break;
+                        case { } Point when Point == new Point(0, 1):
+                            tb.Transform = new RotateTransform(0);
+                            break;
+                        case { } Point when Point == new Point(-1, 0):
+                            tb.Transform = new RotateTransform(90);
+                            break;
+                        case { } Point when Point == new Point(0, -1):
+                            tb.Transform = new RotateTransform(180);
+                            break;
+                        default:
+                            break;
+                    }
+                    tb.EndInit();
+
+                    ImageDrawing drawing = new ImageDrawing(tb, new Rect(enemy.Cords.X * GameModel.TileSize,
                         enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+
                     g.Children.Add(drawing);
                 }
             }
@@ -250,10 +283,32 @@ namespace Renderer
             {
                 if (oldFlyingMonsters == null || !oldFlyingMonstersPosition.Contains(enemy.Cords))
                 {
-                    //GeometryDrawing box = new GeometryDrawing(Brushes.Blue, Is, new RectangleGeometry(new Rect(enemy.Cords.X * GameModel.TileSize,
-                    //       enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize)));
-                    ImageDrawing drawing = new ImageDrawing(GetImage("missle100.png"), new Rect(enemy.Cords.X * GameModel.TileSize,
+                    BitmapImage bmp = GetImage("missle100.png");
+                    TransformedBitmap tb = new TransformedBitmap();
+                    tb.BeginInit();
+                    tb.Source = bmp;
+                    switch (model.FlyingTrackingPath[enemy.Cords])
+                    {
+                        case { } Point when Point == new Point(1, 0):
+                            tb.Transform = new RotateTransform(90);
+                            break;
+                        case { } Point when Point == new Point(0, 1):
+                            tb.Transform = new RotateTransform(180);
+                            break;
+                        case { } Point when Point == new Point(-1, 0):
+                            tb.Transform = new RotateTransform(270);
+                            break;
+                        case { } Point when Point == new Point(0, -1):
+                            tb.Transform = new RotateTransform(0);
+                            break;
+                        default:
+                            break;
+                    }
+                    tb.EndInit();
+
+                    ImageDrawing drawing = new ImageDrawing(tb, new Rect(enemy.Cords.X * GameModel.TileSize,
                         enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+
                     g.Children.Add(drawing);
                 }
             }
@@ -293,11 +348,31 @@ namespace Renderer
 
         private Drawing GetPlayer()
         {
-            if (oldPlayer == null || oldPlayerPosition != model.MyPlayer.Cords)
+            DrawingGroup g = new DrawingGroup();
+            if (oldPlayer == null || oldPlayerPosition != model.MyPlayer.Cords || model.mousePosition != oldMousePosition)
             {
-                Geometry g = new RectangleGeometry(new Rect(model.MyPlayer.Cords.X * GameModel.TileSize,
+                
+                Point p = new Point(model.mousePosition.X - (model.MyPlayer.Cords.X * GameModel.TileSize), model.mousePosition.Y - (model.MyPlayer.Cords.Y * GameModel.TileSize));
+                double rotation = Math.Atan2(p.Y, p.X) * 180 / Math.PI;
+
+                BitmapImage bmp = GetImage("100.png");
+                TransformedBitmap tb = new TransformedBitmap();
+                tb.BeginInit();
+                tb.Source = bmp;
+                tb.Transform = new RotateTransform(90);
+                tb.EndInit();
+
+                //Geometry g = new RectangleGeometry(new Rect(model.MyPlayer.Cords.X * GameModel.TileSize,
+                //    model.MyPlayer.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+
+                ImageDrawing drawing = new ImageDrawing(tb, new Rect(model.MyPlayer.Cords.X * GameModel.TileSize,
                     model.MyPlayer.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                oldPlayer = new GeometryDrawing(PlayerBrush, null, g);
+
+                RotateTransform rotate = new RotateTransform(rotation, (model.MyPlayer.Cords.X * GameModel.TileSize) + GameModel.TileSize / 2, (model.MyPlayer.Cords.Y * GameModel.TileSize) + GameModel.TileSize / 2);
+
+                g.Children.Add(new DrawingGroup() { Children = { drawing }, Transform = rotate });
+
+                oldPlayer = g;
                 oldPlayerPosition = model.MyPlayer.Cords;
             }
             return oldPlayer;

@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\100.png" />
     <None Remove="Images\bg3.png" />
     <None Remove="Images\bluepotion.png" />
-    <None Remove="Images\characterblue100.png" />
     <None Remove="Images\ct100big.png" />
     <None Remove="Images\error-icon-32.png" />
     <None Remove="Images\hoodtracker.gif" />
@@ -24,9 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Images\100.png" />
     <EmbeddedResource Include="Images\bg3.png" />
     <EmbeddedResource Include="Images\bluepotion.png" />
-    <EmbeddedResource Include="Images\characterblue100.png" />
     <EmbeddedResource Include="Images\ct100big.png" />
     <EmbeddedResource Include="Images\error-icon-32.png" />
     <EmbeddedResource Include="Images\hoodtracker.gif" />

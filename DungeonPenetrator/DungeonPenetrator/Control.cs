@@ -42,6 +42,7 @@ namespace DungeonPenetrator
             {
                 win.KeyDown += Win_KeyDown;
                 win.MouseLeftButtonDown += this.Left_MouseButtonDown;
+                win.MouseMove += Win_MouseMove;
             }
             MoveEnemies();
             ShootingEnemies();
@@ -53,6 +54,11 @@ namespace DungeonPenetrator
             updateTimer.Enabled = true;
 
             //InvalidateVisual();
+        }
+
+        private void Win_MouseMove(object sender, MouseEventArgs e)
+        {
+            model.mousePosition = e.GetPosition(this);
         }
 
         private void UpdateScreen(object sender, EventArgs e)
@@ -77,6 +83,17 @@ namespace DungeonPenetrator
                 moveOneEnemy.Tick += delegate
                 {
                     gameLogic.MoveRegularEnemy(item);
+                };
+                moveOneEnemy.Interval = TimeSpan.FromMilliseconds(rnd.Next(1000, 3000));
+                moveOneEnemy.Start();
+            }
+
+            foreach (var item in model.FlyingMonsters)
+            {
+                DispatcherTimer moveOneEnemy = new DispatcherTimer();
+                moveOneEnemy.Tick += delegate
+                {
+                    gameLogic.MoveFlyingEnemy(item);
                 };
                 moveOneEnemy.Interval = TimeSpan.FromMilliseconds(rnd.Next(1000, 3000));
                 moveOneEnemy.Start();
