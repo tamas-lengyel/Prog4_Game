@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace Model
 {
@@ -29,7 +30,7 @@ namespace Model
 
         }
         public ProjectileType Type { get; set; }
-
+        public DispatcherTimer Timer { get; set; }
         /*public override bool Equals(object obj)
         {
             if (obj is Projectile)

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace Logic
 {
@@ -205,7 +206,7 @@ namespace Logic
         {
             gameModel.Projectiles.Remove(projectile);
         }
-        public void MoveProjectile(Projectile projectile)
+        public void MoveProjectile(ref Projectile projectile)
         {
             double x = projectile.direction.X;
             double y = projectile.direction.Y;
@@ -220,11 +221,13 @@ namespace Logic
             double newY = projectile.Cords.Y + (projectile.direction.Y * projectile.Speed);
             if ((newX < 0 || newX >= gameModel.GameWidth) || (newY < 0 || newY >= gameModel.GameHeight))
             {
+                projectile.Timer.Stop();
                 gameModel.Projectiles.Remove(projectile);
                 projectile = null;
                 return;
             }
-            gameModel.Projectiles.Find(x => x.Equals(projectile)).Cords = new Point(newX, newY);
+            //gameModel.Projectiles.Find(x => x.Equals(projectile)).Cords = new Point(newX, newY);
+            projectile.Cords = new Point(newX, newY);
         }
         public void MovePlayer(int dx,int dy)
         {
@@ -241,14 +244,26 @@ namespace Logic
             }
         }
 
-        public Projectile PlayerShoot(Point mousePos,int speed)
+        public void PlayerShoot(Point mousePos,int speed)
         {
             Point playerLocationCord = new Point((gameModel.MyPlayer.Cords.X * GameModel.TileSize) + GameModel.TileSize/2, (gameModel.MyPlayer.Cords.Y * GameModel.TileSize) + GameModel.TileSize / 2);
             Projectile projectile = new Projectile(playerLocationCord, mousePos);
             projectile.Type = ProjectileType.Player;
             projectile.Damage = gameModel.MyPlayer.Damage;
-            projectile.Speed = speed; 
-            return projectile;
+            projectile.Speed = speed;
+
+            projectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
+            projectile.Timer.Interval = TimeSpan.FromMilliseconds(20);
+            projectile.Timer.Tick += new EventHandler((sender, e) => Timer_Tick(this,e,ref projectile));
+            projectile.Timer.Start();
+            gameModel.Projectiles.Add(projectile);
+            //return projectile;
+        }
+
+        private void Timer_Tick(object sender, EventArgs e,ref Projectile projectile)
+        {
+
+            MoveProjectile(ref projectile);
         }
 
         public void MoveFlyingEnemy(FlyingEnemy flyingEnemy)
@@ -264,13 +279,13 @@ namespace Logic
             {
                 case TrackingEnemy:
                     activeGameObjects.Cords =
-                        new Point(activeGameObjects.Cords.X + gameModel.FlyingTrackingPath[activeGameObjects.Cords].X,
-                        activeGameObjects.Cords.Y + gameModel.FlyingTrackingPath[activeGameObjects.Cords].Y);
+                        new Point(activeGameObjects.Cords.X + gameModel.BasicTrackingPath[activeGameObjects.Cords].X,
+                        activeGameObjects.Cords.Y + gameModel.BasicTrackingPath[activeGameObjects.Cords].Y);
                     break;
                 case BossEnemy:
                     activeGameObjects.Cords =
-                        new Point(activeGameObjects.Cords.X + gameModel.FlyingTrackingPath[activeGameObjects.Cords].X,
-                        activeGameObjects.Cords.Y + gameModel.FlyingTrackingPath[activeGameObjects.Cords].Y);
+                        new Point(activeGameObjects.Cords.X + gameModel.BasicTrackingPath[activeGameObjects.Cords].X,
+                        activeGameObjects.Cords.Y + gameModel.BasicTrackingPath[activeGameObjects.Cords].Y);
                     break;
                 default:
                     break;
