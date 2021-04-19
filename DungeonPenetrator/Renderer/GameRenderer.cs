@@ -32,18 +32,19 @@ namespace Renderer
         List<Point> oldFlyingMonstersPosition = new List<Point>();
         List<Point> oldProjectilePosition = new List<Point>();
         Point oldPlayerPosition;
+        Point oldMousePosition;
 
         Dictionary<string, Brush> brushes = new Dictionary<string, Brush>();
 
         Pen Is = new Pen(Brushes.Black, 1);
 
-        Brush BackgroundBrush { get { return GetBrush("snowy.jpg", false); } }
+        Brush BackgroundBrush { get { return GetBrush("bg3.png", false); } }
+        Brush PlayerBrush { get { return GetBrush("characterblue100.png", false); } }
 
         Brush GetBrush(string fname, bool isTiled)
         {
             if (!brushes.ContainsKey(fname))
             {
-                //ImageBrush ib = new ImageBrush(new BitmapImage(new Uri(xxxx)));
                 BitmapImage bmp = new BitmapImage();
                 bmp.BeginInit();
                 bmp.StreamSource = Assembly.LoadFrom("DungeonPenetrator").GetManifestResourceStream("DungeonPenetrator.Images." + fname);
@@ -53,6 +54,15 @@ namespace Renderer
                 brushes.Add(fname, ib);
             }
             return brushes[fname];
+        }
+
+        internal static BitmapImage GetImage(string fileName)
+        {
+            BitmapImage bmp = new BitmapImage();
+            bmp.BeginInit();
+            bmp.StreamSource = Assembly.LoadFrom("DungeonPenetrator").GetManifestResourceStream("DungeonPenetrator.Images." + fileName);
+            bmp.EndInit();
+            return bmp;
         }
 
         public GameRenderer(IGameModel model)
@@ -91,17 +101,21 @@ namespace Renderer
 
         private Drawing GetLevelExit()
         {
-            if (oldLevelExit == null)
+            DrawingGroup g = new DrawingGroup();
+            if (oldLevelExit == null && model.ShootingMonsters.Count == 0 && model.TrackingMonsters.Count == 0 && model.FlyingMonsters.Count == 0)
             {
-                DrawingGroup g = new DrawingGroup();
-                GeometryDrawing box = new GeometryDrawing(Brushes.HotPink, Is, new RectangleGeometry(new Rect(model.LevelExit.X * GameModel.TileSize,
-                           model.LevelExit.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize)));
-                FormattedText text = new FormattedText("G", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black);
-                text.TextAlignment = TextAlignment.Center;
-                Geometry geo = text.BuildGeometry(new Point((model.LevelExit.X * GameModel.TileSize) + (GameModel.TileSize / 2), (model.LevelExit.Y * GameModel.TileSize) + (GameModel.TileSize / 3)));
-                GeometryDrawing textGeo = new GeometryDrawing(Brushes.Black, null, geo);
-                g.Children.Add(box);
-                g.Children.Add(textGeo);
+                ImageDrawing drawing = new ImageDrawing(GetImage("goal.png"), new Rect(model.LevelExit.X * GameModel.TileSize,
+                           model.LevelExit.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+
+                g.Children.Add(drawing);
+                oldLevelExit = g;
+            }
+            else
+            {
+                ImageDrawing drawing = new ImageDrawing(GetImage("goallocked.png"), new Rect(model.LevelExit.X * GameModel.TileSize,
+                           model.LevelExit.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+
+                g.Children.Add(drawing);
                 oldLevelExit = g;
             }
             return oldLevelExit;
@@ -111,14 +125,14 @@ namespace Renderer
         {
             if (oldLavas == null)
             {
-                GeometryGroup g = new GeometryGroup();
+                DrawingGroup g = new DrawingGroup();
                 foreach (var lava in model.Lavas)
                 {
-                    Geometry box = new RectangleGeometry(new Rect(lava.Cords.X * GameModel.TileSize,
+                    ImageDrawing drawing = new ImageDrawing(GetImage("lava.png"), new Rect(lava.Cords.X * GameModel.TileSize,
                         lava.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                    g.Children.Add(box);
+                    g.Children.Add(drawing);
                 }
-                oldLavas = new GeometryDrawing(Brushes.Orange, Is, g);
+                oldLavas = g;
             }
             return oldLavas;
         }
@@ -127,14 +141,14 @@ namespace Renderer
         {
             if (oldWaters == null)
             {
-                GeometryGroup g = new GeometryGroup();
+                DrawingGroup g = new DrawingGroup();
                 foreach (var water in model.Waters)
                 {
-                    Geometry box = new RectangleGeometry(new Rect(water.Cords.X * GameModel.TileSize,
+                    ImageDrawing drawing = new ImageDrawing(GetImage("water.png"), new Rect(water.Cords.X * GameModel.TileSize,
                         water.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                    g.Children.Add(box);
+                    g.Children.Add(drawing);
                 }
-                oldWaters = new GeometryDrawing(Brushes.LightBlue, Is, g);
+                oldWaters = g;
             }
             return oldWaters;
         }
@@ -143,47 +157,83 @@ namespace Renderer
         {
             if (oldWalls == null)
             {
-                GeometryGroup g = new GeometryGroup();
+                DrawingGroup g = new DrawingGroup();
                 foreach (var wall in model.Walls)
                 {
-                    Geometry box = new RectangleGeometry(new Rect(wall.Cords.X * GameModel.TileSize,
+                    ImageDrawing drawing = new ImageDrawing(GetImage("rock100.png"), new Rect(wall.Cords.X * GameModel.TileSize,
                         wall.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                    g.Children.Add(box);
+                    g.Children.Add(drawing);
                 }
-                oldWalls = new GeometryDrawing(Brushes.Gray, Is, g);
+                oldWalls = g;
             }
             return oldWalls;
         }
 
         private Drawing GetShootingMonsters()
         {
-            GeometryGroup g = new GeometryGroup();
+            DrawingGroup g = new DrawingGroup();
             foreach (var enemy in model.ShootingMonsters)
             {
                 if (oldShootingMonsters == null || !oldShootingMonstersPosition.Contains(enemy.Cords))
                 {
-                    Geometry box = new RectangleGeometry(new Rect(enemy.Cords.X * GameModel.TileSize,
+                    Point p = new Point((model.MyPlayer.Cords.X * GameModel.TileSize) - (enemy.Cords.X * GameModel.TileSize), (model.MyPlayer.Cords.Y * GameModel.TileSize) - (enemy.Cords.Y * GameModel.TileSize));
+                    double rotation = Math.Atan2(p.Y, p.X) * 180 / Math.PI;
+                    BitmapImage bmp = GetImage("ct100big.png");
+                    TransformedBitmap tb = new TransformedBitmap();
+                    tb.BeginInit();
+                    tb.Source = bmp;
+                    tb.Transform = new RotateTransform(90);
+                    tb.EndInit();
+
+                    ImageDrawing drawing = new ImageDrawing(tb, new Rect(enemy.Cords.X * GameModel.TileSize,
                         enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                    g.Children.Add(box);
+
+                    RotateTransform rotate = new RotateTransform(rotation, (enemy.Cords.X * GameModel.TileSize) + GameModel.TileSize/2 , (enemy.Cords.Y * GameModel.TileSize) + GameModel.TileSize / 2);
+
+                    g.Children.Add(new DrawingGroup() { Children = { drawing }, Transform = rotate });
                 }
             }
-            oldShootingMonsters = new GeometryDrawing(Brushes.Yellow, Is, g);
+            oldShootingMonsters = g;
             return oldShootingMonsters;
         }
 
         private Drawing GetTrackingMonsters()
         {
-            GeometryGroup g = new GeometryGroup();
+            DrawingGroup g = new DrawingGroup();
             foreach (var enemy in model.TrackingMonsters)
             {
                 if (oldTrackingMonsters == null || !oldTrackingMonstersPosition.Contains(enemy.Cords))
                 {
-                    Geometry box = new RectangleGeometry(new Rect(enemy.Cords.X * GameModel.TileSize,
+                    BitmapImage bmp = GetImage("hoodtracker100100.png");
+                    TransformedBitmap tb = new TransformedBitmap();
+                    tb.BeginInit();
+                    tb.Source = bmp;
+                    switch (model.BasicTrackingPath[enemy.Cords])
+                    {
+                        case { } Point when Point == new Point(1, 0):
+                            tb.Transform = new RotateTransform(270);
+                            break;
+                        case { } Point when Point == new Point(0, 1):
+                            tb.Transform = new RotateTransform(0);
+                            break;
+                        case { } Point when Point == new Point(-1, 0):
+                            tb.Transform = new RotateTransform(90);
+                            break;
+                        case { } Point when Point == new Point(0, -1):
+                            tb.Transform = new RotateTransform(180);
+                            break;
+                        default:
+                            break;
+                    }
+                    tb.EndInit();
+
+                    ImageDrawing drawing = new ImageDrawing(tb, new Rect(enemy.Cords.X * GameModel.TileSize,
                         enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                    g.Children.Add(box);
+
+                    g.Children.Add(drawing);
                 }
             }
-            oldTrackingMonsters = new GeometryDrawing(Brushes.DarkRed, Is, g);
+            oldTrackingMonsters = g;
             return oldTrackingMonsters;
         }
 
@@ -194,49 +244,28 @@ namespace Renderer
                 DrawingGroup g = new DrawingGroup();
                 foreach (var powerup in model.Powerups)
                 {
-                    FormattedText text;
-                    GeometryDrawing box;
-                    Geometry geo;
-                    GeometryDrawing textGeo;
+                    ImageDrawing drawing;
                     switch (powerup.Type)
                     {
                         case Model.Passive.PowerupType.Health:
-                            box = new GeometryDrawing(Brushes.Purple, Is, new RectangleGeometry(new Rect(powerup.Cords.X * GameModel.TileSize,
-                           powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize)));
-                            text = new FormattedText("H", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black);
-                            text.TextAlignment = TextAlignment.Center;
-                            geo = text.BuildGeometry(new Point((powerup.Cords.X * GameModel.TileSize) + (GameModel.TileSize / 2), (powerup.Cords.Y * GameModel.TileSize) + (GameModel.TileSize / 3)));
-                            textGeo = new GeometryDrawing(Brushes.Black, null, geo);
+                            drawing = new ImageDrawing(GetImage("redpotion.png"), new Rect(powerup.Cords.X * GameModel.TileSize,
+                                powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                             break;
                         case Model.Passive.PowerupType.Damage:
-                            box = new GeometryDrawing(Brushes.Purple, Is, new RectangleGeometry(new Rect(powerup.Cords.X * GameModel.TileSize,
-                           powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize)));
-                            text = new FormattedText("D", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black);
-                            text.TextAlignment = TextAlignment.Center;
-                            geo = text.BuildGeometry(new Point((powerup.Cords.X * GameModel.TileSize) + (GameModel.TileSize / 2), (powerup.Cords.Y * GameModel.TileSize) + (GameModel.TileSize / 3)));
-                            textGeo = new GeometryDrawing(Brushes.Black, null, geo);
+                            drawing = new ImageDrawing(GetImage("bluepotion.png"), new Rect(powerup.Cords.X * GameModel.TileSize,
+                                powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                             break;
                         case Model.Passive.PowerupType.FiringSpeed:
-                            box = new GeometryDrawing(Brushes.Purple, Is, new RectangleGeometry(new Rect(powerup.Cords.X * GameModel.TileSize,
-                           powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize)));
-                            text = new FormattedText("R", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black);
-                            text.TextAlignment = TextAlignment.Center;
-                            geo = text.BuildGeometry(new Point((powerup.Cords.X * GameModel.TileSize) + (GameModel.TileSize / 2), (powerup.Cords.Y * GameModel.TileSize) + (GameModel.TileSize / 3)));
-                            textGeo = new GeometryDrawing(Brushes.Black, null, geo);
+                            drawing = new ImageDrawing(GetImage("yellowpotion.png"), new Rect(powerup.Cords.X * GameModel.TileSize,
+                                powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                             break;
                         default:
-                            box = new GeometryDrawing(Brushes.Purple, Is, new RectangleGeometry(new Rect(powerup.Cords.X * GameModel.TileSize,
-                         powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize)));
-                            text = new FormattedText("ERROR", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black);
-                            text.TextAlignment = TextAlignment.Center;
-                            geo = text.BuildGeometry(new Point((powerup.Cords.X * GameModel.TileSize) + (GameModel.TileSize / 2), (powerup.Cords.Y * GameModel.TileSize) + (GameModel.TileSize / 3)));
-                            textGeo = new GeometryDrawing(Brushes.Black, null, geo);
+                            drawing = new ImageDrawing(GetImage("error-icon-32.png"), new Rect(powerup.Cords.X * GameModel.TileSize,
+                                powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                             break;
                     }
 
-
-                    g.Children.Add(box);
-                    g.Children.Add(textGeo);
+                    g.Children.Add(drawing);
                 }
                 oldPowerups = g;
             }
@@ -250,16 +279,33 @@ namespace Renderer
             {
                 if (oldFlyingMonsters == null || !oldFlyingMonstersPosition.Contains(enemy.Cords))
                 {
-                    GeometryDrawing box = new GeometryDrawing(Brushes.Blue, Is, new RectangleGeometry(new Rect(enemy.Cords.X * GameModel.TileSize,
-                           enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize)));
+                    BitmapImage bmp = GetImage("missle100.png");
+                    TransformedBitmap tb = new TransformedBitmap();
+                    tb.BeginInit();
+                    tb.Source = bmp;
+                    switch (model.FlyingTrackingPath[enemy.Cords])
+                    {
+                        case { } Point when Point == new Point(1, 0):
+                            tb.Transform = new RotateTransform(90);
+                            break;
+                        case { } Point when Point == new Point(0, 1):
+                            tb.Transform = new RotateTransform(180);
+                            break;
+                        case { } Point when Point == new Point(-1, 0):
+                            tb.Transform = new RotateTransform(270);
+                            break;
+                        case { } Point when Point == new Point(0, -1):
+                            tb.Transform = new RotateTransform(0);
+                            break;
+                        default:
+                            break;
+                    }
+                    tb.EndInit();
 
-                    FormattedText text = new FormattedText("F", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black);
-                    text.TextAlignment = TextAlignment.Center;
-                    Geometry geo = text.BuildGeometry(new Point((enemy.Cords.X * GameModel.TileSize) + (GameModel.TileSize / 2), (enemy.Cords.Y * GameModel.TileSize) + (GameModel.TileSize / 3)));
-                    GeometryDrawing textGeo = new GeometryDrawing(Brushes.Black, null, geo);
+                    ImageDrawing drawing = new ImageDrawing(tb, new Rect(enemy.Cords.X * GameModel.TileSize,
+                        enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
 
-                    g.Children.Add(box);
-                    g.Children.Add(textGeo);
+                    g.Children.Add(drawing);
                 }
             }
             oldFlyingMonsters = g;
@@ -298,11 +344,28 @@ namespace Renderer
 
         private Drawing GetPlayer()
         {
-            if (oldPlayer == null || oldPlayerPosition != model.MyPlayer.Cords)
+            DrawingGroup g = new DrawingGroup();
+            if (oldPlayer == null || oldPlayerPosition != model.MyPlayer.Cords || model.mousePosition != oldMousePosition)
             {
-                Geometry g = new RectangleGeometry(new Rect(model.MyPlayer.Cords.X * GameModel.TileSize,
+                
+                Point p = new Point(model.mousePosition.X - (model.MyPlayer.Cords.X * GameModel.TileSize), model.mousePosition.Y - (model.MyPlayer.Cords.Y * GameModel.TileSize));
+                double rotation = Math.Atan2(p.Y, p.X) * 180 / Math.PI;
+
+                BitmapImage bmp = GetImage("100.png");
+                TransformedBitmap tb = new TransformedBitmap();
+                tb.BeginInit();
+                tb.Source = bmp;
+                tb.Transform = new RotateTransform(90);
+                tb.EndInit();
+
+                ImageDrawing drawing = new ImageDrawing(tb, new Rect(model.MyPlayer.Cords.X * GameModel.TileSize,
                     model.MyPlayer.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                oldPlayer = new GeometryDrawing(Brushes.Red, Is, g);
+
+                RotateTransform rotate = new RotateTransform(rotation, (model.MyPlayer.Cords.X * GameModel.TileSize) + GameModel.TileSize / 2, (model.MyPlayer.Cords.Y * GameModel.TileSize) + GameModel.TileSize / 2);
+
+                g.Children.Add(new DrawingGroup() { Children = { drawing }, Transform = rotate });
+
+                oldPlayer = g;
                 oldPlayerPosition = model.MyPlayer.Cords;
             }
             return oldPlayer;

@@ -125,7 +125,7 @@ namespace Logic
         }
         private void GenerateBasicEnemies()
         {
-            int rndObjectNum = rnd.Next(15, (int)((int)(gameModel.GameWidth / GameModel.TileSize) * (int)(gameModel.GameHeight / GameModel.TileSize) / (GameModel.TileSize/5)));
+            int rndObjectNum = rnd.Next(15, (int)((int)(gameModel.GameWidth / GameModel.TileSize) * (int)(gameModel.GameHeight / GameModel.TileSize) / (GameModel.TileSize/4)));
             for (int i = 0; i < rndObjectNum; i++)
             {
                 Tuple<int, int> rndCord = new Tuple<int, int>(rnd.Next(2,(int)(gameModel.GameWidth / GameModel.TileSize)-2), rnd.Next(3,(int)(gameModel.GameHeight / GameModel.TileSize)-3));
@@ -150,7 +150,7 @@ namespace Logic
         }
         private void GenerateCollectables()
         {
-            int rndObjectNum = rnd.Next(2,(int)((int)(gameModel.GameWidth / GameModel.TileSize) * (int)(gameModel.GameHeight / GameModel.TileSize) / (GameModel.TileSize/5)));
+            int rndObjectNum = rnd.Next(0,(int)((int)(gameModel.GameWidth / GameModel.TileSize) * (int)(gameModel.GameHeight / GameModel.TileSize) / (GameModel.TileSize/2)));
             for (int i = 0; i < rndObjectNum; i++)
             {
                 Tuple<int, int> rndCord = new Tuple<int, int>(rnd.Next((int)(gameModel.GameWidth / GameModel.TileSize)), rnd.Next((int)(gameModel.GameHeight / GameModel.TileSize)));
