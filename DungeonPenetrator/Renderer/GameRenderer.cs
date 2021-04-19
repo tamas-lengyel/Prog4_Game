@@ -45,7 +45,6 @@ namespace Renderer
         {
             if (!brushes.ContainsKey(fname))
             {
-                //ImageBrush ib = new ImageBrush(new BitmapImage(new Uri(xxxx)));
                 BitmapImage bmp = new BitmapImage();
                 bmp.BeginInit();
                 bmp.StreamSource = Assembly.LoadFrom("DungeonPenetrator").GetManifestResourceStream("DungeonPenetrator.Images." + fname);
@@ -63,7 +62,6 @@ namespace Renderer
             bmp.BeginInit();
             bmp.StreamSource = Assembly.LoadFrom("DungeonPenetrator").GetManifestResourceStream("DungeonPenetrator.Images." + fileName);
             bmp.EndInit();
-            //bmp.Rotation = Rotation.Rotate90;
             return bmp;
         }
 
@@ -103,17 +101,21 @@ namespace Renderer
 
         private Drawing GetLevelExit()
         {
-            if (oldLevelExit == null)
+            DrawingGroup g = new DrawingGroup();
+            if (oldLevelExit == null && model.ShootingMonsters.Count == 0 && model.TrackingMonsters.Count == 0 && model.FlyingMonsters.Count == 0)
             {
-                DrawingGroup g = new DrawingGroup();
-                GeometryDrawing box = new GeometryDrawing(Brushes.HotPink, Is, new RectangleGeometry(new Rect(model.LevelExit.X * GameModel.TileSize,
-                           model.LevelExit.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize)));
-                FormattedText text = new FormattedText("G", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black);
-                text.TextAlignment = TextAlignment.Center;
-                Geometry geo = text.BuildGeometry(new Point((model.LevelExit.X * GameModel.TileSize) + (GameModel.TileSize / 2), (model.LevelExit.Y * GameModel.TileSize) + (GameModel.TileSize / 3)));
-                GeometryDrawing textGeo = new GeometryDrawing(Brushes.Black, null, geo);
-                g.Children.Add(box);
-                g.Children.Add(textGeo);
+                ImageDrawing drawing = new ImageDrawing(GetImage("goal.png"), new Rect(model.LevelExit.X * GameModel.TileSize,
+                           model.LevelExit.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+
+                g.Children.Add(drawing);
+                oldLevelExit = g;
+            }
+            else
+            {
+                ImageDrawing drawing = new ImageDrawing(GetImage("goallocked.png"), new Rect(model.LevelExit.X * GameModel.TileSize,
+                           model.LevelExit.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+
+                g.Children.Add(drawing);
                 oldLevelExit = g;
             }
             return oldLevelExit;
@@ -126,8 +128,6 @@ namespace Renderer
                 DrawingGroup g = new DrawingGroup();
                 foreach (var lava in model.Lavas)
                 {
-                    //Geometry box = new RectangleGeometry(new Rect(lava.Cords.X * GameModel.TileSize,
-                    //    lava.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                     ImageDrawing drawing = new ImageDrawing(GetImage("lava.png"), new Rect(lava.Cords.X * GameModel.TileSize,
                         lava.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                     g.Children.Add(drawing);
@@ -144,8 +144,6 @@ namespace Renderer
                 DrawingGroup g = new DrawingGroup();
                 foreach (var water in model.Waters)
                 {
-                    //Geometry box = new RectangleGeometry(new Rect(water.Cords.X * GameModel.TileSize,
-                    //    water.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                     ImageDrawing drawing = new ImageDrawing(GetImage("water.png"), new Rect(water.Cords.X * GameModel.TileSize,
                         water.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                     g.Children.Add(drawing);
@@ -162,8 +160,6 @@ namespace Renderer
                 DrawingGroup g = new DrawingGroup();
                 foreach (var wall in model.Walls)
                 {
-                    //Geometry box = new RectangleGeometry(new Rect(wall.Cords.X * GameModel.TileSize,
-                    //    wall.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                     ImageDrawing drawing = new ImageDrawing(GetImage("rock100.png"), new Rect(wall.Cords.X * GameModel.TileSize,
                         wall.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                     g.Children.Add(drawing);
@@ -361,9 +357,6 @@ namespace Renderer
                 tb.Source = bmp;
                 tb.Transform = new RotateTransform(90);
                 tb.EndInit();
-
-                //Geometry g = new RectangleGeometry(new Rect(model.MyPlayer.Cords.X * GameModel.TileSize,
-                //    model.MyPlayer.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
 
                 ImageDrawing drawing = new ImageDrawing(tb, new Rect(model.MyPlayer.Cords.X * GameModel.TileSize,
                     model.MyPlayer.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
