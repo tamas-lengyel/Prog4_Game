@@ -10,5 +10,6 @@ namespace Model.Passive
     public class WaterProp : PassiveGameObjects
     {
         public override Point Cords { get; set; }
+        public override Rect Area { get { return new Rect(Cords.X * GameModel.TileSize, Cords.Y * GameModel.TileSize, GameModel.TileSize - 1, GameModel.TileSize - 1); } }
     }
 }

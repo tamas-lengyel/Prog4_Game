@@ -52,7 +52,7 @@ namespace Logic
 
                 gameModel.MyPlayer.IsReloading = false;
                 gameModel.MyPlayer.FiringSpeed = 1;
-                gameModel.MyPlayer.Damage = 5;
+                gameModel.MyPlayer.Damage = 255;
                 gameModel.MyPlayer.Health = 100;
                 gameModel.LevelCounter = 0; // Gets raised to one, must be zero
             }
@@ -83,13 +83,13 @@ namespace Logic
                             gameModel.Waters.Add(new WaterProp { Cords = new Point(x, y)});
                             break;
                         case 'H':
-                            gameModel.Powerups.Add(new Powerups { Cords = new Point(x, y), Type = PowerupType.Health});
+                            gameModel.Powerups.Add(new Powerups(new Point(x, y), PowerupType.Health));
                             break;
                         case 'D':
-                            gameModel.Powerups.Add(new Powerups { Cords = new Point(x, y), Type = PowerupType.Damage});
+                            gameModel.Powerups.Add(new Powerups (new Point(x, y), PowerupType.Damage));
                             break;
                         case 'R':
-                            gameModel.Powerups.Add(new Powerups { Cords = new Point(x, y), Type = PowerupType.FiringSpeed});
+                            gameModel.Powerups.Add(new Powerups ( new Point(x, y), PowerupType.FiringSpeed));
                             break;
                         case 'F':
                             gameModel.FlyingMonsters.Add(new FlyingEnemy { Cords = new Point(x, y), Damage = 10, Health = 30 });

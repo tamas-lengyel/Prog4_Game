@@ -15,11 +15,13 @@ namespace Model.Passive
     public class Powerups : PassiveGameObjects
     {
         public override Point Cords { get; set; }
-        public PowerupType Type;
-        public int ModifyRate { get; }
-        public Powerups()
+        public PowerupType Type { get; set; }
+        public double ModifyRate { get; }
+        public Powerups(Point Cords, PowerupType Type)
         {
-            switch (Type)
+            this.Cords = Cords;
+            this.Type = Type;
+            switch (this.Type)
             {
                 case PowerupType.Health:
                     ModifyRate = 20;
@@ -28,9 +30,11 @@ namespace Model.Passive
                     ModifyRate = 5;
                     break;
                 case PowerupType.FiringSpeed:
-                    ModifyRate = 2;
+                    ModifyRate = 0.2d;
                     break;
             }
         }
+        public override Rect Area { get { return new Rect(Cords.X * GameModel.TileSize, Cords.Y * GameModel.TileSize, GameModel.TileSize - 1, GameModel.TileSize - 1); } }
+
     }
 }

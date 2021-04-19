@@ -39,13 +39,13 @@ namespace Logic
                 case PowerupType.Health:
                     if (gameModel.MyPlayer.Health+powerups.ModifyRate<100) // If player's maxhealth will be modified this should not be hardcoded like this
                     {
-                        gameModel.MyPlayer.Health += powerups.ModifyRate;
+                        gameModel.MyPlayer.Health += (int)powerups.ModifyRate;
                         break;
                     }
                     gameModel.MyPlayer.Health = 100;
                     break;
                 case PowerupType.Damage:
-                    gameModel.MyPlayer.Damage += powerups.ModifyRate;
+                    gameModel.MyPlayer.Damage += (int)powerups.ModifyRate;
                     break;
                 case PowerupType.FiringSpeed: // max value should be 50 needs param
                     if (gameModel.MyPlayer.FiringSpeed<50)
@@ -63,13 +63,13 @@ namespace Logic
             switch(rnd.Next(0, 3))
             {
                 case 0:
-                    gameModel.Powerups.Add(new Powerups { Cords = emptyTiles[rnd.Next(0,emptyTiles.Count())], Type = PowerupType.Health });
+                    gameModel.Powerups.Add(new Powerups (emptyTiles[rnd.Next(0,emptyTiles.Count())],PowerupType.Health ));
                     break;
                 case 1:
-                    gameModel.Powerups.Add(new Powerups { Cords = emptyTiles[rnd.Next(0, emptyTiles.Count())], Type = PowerupType.Damage});
+                    gameModel.Powerups.Add(new Powerups (emptyTiles[rnd.Next(0, emptyTiles.Count())],PowerupType.Damage));
                     break;
                 case 2:
-                    gameModel.Powerups.Add(new Powerups { Cords = emptyTiles[rnd.Next(0, emptyTiles.Count())], Type = PowerupType.FiringSpeed});
+                    gameModel.Powerups.Add(new Powerups (emptyTiles[rnd.Next(0, emptyTiles.Count())],PowerupType.FiringSpeed));
                     break;
             }
         }
@@ -308,7 +308,6 @@ namespace Logic
                     if (activeGameObjects.Health - damage <= 0)
                     {
                         gameModel.FlyingMonsters.Find(x=>x==activeGameObjects).Health = 0;
-                        DisposeEnemy(activeGameObjects);
                         break;
                     }
                     gameModel.FlyingMonsters.Find(x => x == activeGameObjects).Health -= damage;
@@ -317,7 +316,6 @@ namespace Logic
                     if (activeGameObjects.Health - damage <= 0)
                     {
                         gameModel.TrackingMonsters.Find(x => x == activeGameObjects).Health = 0;
-                        DisposeEnemy(activeGameObjects);
                         break;
                     }
                     gameModel.TrackingMonsters.Find(x => x == activeGameObjects).Health -= damage;
@@ -326,7 +324,6 @@ namespace Logic
                     if (activeGameObjects.Health - damage <= 0)
                     {
                         gameModel.ShootingMonsters.Find(x => x == activeGameObjects).Health = 0;
-                        DisposeEnemy(activeGameObjects);
                         break;
                     }
                     gameModel.ShootingMonsters.Find(x => x == activeGameObjects).Health -= damage;
@@ -343,6 +340,143 @@ namespace Logic
                     break;
             }
         }
+        private void ManageIntersectsForPlayer()
+        {
+            List<GameObjects> rmlist = new List<GameObjects>();
+            foreach (var item in gameModel.Lavas)
+            {
+                if (gameModel.MyPlayer.IsCollision(item))
+                {
+                    DamageActiveGameObject(gameModel.MyPlayer, item.Damage);
+                }
+            }
+            foreach (var item in gameModel.FlyingMonsters)
+            {
+                if (gameModel.MyPlayer.IsCollision(item))
+                {
+                    DamageActiveGameObject(gameModel.MyPlayer, item.Damage);
+                }
+            }
+            foreach (var item in gameModel.TrackingMonsters)
+            {
+                if (gameModel.MyPlayer.IsCollision(item))
+                {
+                    DamageActiveGameObject(gameModel.MyPlayer, item.Damage);
+                    rmlist.Add(item);
+                }
+            }
+            foreach (var item in gameModel.Projectiles.Where(x=>x.Type.Equals(ProjectileType.Enemy)))
+            {
+                if (gameModel.MyPlayer.IsCollision(item))
+                {
+                    DamageActiveGameObject(gameModel.MyPlayer, item.Damage);
+                }
+            }
+            foreach (var item in gameModel.Powerups)
+            {
+                if (gameModel.MyPlayer.IsCollision(item))
+                {
+                    CollectPowerup(item);
+                    rmlist.Add(item);
+                }
+            }
+            foreach (var item in rmlist)
+            {
+                switch (item)
+                {
+                    case FlyingEnemy:
+                        gameModel.FlyingMonsters.Remove(item as FlyingEnemy);
+                        break;
+                    case Powerups:
+                        gameModel.Powerups.Remove(item as Powerups);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+
+        }
+        public void Updater()
+        {
+            if (gameModel.ShootingMonsters.Count == 0 && gameModel.TrackingMonsters.Count == 0 && gameModel.FlyingMonsters.Count == 0)
+            {
+                gameModel.LevelFinished = true;
+            }
+
+            ManageIntersectsForPlayer();
+            ManageProjectileIntersects();
+        }
+        private void ManageProjectileIntersects()
+        {
+            List<ActiveGameObjects> rmGameObjectList = new List<ActiveGameObjects>();
+            List<Projectile> rmprojlist = new List<Projectile>();
+            foreach (var item in gameModel.Projectiles)
+            {
+                foreach (var walls in gameModel.Walls)
+                {
+                    if (walls.IsCollision(item))
+                    {
+                        rmprojlist.Add(item);
+                    }
+                }
+            }
+            foreach (var item in rmprojlist)
+            {
+                item.Timer.Stop();
+                gameModel.Projectiles.Remove(item);
+            }
+            foreach (var item in gameModel.Projectiles.Where(x => x.Type.Equals(ProjectileType.Player)))
+            {
+                foreach (var flying in gameModel.FlyingMonsters)
+                {
+                    if (flying.IsCollision(item))
+                    {
+                        DamageActiveGameObject(flying, item.Damage);
+                        if (flying.Health == 0)
+                        {
+                            rmGameObjectList.Add(flying);
+                        }
+                        rmprojlist.Add(item);
+                    }
+                }
+                foreach (var shooting in gameModel.ShootingMonsters)
+                {
+                    if (shooting.IsCollision(item))
+                    {
+                        DamageActiveGameObject(shooting, item.Damage);
+                        if (shooting.Health == 0)
+                        {
+                            rmGameObjectList.Add(shooting);
+                        }
+                        rmprojlist.Add(item);
+                    }
+                }
+                foreach (var tracking in gameModel.TrackingMonsters)
+                {
+                    if (tracking.IsCollision(item))
+                    {
+                        DamageActiveGameObject(tracking, item.Damage);
+                        if (tracking.Health==0)
+                        {
+                            rmGameObjectList.Add(tracking);
+                        }
+                        rmprojlist.Add(item);
+                    }
+                }
+            }
+            foreach (var item in rmprojlist)
+            {
+                item.Timer.Stop();
+                gameModel.Projectiles.Remove(item);
+            }
+            foreach (var item in rmGameObjectList)
+            {
+                DisposeEnemy(item);
+            }
+            
+        }
+
     }
 }
 

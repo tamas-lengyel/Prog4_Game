@@ -16,10 +16,11 @@ namespace Logic
         // Enemywise
         void MoveFlyingEnemy(FlyingEnemy flyingEnemy);
         void MoveRegularEnemy(ActiveGameObjects activeGameObjects);
-        public Projectile EnemyShoot(Point enemyLocation, int speed, int damage);
+        Projectile EnemyShoot(Point enemyLocation, int speed, int damage);
         void DisposeEnemy(ActiveGameObjects activeGameObject);
 
-        public void MoveProjectile(ref Projectile projectile);
+        void Updater();
+        void MoveProjectile(ref Projectile projectile);
         void CollectPowerup(Powerups powerups);
         void DamageActiveGameObject(ActiveGameObjects activeGameObjects, int damage);
         void DisposeBullet(Projectile projectile);
