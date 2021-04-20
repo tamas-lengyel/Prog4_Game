@@ -1,5 +1,6 @@
 ﻿using Model.Active;
 using Model.Passive;
+using Model.Ui;
 using System;
 using System.Collections.Generic;
 using System.Windows;

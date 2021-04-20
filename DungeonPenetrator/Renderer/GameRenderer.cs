@@ -26,6 +26,14 @@ namespace Renderer
         Drawing oldPowerups;
         Drawing oldBoss;
 
+        Model.Ui.HealthBar hpBar = new Model.Ui.HealthBar();
+        Drawing oldHpBar;
+        int oldPlayerHealth;
+
+        Model.Ui.LevelCounter lvlCounter = new Model.Ui.LevelCounter();
+        Drawing oldLvlCounter;
+        int oldModelLvlCounter;
+
         Point oldBossPosition;
         List<Point> oldTrackingMonstersPosition = new List<Point>();
         List<Point> oldShootingMonstersPosition = new List<Point>();
@@ -40,7 +48,6 @@ namespace Renderer
         Pen Is = new Pen(Brushes.Black, 1);
 
         Brush BackgroundBrush { get { return GetBrush("bg3.png", false); } }
-        Brush PlayerBrush { get { return GetBrush("characterblue100.png", false); } }
 
         Brush GetBrush(string fname, bool isTiled)
         {
@@ -86,7 +93,43 @@ namespace Renderer
             //dg.Children.Add(GetBoss());
             dg.Children.Add(GetProjectiles());
             dg.Children.Add(GetPlayer());
+
+            dg.Children.Add(GetLevelCounter());
+            dg.Children.Add(GetHpBar());
             return dg;
+        }
+
+        private Drawing GetLevelCounter()
+        {
+            DrawingGroup group = new DrawingGroup();
+            if (oldLvlCounter == null || model.LevelCounter != oldModelLvlCounter)
+            {
+                oldModelLvlCounter = model.LevelCounter;
+                GeometryDrawing box = new GeometryDrawing(Brushes.Gray, Is, new RectangleGeometry(new Rect(lvlCounter.LvlCounterX, lvlCounter.LvlCounterY, lvlCounter.LvlCounterWidth, lvlCounter.LvlCounterHeight)));
+
+                FormattedText text = new FormattedText(oldModelLvlCounter.ToString(), CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black);
+                text.TextAlignment = TextAlignment.Center;
+                Geometry geo = text.BuildGeometry(new Point(lvlCounter.LvlCounterX + (lvlCounter.LvlCounterWidth / 2), lvlCounter.LvlCounterY + (lvlCounter.LvlCounterHeight / 4.2)));
+                GeometryDrawing textGeo = new GeometryDrawing(Brushes.Black, null, geo);
+
+                group.Children.Add(box);
+                group.Children.Add(textGeo);
+
+                oldLvlCounter = group;
+            }
+            return oldLvlCounter;
+        }
+
+        private Drawing GetHpBar()
+        {
+            if (oldHpBar == null || model.MyPlayer.Health != oldPlayerHealth)
+            {
+                oldPlayerHealth = model.MyPlayer.Health;
+                Geometry g = new RectangleGeometry(new Rect(hpBar.HpBarX, hpBar.HpBarY, hpBar.HpWidth, oldPlayerHealth * 7));
+                g.Transform = new RotateTransform(180, hpBar.HpBarX + hpBar.HpWidth/2, hpBar.HpBarY + hpBar.HpHeight/2);
+                oldHpBar = new GeometryDrawing(Brushes.Red, Is, g);
+            }
+            return oldHpBar;
         }
 
         private Drawing GetBackground()
@@ -335,10 +378,10 @@ namespace Renderer
             {
                 if (oldFlyingMonsters == null || !oldFlyingMonstersPosition.Contains(projectile.Cords))
                 {
-                    GeometryDrawing box = new GeometryDrawing(Brushes.Red, Is, new RectangleGeometry(new Rect(projectile.Cords.X,
-                           projectile.Cords.Y, 10, 10)));
-                    
-                    g.Children.Add(box);
+                    ImageDrawing drawing = new ImageDrawing(GetImage("bullet.png"), new Rect(projectile.Cords.X,
+                           projectile.Cords.Y, 10, 10));
+
+                    g.Children.Add(drawing);
                 }
             }
             oldProjectiles = g;
