@@ -15,24 +15,24 @@ namespace Repository
         public HighscoreRepository() : base()
         {
             this.filename = "highscores.json";
-            if (!Directory.Exists(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), $@"\Saves\")))
+            if (!Directory.Exists(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + $@"\Saves\"))
             {
-                Directory.CreateDirectory(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"\Saves\"));
+                Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + $@"\Saves\");
             }
-            if (!File.Exists(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), $@"\Saves\{filename}")))
+            if (!File.Exists(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + $@"\Saves\{filename}"))
             {
-                File.Create(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), $@"\Saves\{filename}")).Close();
+                File.Create(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + $@"\Saves\{filename}").Close();
             }
         }
 
         public IQueryable<Highscore> GetAll()
         {
-            if (File.ReadAllText(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), $@"\Saves\{filename}")) == string.Empty)
+            if (File.ReadAllText(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + $@"\Saves\{filename}") == string.Empty)
             {
                 return new List<Highscore>().AsQueryable();
             }
             return JsonConvert.DeserializeObject<List<Highscore>>(File.ReadAllText(
-                Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), $@"\Saves\{filename}"))).AsQueryable();
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + $@"\Saves\{filename}")).AsQueryable();
         }
 
         public override void Insert(Highscore entity)
@@ -40,7 +40,7 @@ namespace Repository
             List<Highscore> list = GetAll().ToList();
             list.Add(entity);
             string json = JsonConvert.SerializeObject(list, Formatting.Indented);
-            File.WriteAllText(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), $@"\Saves\{filename}"), json);
+            File.WriteAllText(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + $@"\Saves\{filename}", json);
         }
     }
 }

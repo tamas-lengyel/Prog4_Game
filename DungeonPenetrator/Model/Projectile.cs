@@ -12,10 +12,10 @@ namespace Model
     {
         Enemy,Player
     };
-    public class Projectile
+    public class Projectile : GameObjects
     {
         public int Speed { get; set; }
-        public Point Cords { get; set; }
+        public override Point Cords { get; set; }
         public Point direction;
         public int Damage { get; set; }
         public Projectile(Point From, Point To)
@@ -30,6 +30,7 @@ namespace Model
 
         }
         public ProjectileType Type { get; set; }
+        public override Rect Area { get { return new Rect(Cords.X , Cords.Y , 10, 10); } }
         public DispatcherTimer Timer { get; set; }
         /*public override bool Equals(object obj)
         {

@@ -95,9 +95,9 @@ namespace LogicTest
             }
 
             gameModelMock.Object.Powerups = new List<Powerups>();
-            gameModelMock.Object.Powerups.Add(new Powerups { Cords = new Point(0, 2), Type = PowerupType.Health });
-            gameModelMock.Object.Powerups.Add(new Powerups { Cords = new Point(2, 2), Type = PowerupType.Damage });
-            gameModelMock.Object.Powerups.Add(new Powerups { Cords = new Point(5, 2), Type = PowerupType.FiringSpeed });
+            gameModelMock.Object.Powerups.Add(new Powerups (new Point(0, 2), PowerupType.Health ));
+            gameModelMock.Object.Powerups.Add(new Powerups (new Point(2, 2), PowerupType.Damage ));
+            gameModelMock.Object.Powerups.Add(new Powerups (new Point(5, 2), PowerupType.FiringSpeed ));
             foreach (var item in gameModelMock.Object.Powerups)
             {
                 switch (item.Type)

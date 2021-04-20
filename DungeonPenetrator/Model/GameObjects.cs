@@ -10,5 +10,10 @@ namespace Model
     public abstract class GameObjects : IGameObjects
     {
         public abstract Point Cords { get; set; }
+        public abstract Rect Area { get;}
+        public bool IsCollision(GameObjects other)
+        {
+            return this.Area.IntersectsWith(other.Area);
+        }
     }
 }

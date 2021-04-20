@@ -31,6 +31,7 @@ namespace Renderer
         List<Point> oldShootingMonstersPosition = new List<Point>();
         List<Point> oldFlyingMonstersPosition = new List<Point>();
         List<Point> oldProjectilePosition = new List<Point>();
+        int powerupCount;
         Point oldPlayerPosition;
         Point oldMousePosition;
 
@@ -102,7 +103,7 @@ namespace Renderer
         private Drawing GetLevelExit()
         {
             DrawingGroup g = new DrawingGroup();
-            if (oldLevelExit == null && model.ShootingMonsters.Count == 0 && model.TrackingMonsters.Count == 0 && model.FlyingMonsters.Count == 0)
+            if (oldLevelExit == null || (model.ShootingMonsters.Count == 0 && model.TrackingMonsters.Count == 0 && model.FlyingMonsters.Count == 0))
             {
                 ImageDrawing drawing = new ImageDrawing(GetImage("goal.png"), new Rect(model.LevelExit.X * GameModel.TileSize,
                            model.LevelExit.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
@@ -239,7 +240,7 @@ namespace Renderer
 
         private Drawing GetPowerups()
         {
-            if (oldPowerups == null)
+            if (oldPowerups == null || powerupCount!=model.Powerups.Count)
             {
                 DrawingGroup g = new DrawingGroup();
                 foreach (var powerup in model.Powerups)
@@ -262,10 +263,13 @@ namespace Renderer
                         default:
                             drawing = new ImageDrawing(GetImage("error-icon-32.png"), new Rect(powerup.Cords.X * GameModel.TileSize,
                                 powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                            break;
+                            break;       
                     }
-
                     g.Children.Add(drawing);
+                }
+                if (powerupCount != model.Powerups.Count)
+                {
+                    powerupCount = model.Powerups.Count;
                 }
                 oldPowerups = g;
             }
