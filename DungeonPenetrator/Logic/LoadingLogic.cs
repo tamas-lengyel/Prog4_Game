@@ -40,22 +40,20 @@ namespace Logic
             {
                 gameModel = new GameModel();
                 gameModel.MyPlayer = new Player();
-                gameModel.Projectiles = new List<Projectile>();
-                gameModel.Powerups = new List<Powerups>();
-                gameModel.FlyingMonsters = new List<FlyingEnemy>();
-                gameModel.ShootingMonsters = new List<ShootingEnemy>();
-                gameModel.TrackingMonsters = new List<TrackingEnemy>();
-                gameModel.Lavas = new List<LavaProp>();
-                gameModel.Walls = new List<WallProp>();
-                gameModel.Waters = new List<WaterProp>();
-
-
-                gameModel.MyPlayer.IsReloading = false;
                 gameModel.MyPlayer.FiringSpeed = 1;
                 gameModel.MyPlayer.Damage = 255;
                 gameModel.MyPlayer.Health = 100;
                 gameModel.LevelCounter = 0; // Gets raised to one, must be zero
             }
+            gameModel.MyPlayer.IsReloading = false;
+            gameModel.Projectiles = new List<Projectile>();
+            gameModel.Powerups = new List<Powerups>();
+            gameModel.FlyingMonsters = new List<FlyingEnemy>();
+            gameModel.ShootingMonsters = new List<ShootingEnemy>();
+            gameModel.TrackingMonsters = new List<TrackingEnemy>();
+            gameModel.Lavas = new List<LavaProp>();
+            gameModel.Walls = new List<WallProp>();
+            gameModel.Waters = new List<WaterProp>();
             gameModel.GameAreaChar = new char[(int)(gameModel.GameWidth / GameModel.TileSize), (int)(gameModel.GameHeight / GameModel.TileSize)];
             gameModel.LevelCounter++;
             gameModel.MyPlayer.Cords = new Point(
@@ -228,6 +226,7 @@ namespace Logic
             if (gameModel == null)
             {
                 GenerateMap();
+                saveGameRepository.Insert(gameModel as GameModel);
                 return gameModel;
             }
             return gameModel;

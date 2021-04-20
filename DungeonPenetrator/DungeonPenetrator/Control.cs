@@ -25,8 +25,9 @@ namespace DungeonPenetrator
 
         System.Timers.Timer updateTimer;
         DispatcherTimer shootOnce;
-        DispatcherTimer moveOneEnemy;
         DispatcherTimer moveOnce;
+        DispatcherTimer reloadTimer;
+        DispatcherTimer levelTimer;
         public Control()
         {
             Loaded += Control_Loaded;
@@ -48,22 +49,60 @@ namespace DungeonPenetrator
                 win.MouseLeftButtonDown += this.Left_MouseButtonDown;
                 win.MouseMove += Win_MouseMove;
             }
-            MoveEnemies();
-            shootOnce = new DispatcherTimer();
+            //MoveEnemies();
             updateTimer = new System.Timers.Timer();
             updateTimer.Elapsed += new ElapsedEventHandler(this.UpdateScreen);
             updateTimer.Interval = 20;
             updateTimer.AutoReset = true;
             updateTimer.Enabled = true;
-            shootOnce.Interval = TimeSpan.FromMilliseconds(rnd.Next(3000, 5000));
+            shootOnce = new DispatcherTimer();
+            shootOnce.Interval = TimeSpan.FromMilliseconds(rnd.Next(1000, 2000));
             shootOnce.Tick += ShootingEnemies;
+            moveOnce = new DispatcherTimer();
+            moveOnce.Interval = TimeSpan.FromMilliseconds(rnd.Next(200, 500));
+            moveOnce.Tick += MoveEnemies;
+            levelTimer = new DispatcherTimer();
+            levelTimer.Interval = TimeSpan.FromMilliseconds(1000);
+            levelTimer.Tick += LevelTimer_Tick;
+            levelTimer.Start();
+        }
+
+        private void LevelTimer_Tick(object sender, EventArgs e)
+        {
+            if (model.LevelFinished)
+            {
+                levelTimer.Stop();
+                foreach (var item in model.Projectiles)
+                {
+                    item.Timer.Stop();
+                    item.Timer = null;
+                }
+                shootOnce.Stop();
+                moveOnce.Stop();
+                updateTimer.Stop();
+                if (reloadTimer != null)
+                {
+                    reloadTimer.Stop();
+                }
+                gameLogic = null;
+                renderer = null;
+                loadigLogic.NextLevel();
+                gameLogic = new GameLogic(model);
+                renderer = new GameRenderer(model);
+                saveGameRepo.Insert(model as GameModel);
+                updateTimer.Start();
+                levelTimer.Start();
+                //shootOnce.Start();
+                //moveOnce.Start();
+            }
         }
 
         private void ShootingEnemies(object sender, EventArgs e)
         {
-            foreach (var item in model.ShootingMonsters)
+            if (model.ShootingMonsters.Count != 0)
             {
-                Projectile enemyProjectile = gameLogic.EnemyShoot(item.Cords, rnd.Next(2, 4), item.Damage);
+                int rndEnemy = rnd.Next(0, model.ShootingMonsters.Count);
+                Projectile enemyProjectile = gameLogic.EnemyShoot(model.ShootingMonsters[rndEnemy].Cords, rnd.Next(2, 4), model.ShootingMonsters[rndEnemy].Damage);
                 model.Projectiles.Add(enemyProjectile);
                 enemyProjectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
                 enemyProjectile.Timer.Interval = TimeSpan.FromMilliseconds(20);
@@ -84,32 +123,12 @@ namespace DungeonPenetrator
         private void UpdateScreen(object sender, EventArgs e)
         {
             shootOnce.Start();
-            gameLogic.Updater();
+            moveOnce.Start();
             if (model.MyPlayer.Health==0)
             {
                 //updateTimer.Stop();
             }
-            if (model.LevelFinished)
-            {
-                
-                /*updateTimer.Stop();
-                moveOneEnemy.Stop();
-                shootOnce.Stop();
-                reloadTimer.Stop();
-                moveOnce.Stop();
-                foreach (var item in model.Projectiles)
-                {
-                    item.Timer.Stop();
-                }
-                Thread.Sleep(1000);
-                model = null;
-                model = new GameModel();
-                loadigLogic = new LoadingLogic(model, saveGameRepo, highscoreRepo);
-                model = loadigLogic.Play();
-                gameLogic = new GameLogic(model);
-                renderer = new GameRenderer(model);
-                updateTimer.Start();*/
-            }
+            gameLogic.Updater();
             try { this.Dispatcher.Invoke(() => this.InvalidateVisual()); } // update screen
             catch (Exception) { }
         }
@@ -122,36 +141,26 @@ namespace DungeonPenetrator
             }
         }
 
-        private void MoveEnemies()
+        private void MoveEnemies(object sender, EventArgs e)
         {
-            foreach (var item in model.TrackingMonsters)
+            if (model.TrackingMonsters.Count != 0)
             {
-                moveOneEnemy = new DispatcherTimer();
-                moveOneEnemy.Tick += delegate
-                {
-                    gameLogic.MoveRegularEnemy(item);
-                };
-                moveOneEnemy.Interval = TimeSpan.FromMilliseconds(rnd.Next(1000, 3000));
-                moveOneEnemy.Start();
+                int rndTrackingEnemyInd = rnd.Next(0, model.TrackingMonsters.Count);
+                gameLogic.MoveRegularEnemy(model.TrackingMonsters[rndTrackingEnemyInd]);
             }
-
-            foreach (var item in model.FlyingMonsters)
+            if (model.FlyingMonsters.Count != 0)
             {
-                moveOneEnemy = new DispatcherTimer();
-                moveOneEnemy.Tick += delegate
-                {
-                    gameLogic.MoveFlyingEnemy(item);
-                };
-                moveOneEnemy.Interval = TimeSpan.FromMilliseconds(rnd.Next(1000, 3000));
-                moveOneEnemy.Start();
+                int rndFlyingEnemyInd = rnd.Next(0, model.FlyingMonsters.Count);
+                gameLogic.MoveFlyingEnemy(model.FlyingMonsters[rndFlyingEnemyInd]);
             }
+            moveOnce.Stop();
         }
 
         private void Left_MouseButtonDown(object sender,MouseButtonEventArgs e)
         {
-            DispatcherTimer reloadTimer = new DispatcherTimer();
             if (!model.MyPlayer.IsReloading)
             {
+                reloadTimer = new DispatcherTimer();
                 Point mousePos = new Point(e.GetPosition((IInputElement)sender).X, e.GetPosition((IInputElement)sender).Y);
                 model.MyPlayer.IsReloading = true;
                 gameLogic.PlayerShoot(mousePos, 10);
@@ -167,7 +176,7 @@ namespace DungeonPenetrator
 
         private void Win_KeyDown(object sender, KeyEventArgs e)
         {
-            moveOnce = new DispatcherTimer();
+            
             if (canmove)
             {
                 switch (e.Key)
@@ -218,6 +227,37 @@ namespace DungeonPenetrator
                         };
                         moveOnce.Interval = TimeSpan.FromMilliseconds(100);
                         moveOnce.Start();
+                        break;
+                    case Key.Space:
+                        foreach (var item in model.Projectiles)
+                        {
+                            item.Timer.Stop();
+                            item.Timer = null;
+                        }
+                        shootOnce.Stop();
+                        moveOnce.Stop();
+                        updateTimer.Stop();
+                        if (reloadTimer != null)
+                        {
+                            reloadTimer.Stop();
+                        }
+                        gameLogic = null;
+                        renderer = null;
+                        loadigLogic.NextLevel();
+                        // gameLogic = new GameLogic(model);
+                        // renderer = new GameRenderer(model);
+                        /*shootOnce = new DispatcherTimer();
+                        moveOnce = new DispatcherTimer();
+                        //reloadTimer = new DispatcherTimer();
+                        shootOnce.Interval = TimeSpan.FromMilliseconds(rnd.Next(1000, 2000));
+                        shootOnce.Tick += ShootingEnemies;
+                        moveOnce.Interval = TimeSpan.FromMilliseconds(rnd.Next(200, 500));
+                        moveOnce.Tick += MoveEnemies;*/
+                        /*if (reloadTimer != null)
+                            reloadTimer.Start();*/
+                        updateTimer.Start();
+                        gameLogic = new GameLogic(model);
+                        renderer = new GameRenderer(model);
                         break;
                     default:
                         break;

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -343,21 +344,16 @@ namespace Logic
         private void ManageIntersectsForPlayer()
         {
             List<GameObjects> rmlist = new List<GameObjects>();
-            foreach (var item in gameModel.Lavas)
+            var lavas = gameModel.Lavas;
+            foreach (var item in lavas)
             {
                 if (gameModel.MyPlayer.IsCollision(item))
                 {
                     DamageActiveGameObject(gameModel.MyPlayer, item.Damage);
                 }
             }
-            foreach (var item in gameModel.FlyingMonsters)
-            {
-                if (gameModel.MyPlayer.IsCollision(item))
-                {
-                    DamageActiveGameObject(gameModel.MyPlayer, item.Damage);
-                }
-            }
-            foreach (var item in gameModel.TrackingMonsters)
+            var flyings = gameModel.FlyingMonsters;
+            foreach (var item in flyings)
             {
                 if (gameModel.MyPlayer.IsCollision(item))
                 {
@@ -365,14 +361,24 @@ namespace Logic
                     rmlist.Add(item);
                 }
             }
-            foreach (var item in gameModel.Projectiles.Where(x=>x.Type.Equals(ProjectileType.Enemy)))
+            var trackings = gameModel.TrackingMonsters;
+            foreach (var item in trackings)
             {
                 if (gameModel.MyPlayer.IsCollision(item))
                 {
                     DamageActiveGameObject(gameModel.MyPlayer, item.Damage);
                 }
             }
-            foreach (var item in gameModel.Powerups)
+            var enemyProjectiles = gameModel.Projectiles.Where(x => x.Type.Equals(ProjectileType.Enemy));
+            foreach (var item in enemyProjectiles)
+            {
+                if (gameModel.MyPlayer.IsCollision(item))
+                {
+                    DamageActiveGameObject(gameModel.MyPlayer, item.Damage);
+                }
+            }
+            var powerups = gameModel.Powerups;
+            foreach (var item in powerups)
             {
                 if (gameModel.MyPlayer.IsCollision(item))
                 {
@@ -399,7 +405,7 @@ namespace Logic
         }
         public void Updater()
         {
-            if (gameModel.ShootingMonsters.Count == 0 && gameModel.TrackingMonsters.Count == 0 && gameModel.FlyingMonsters.Count == 0)
+            if (gameModel.ShootingMonsters.Count == 0 && gameModel.TrackingMonsters.Count == 0 && gameModel.FlyingMonsters.Count == 0 && gameModel.MyPlayer.Cords==gameModel.LevelExit)
             {
                 gameModel.LevelFinished = true;
             }
@@ -426,7 +432,9 @@ namespace Logic
                 item.Timer.Stop();
                 gameModel.Projectiles.Remove(item);
             }
-            foreach (var item in gameModel.Projectiles.Where(x => x.Type.Equals(ProjectileType.Player)))
+            var playerprojectiles = gameModel.Projectiles.Where(x => x.Type.Equals(ProjectileType.Player));
+
+            foreach (var item in playerprojectiles)
             {
                 foreach (var flying in gameModel.FlyingMonsters)
                 {
