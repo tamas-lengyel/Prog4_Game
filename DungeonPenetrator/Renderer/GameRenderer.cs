@@ -378,7 +378,7 @@ namespace Renderer
             {
                 if (oldFlyingMonsters == null || !oldFlyingMonstersPosition.Contains(projectile.Cords))
                 {
-                    ImageDrawing drawing = new ImageDrawing(GetImage("bullet.png"), new Rect(projectile.Cords.X,
+                    ImageDrawing drawing = new ImageDrawing(GetImage("bullet3.png"), new Rect(projectile.Cords.X,
                            projectile.Cords.Y, 10, 10));
 
                     g.Children.Add(drawing);
