@@ -10,6 +10,7 @@
     <None Remove="Images\100.png" />
     <None Remove="Images\bg3.png" />
     <None Remove="Images\bluepotion.png" />
+    <None Remove="Images\bullet3.png" />
     <None Remove="Images\ct100big.png" />
     <None Remove="Images\error-icon-32.png" />
     <None Remove="Images\goal.png" />
@@ -21,6 +22,7 @@
     <None Remove="Images\redpotion.png" />
     <None Remove="Images\rock100.png" />
     <None Remove="Images\snowy.jpg" />
+    <None Remove="Images\stopped.png" />
     <None Remove="Images\water.png" />
     <None Remove="Images\yellowpotion.png" />
   </ItemGroup>
@@ -29,6 +31,7 @@
     <EmbeddedResource Include="Images\100.png" />
     <EmbeddedResource Include="Images\bg3.png" />
     <EmbeddedResource Include="Images\bluepotion.png" />
+    <EmbeddedResource Include="Images\bullet3.png" />
     <EmbeddedResource Include="Images\ct100big.png" />
     <EmbeddedResource Include="Images\error-icon-32.png" />
     <EmbeddedResource Include="Images\goal.png" />
@@ -40,6 +43,7 @@
     <EmbeddedResource Include="Images\redpotion.png" />
     <EmbeddedResource Include="Images\rock100.png" />
     <EmbeddedResource Include="Images\snowy.jpg" />
+    <EmbeddedResource Include="Images\stopped.png" />
     <EmbeddedResource Include="Images\water.png" />
     <EmbeddedResource Include="Images\yellowpotion.png" />
   </ItemGroup>

@@ -46,6 +46,7 @@ namespace Logic
                 gameModel.LevelCounter = 0; // Gets raised to one, must be zero
             }
             gameModel.MyPlayer.IsReloading = false;
+            gameModel.GameIsPaused = false;
             gameModel.Projectiles = new List<Projectile>();
             gameModel.Powerups = new List<Powerups>();
             gameModel.FlyingMonsters = new List<FlyingEnemy>();
