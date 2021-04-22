@@ -22,6 +22,7 @@
     <None Remove="Images\redpotion.png" />
     <None Remove="Images\rock100.png" />
     <None Remove="Images\snowy.jpg" />
+    <None Remove="Images\stopped.png" />
     <None Remove="Images\water.png" />
     <None Remove="Images\yellowpotion.png" />
   </ItemGroup>
@@ -42,6 +43,7 @@
     <EmbeddedResource Include="Images\redpotion.png" />
     <EmbeddedResource Include="Images\rock100.png" />
     <EmbeddedResource Include="Images\snowy.jpg" />
+    <EmbeddedResource Include="Images\stopped.png" />
     <EmbeddedResource Include="Images\water.png" />
     <EmbeddedResource Include="Images\yellowpotion.png" />
   </ItemGroup>

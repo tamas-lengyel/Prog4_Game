@@ -45,7 +45,7 @@ namespace DungeonPenetrator
             this.listBox.Items.Add("Character Name\t Levels Completed");
             foreach (var item in HighScores)
             {
-                listBox.Items.Add($"{item.Name}: \t {item.Level}");
+                listBox.Items.Add($"{item.Name}: \t\t {item.Level}");
             }
         }
     }

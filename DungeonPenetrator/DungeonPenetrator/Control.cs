@@ -69,6 +69,29 @@ namespace DungeonPenetrator
 
         private void LevelTimer_Tick(object sender, EventArgs e)
         {
+            if (model.MyPlayer.Health == 0)
+            {
+                levelTimer.Stop();
+                foreach (var item in model.Projectiles)
+                {
+                    item.Timer.Stop();
+                    item.Timer = null;
+                }
+                shootOnce.Stop();
+                moveOnce.Stop();
+                updateTimer.Stop();
+                if (reloadTimer != null)
+                {
+                    reloadTimer.Stop();
+                }
+
+                saveGameRepo.Insert(new GameModel());
+
+                GameOverWindow window = new GameOverWindow(loadigLogic, saveGameRepo);
+                window.Show();
+                Window win = Window.GetWindow(this);
+                win.Close();
+            }
             if (model.LevelFinished)
             {
                 levelTimer.Stop();
@@ -124,10 +147,7 @@ namespace DungeonPenetrator
         {
             shootOnce.Start();
             moveOnce.Start();
-            if (model.MyPlayer.Health==0)
-            {
-                //updateTimer.Stop();
-            }
+            
             gameLogic.Updater();
             try { this.Dispatcher.Invoke(() => this.InvalidateVisual()); } // update screen
             catch (Exception) { }
@@ -229,35 +249,63 @@ namespace DungeonPenetrator
                         moveOnce.Start();
                         break;
                     case Key.Space:
-                        foreach (var item in model.Projectiles)
+                        //foreach (var item in model.Projectiles)
+                        //{
+                        //    item.Timer.Stop();
+                        //    item.Timer = null;
+                        //}
+                        //shootOnce.Stop();
+                        //moveOnce.Stop();
+                        //updateTimer.Stop();
+                        //if (reloadTimer != null)
+                        //{
+                        //    reloadTimer.Stop();
+                        //}
+                        //gameLogic = null;
+                        //renderer = null;
+                        //loadigLogic.NextLevel();
+                        //// gameLogic = new GameLogic(model);
+                        //// renderer = new GameRenderer(model);
+                        ///*shootOnce = new DispatcherTimer();
+                        //moveOnce = new DispatcherTimer();
+                        ////reloadTimer = new DispatcherTimer();
+                        //shootOnce.Interval = TimeSpan.FromMilliseconds(rnd.Next(1000, 2000));
+                        //shootOnce.Tick += ShootingEnemies;
+                        //moveOnce.Interval = TimeSpan.FromMilliseconds(rnd.Next(200, 500));
+                        //moveOnce.Tick += MoveEnemies;*/
+                        ///*if (reloadTimer != null)
+                        //    reloadTimer.Start();*/
+                        //updateTimer.Start();
+                        //gameLogic = new GameLogic(model);
+                        //renderer = new GameRenderer(model);
+                        break;
+                    case Key.Escape:
+                        model.GameIsPaused = !model.GameIsPaused;
+                        if (!model.GameIsPaused)
                         {
-                            item.Timer.Stop();
-                            item.Timer = null;
+                            foreach (var item in model.Projectiles)
+                            {
+                                item.Timer.Start();
+                            }
+                            updateTimer.Start();
+                            levelTimer.Start();
                         }
-                        shootOnce.Stop();
-                        moveOnce.Stop();
-                        updateTimer.Stop();
-                        if (reloadTimer != null)
+                        else
                         {
-                            reloadTimer.Stop();
+                            levelTimer.Stop();
+                            foreach (var item in model.Projectiles)
+                            {
+                                item.Timer.Stop();
+                            }
+                            shootOnce.Stop();
+                            moveOnce.Stop();
+                            updateTimer.Stop();
+                            if (reloadTimer != null)
+                            {
+                                reloadTimer.Stop();
+                            }
                         }
-                        gameLogic = null;
-                        renderer = null;
-                        loadigLogic.NextLevel();
-                        // gameLogic = new GameLogic(model);
-                        // renderer = new GameRenderer(model);
-                        /*shootOnce = new DispatcherTimer();
-                        moveOnce = new DispatcherTimer();
-                        //reloadTimer = new DispatcherTimer();
-                        shootOnce.Interval = TimeSpan.FromMilliseconds(rnd.Next(1000, 2000));
-                        shootOnce.Tick += ShootingEnemies;
-                        moveOnce.Interval = TimeSpan.FromMilliseconds(rnd.Next(200, 500));
-                        moveOnce.Tick += MoveEnemies;*/
-                        /*if (reloadTimer != null)
-                            reloadTimer.Start();*/
-                        updateTimer.Start();
-                        gameLogic = new GameLogic(model);
-                        renderer = new GameRenderer(model);
+                        InvalidateVisual();
                         break;
                     default:
                         break;

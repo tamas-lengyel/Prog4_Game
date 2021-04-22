@@ -31,5 +31,7 @@ namespace Model
         bool LevelFinished { get; set; }
         Dictionary<Point, Point> BasicTrackingPath { get; set; } // Key tilecord-> Value->DirectionVector
         Dictionary<Point, Point> FlyingTrackingPath { get; set; } // Key tilecord-> Value->DirectionVector
+
+        public bool GameIsPaused { get; set; }
     }
 }

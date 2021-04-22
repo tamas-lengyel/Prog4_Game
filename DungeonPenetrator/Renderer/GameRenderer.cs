@@ -34,6 +34,8 @@ namespace Renderer
         Drawing oldLvlCounter;
         int oldModelLvlCounter;
 
+        Drawing oldPauseScreen;
+
         Point oldBossPosition;
         List<Point> oldTrackingMonstersPosition = new List<Point>();
         List<Point> oldShootingMonstersPosition = new List<Point>();
@@ -96,7 +98,26 @@ namespace Renderer
 
             dg.Children.Add(GetLevelCounter());
             dg.Children.Add(GetHpBar());
+            
+            dg.Children.Add(GetPauseScreen());
+            
             return dg;
+        }
+
+        private Drawing GetPauseScreen()
+        {
+            if (!model.GameIsPaused)
+            {
+                ImageDrawing drawing = new ImageDrawing(GetImage("stopped.png"), new Rect(1000, 1000, model.GameWidth, model.GameHeight));
+                oldPauseScreen = drawing;
+            }
+            if (model.GameIsPaused)
+            {
+                ImageDrawing drawing = new ImageDrawing(GetImage("stopped.png"), new Rect(0, 0, model.GameWidth, model.GameHeight));
+                oldPauseScreen = drawing;
+            }
+           
+            return oldPauseScreen;
         }
 
         private Drawing GetLevelCounter()

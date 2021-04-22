@@ -8,11 +8,13 @@
         Title="Dungeon Penetrator" 
         Height="1080" Width="1920"
         FontSize="40"
-        SizeToContent="WidthAndHeight">
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
 
     <StackPanel Margin="10,10,1435,635">
-        <Button Name="newOrContinue" Height="100" Width="400" Margin="20" Click="NewGameBtn_Click"></Button>
-        <Button Height="100" Width="400" Margin="20" Click="HighscoresBtn_Click">Highscores</Button>
-        <Button Height="100" Width="400" Margin="20" Click="QuitGameBtn_Click">Quit Game</Button>
+        <Button FontFamily="Berlin Sans FB" Name="newOrContinue" Height="100" Width="400" Margin="20" Click="NewGameBtn_Click"></Button>
+        <Button FontFamily="Berlin Sans FB" Height="100" Width="400" Margin="20" Click="HighscoresBtn_Click">Highscores</Button>
+        <Button FontFamily="Berlin Sans FB" Height="100" Width="400" Margin="20" Click="QuitGameBtn_Click">Quit Game</Button>
     </StackPanel>
 </Window>
