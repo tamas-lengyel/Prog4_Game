@@ -4,6 +4,7 @@ using Model.Ui;
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace Model
 {
@@ -12,7 +13,7 @@ namespace Model
         double GameWidth { get; }
         double GameHeight { get; }
         static double TileSize { get; }
-        public Point mousePosition { get; set; }
+        Point mousePosition { get; set; }
 
         Point LevelExit { get; }
         int LevelCounter { get; set; }
@@ -32,6 +33,8 @@ namespace Model
         Dictionary<Point, Point> BasicTrackingPath { get; set; } // Key tilecord-> Value->DirectionVector
         Dictionary<Point, Point> FlyingTrackingPath { get; set; } // Key tilecord-> Value->DirectionVector
 
-        public bool GameIsPaused { get; set; }
+        bool GameIsPaused { get; set; }
+        DispatcherTimer LavaTickTimer { get; set; }
+        DispatcherTimer EnemyHitTickTimer { get; set; }
     }
 }

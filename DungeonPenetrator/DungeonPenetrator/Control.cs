@@ -3,9 +3,12 @@ using Model;
 using Renderer;
 using Repository;
 using System;
+using System.Media;
+using System.Reflection;
 using System.Threading;
 using System.Timers;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -28,6 +31,7 @@ namespace DungeonPenetrator
         DispatcherTimer moveOnce;
         DispatcherTimer reloadTimer;
         DispatcherTimer levelTimer;
+        private Thread soundPlayThread;
         public Control()
         {
             Loaded += Control_Loaded;
@@ -52,7 +56,7 @@ namespace DungeonPenetrator
             //MoveEnemies();
             updateTimer = new System.Timers.Timer();
             updateTimer.Elapsed += new ElapsedEventHandler(this.UpdateScreen);
-            updateTimer.Interval = 20;
+            updateTimer.Interval = 30;
             updateTimer.AutoReset = true;
             updateTimer.Enabled = true;
             shootOnce = new DispatcherTimer();
@@ -62,7 +66,7 @@ namespace DungeonPenetrator
             moveOnce.Interval = TimeSpan.FromMilliseconds(rnd.Next(200, 500));
             moveOnce.Tick += MoveEnemies;
             levelTimer = new DispatcherTimer();
-            levelTimer.Interval = TimeSpan.FromMilliseconds(1000);
+            levelTimer.Interval = TimeSpan.FromMilliseconds(200);
             levelTimer.Tick += LevelTimer_Tick;
             levelTimer.Start();
         }
@@ -85,7 +89,7 @@ namespace DungeonPenetrator
                     reloadTimer.Stop();
                 }
 
-                saveGameRepo.Insert(new GameModel());
+                saveGameRepo.Insert(null);
 
                 GameOverWindow window = new GameOverWindow(loadigLogic, saveGameRepo);
                 window.Show();
@@ -125,7 +129,20 @@ namespace DungeonPenetrator
             if (model.ShootingMonsters.Count != 0)
             {
                 int rndEnemy = rnd.Next(0, model.ShootingMonsters.Count);
-                Projectile enemyProjectile = gameLogic.EnemyShoot(model.ShootingMonsters[rndEnemy].Cords, rnd.Next(2, 4), model.ShootingMonsters[rndEnemy].Damage);
+                Projectile enemyProjectile = gameLogic.EnemyShoot(model.ShootingMonsters[rndEnemy].Cords, rnd.Next(6, 8), model.ShootingMonsters[rndEnemy].Damage);
+                /*soundPlayThread = new Thread(() => {
+                    SoundPlayer sp = new System.Media.SoundPlayer(Assembly.LoadFrom("DungeonPenetrator").GetManifestResourceStream("DungeonPenetrator.Images.piu.wav"));
+                    sp.PlaySync();
+                });
+                soundPlayThread.IsBackground = true;
+                soundPlayThread.Start();*/
+
+                MediaPlayer mp = new MediaPlayer();
+                mp.Open(new Uri("pack://application:,,,/Images/piu.wav"));
+                //mp.Open(Assembly.LoadFrom("DungeonPenetrator").GetManifestResourceStream("DungeonPenetrator.Images.piu.wav"); 
+                mp.Play();
+
+
                 model.Projectiles.Add(enemyProjectile);
                 enemyProjectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
                 enemyProjectile.Timer.Interval = TimeSpan.FromMilliseconds(20);
@@ -175,15 +192,26 @@ namespace DungeonPenetrator
             }
             moveOnce.Stop();
         }
-
+        
         private void Left_MouseButtonDown(object sender,MouseButtonEventArgs e)
         {
-            if (!model.MyPlayer.IsReloading)
+            if (!model.MyPlayer.IsReloading && !model.GameIsPaused)
             {
                 reloadTimer = new DispatcherTimer();
                 Point mousePos = new Point(e.GetPosition((IInputElement)sender).X, e.GetPosition((IInputElement)sender).Y);
                 model.MyPlayer.IsReloading = true;
                 gameLogic.PlayerShoot(mousePos, 10);
+
+
+                
+                //System.Media.SoundPlayer sound = new System.Media.SoundPlayer(Assembly.LoadFrom("DungeonPenetrator").GetManifestResourceStream("DungeonPenetrator.Images.piu.wav"));
+                /*soundPlayThread = new Thread(() => {
+                    new System.Media.SoundPlayer(Assembly.LoadFrom("DungeonPenetrator").GetManifestResourceStream("DungeonPenetrator.Images.piu2.wav")).Play();
+                });
+                soundPlayThread.IsBackground = true;
+                soundPlayThread.Start();*/
+                
+              
                 reloadTimer.Tick += delegate
                 {
                     model.MyPlayer.IsReloading = false;
@@ -194,10 +222,22 @@ namespace DungeonPenetrator
             }
         }
 
+        private void StartSoundPlay()
+        {
+                var play= new Thread(playpiu);
+                play.Name = "soundplay";
+                play.IsBackground = true;
+                play.Start();
+        }
+        private void playpiu()
+        {
+            
+        }
+
         private void Win_KeyDown(object sender, KeyEventArgs e)
         {
             
-            if (canmove)
+            if (canmove && !model.GameIsPaused)
             {
                 switch (e.Key)
                 {
@@ -279,37 +319,47 @@ namespace DungeonPenetrator
                         //gameLogic = new GameLogic(model);
                         //renderer = new GameRenderer(model);
                         break;
-                    case Key.Escape:
-                        model.GameIsPaused = !model.GameIsPaused;
-                        if (!model.GameIsPaused)
-                        {
-                            foreach (var item in model.Projectiles)
-                            {
-                                item.Timer.Start();
-                            }
-                            updateTimer.Start();
-                            levelTimer.Start();
-                        }
-                        else
-                        {
-                            levelTimer.Stop();
-                            foreach (var item in model.Projectiles)
-                            {
-                                item.Timer.Stop();
-                            }
-                            shootOnce.Stop();
-                            moveOnce.Stop();
-                            updateTimer.Stop();
-                            if (reloadTimer != null)
-                            {
-                                reloadTimer.Stop();
-                            }
-                        }
-                        InvalidateVisual();
-                        break;
                     default:
                         break;
                 }
+            }
+            if (e.Key == Key.Escape)
+            {
+                model.GameIsPaused = !model.GameIsPaused;
+                if (!model.GameIsPaused)
+                {
+                    //Window win = Window.GetWindow(this);
+                    //win.MouseLeftButtonDown += Left_MouseButtonDown;
+                    foreach (var item in model.Projectiles)
+                    {
+                        item.Timer.Start();
+                    }
+                    updateTimer.Start();
+                    levelTimer.Start();
+                    if (reloadTimer != null)
+                    {
+                        reloadTimer.Start();
+                    }
+                }
+                else
+                {
+                    levelTimer.Stop();
+                    foreach (var item in model.Projectiles)
+                    {
+                        item.Timer.Stop();
+                    }
+                    //Window win = Window.GetWindow(this);
+                    //win.MouseLeftButtonDown -= Left_MouseButtonDown;
+                    shootOnce.Stop();
+                    moveOnce.Stop();
+                    updateTimer.Stop();
+                    if (reloadTimer != null)
+                    {
+                        reloadTimer.Stop();
+                    }
+                }
+                InvalidateVisual();
+
             }
         }
     }

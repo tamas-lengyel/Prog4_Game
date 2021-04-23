@@ -4,10 +4,12 @@ using Model.Passive;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace Logic
@@ -21,8 +23,28 @@ namespace Logic
             this.gameModel = gameModel;
             gameModel.FlyingTrackingPath = BreadthFirstSearch(GetFlyingEnemyNeighbours);
             gameModel.BasicTrackingPath = BreadthFirstSearch(GetRegularEnemyNeighbours);
+            InitailzeTimers();
         }
-
+        private void InitailzeTimers()
+        {
+            gameModel.LavaTickTimer = new DispatcherTimer();
+            gameModel.LavaTickTimer.Interval = TimeSpan.FromMilliseconds(300);
+            gameModel.LavaTickTimer.Tick += delegate
+            {
+                gameModel.MyPlayer.BeingDamagedByLava = false;
+                gameModel.LavaTickTimer.Stop();
+            };
+            gameModel.EnemyHitTickTimer = new DispatcherTimer();
+            gameModel.EnemyHitTickTimer.Interval = TimeSpan.FromMilliseconds(300);
+            gameModel.EnemyHitTickTimer.Tick += delegate
+            {
+                foreach (var item in gameModel.TrackingMonsters)
+                {
+                    item.CanAttack = true;
+                }
+                gameModel.EnemyHitTickTimer.Stop();
+            };
+        }
         public Projectile EnemyShoot(Point enemyLocation, int speed, int damage) 
         {
             Point enemLocationCord = new Point((enemyLocation.X * GameModel.TileSize) + GameModel.TileSize / 2, (enemyLocation.Y * GameModel.TileSize) + GameModel.TileSize / 2);
@@ -256,6 +278,11 @@ namespace Logic
             projectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
             projectile.Timer.Interval = TimeSpan.FromMilliseconds(20);
             projectile.Timer.Tick += new EventHandler((sender, e) => Timer_Tick(this,e,ref projectile));
+            Thread soundPlayThread = new Thread(() => {
+                new System.Media.SoundPlayer(Assembly.LoadFrom("DungeonPenetrator").GetManifestResourceStream("DungeonPenetrator.Images.piu2.wav")).Play();
+            });
+            soundPlayThread.IsBackground = true;
+            soundPlayThread.Start();
             projectile.Timer.Start();
             gameModel.Projectiles.Add(projectile);
             //return projectile;
@@ -333,6 +360,11 @@ namespace Logic
                     if (activeGameObjects.Health - damage <= 0)
                     {
                         gameModel.MyPlayer.Health = 0;
+                        Thread soundPlayThread = new Thread(() => {
+                            new System.Media.SoundPlayer(Assembly.LoadFrom("DungeonPenetrator").GetManifestResourceStream("DungeonPenetrator.Images.auh.wav")).Play();
+                        });
+                        soundPlayThread.IsBackground = true;
+                        soundPlayThread.Start();
                         break;
                     }
                     gameModel.MyPlayer.Health -= damage;
@@ -341,6 +373,7 @@ namespace Logic
                     break;
             }
         }
+
         private void ManageIntersectsForPlayer()
         {
             List<GameObjects> rmlist = new List<GameObjects>();
@@ -349,7 +382,13 @@ namespace Logic
             {
                 if (gameModel.MyPlayer.IsCollision(item))
                 {
-                    DamageActiveGameObject(gameModel.MyPlayer, item.Damage);
+                    if (!gameModel.MyPlayer.BeingDamagedByLava)
+                    {
+                        DamageActiveGameObject(gameModel.MyPlayer, item.Damage);
+                        gameModel.MyPlayer.BeingDamagedByLava = true;
+                        gameModel.LavaTickTimer.Start();
+                    }
+                        
                 }
             }
             var flyings = gameModel.FlyingMonsters;
@@ -366,7 +405,12 @@ namespace Logic
             {
                 if (gameModel.MyPlayer.IsCollision(item))
                 {
-                    DamageActiveGameObject(gameModel.MyPlayer, item.Damage);
+                    if (item.CanAttack)
+                    {
+                        DamageActiveGameObject(gameModel.MyPlayer, item.Damage);
+                        item.CanAttack = false;
+                        gameModel.EnemyHitTickTimer.Start();
+                    }
                 }
             }
             var enemyProjectiles = gameModel.Projectiles.Where(x => x.Type.Equals(ProjectileType.Enemy));
@@ -375,6 +419,7 @@ namespace Logic
                 if (gameModel.MyPlayer.IsCollision(item))
                 {
                     DamageActiveGameObject(gameModel.MyPlayer, item.Damage);
+                    rmlist.Add(item);
                 }
             }
             var powerups = gameModel.Powerups;
@@ -395,6 +440,9 @@ namespace Logic
                         break;
                     case Powerups:
                         gameModel.Powerups.Remove(item as Powerups);
+                        break;
+                    case Projectile:
+                        gameModel.Projectiles.Remove(item as Projectile);
                         break;
                     default:
                         break;
@@ -417,7 +465,8 @@ namespace Logic
         {
             List<ActiveGameObjects> rmGameObjectList = new List<ActiveGameObjects>();
             List<Projectile> rmprojlist = new List<Projectile>();
-            foreach (var item in gameModel.Projectiles)
+            var projectiles = gameModel.Projectiles;
+            foreach (var item in projectiles)
             {
                 foreach (var walls in gameModel.Walls)
                 {
@@ -432,9 +481,9 @@ namespace Logic
                 item.Timer.Stop();
                 gameModel.Projectiles.Remove(item);
             }
-            var playerprojectiles = gameModel.Projectiles.Where(x => x.Type.Equals(ProjectileType.Player));
+            projectiles = gameModel.Projectiles.Where(x => x.Type.Equals(ProjectileType.Player)).ToList();
 
-            foreach (var item in playerprojectiles)
+            foreach (var item in projectiles)
             {
                 foreach (var flying in gameModel.FlyingMonsters)
                 {

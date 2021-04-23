@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="Images\100.png" />
+    <None Remove="Images\auh.wav" />
     <None Remove="Images\bg3.png" />
     <None Remove="Images\bluepotion.png" />
     <None Remove="Images\bullet3.png" />
@@ -19,6 +20,8 @@
     <None Remove="Images\hoodtracker100100.png" />
     <None Remove="Images\lava.png" />
     <None Remove="Images\missle100.png" />
+    <None Remove="Images\piu.mp3" />
+    <None Remove="Images\piu2.wav" />
     <None Remove="Images\redpotion.png" />
     <None Remove="Images\rock100.png" />
     <None Remove="Images\snowy.jpg" />
@@ -29,6 +32,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Images\100.png" />
+    <EmbeddedResource Include="Images\auh.wav" />
     <EmbeddedResource Include="Images\bg3.png" />
     <EmbeddedResource Include="Images\bluepotion.png" />
     <EmbeddedResource Include="Images\bullet3.png" />
@@ -40,6 +44,8 @@
     <EmbeddedResource Include="Images\hoodtracker100100.png" />
     <EmbeddedResource Include="Images\lava.png" />
     <EmbeddedResource Include="Images\missle100.png" />
+    <EmbeddedResource Include="Images\piu.mp3" />
+    <EmbeddedResource Include="Images\piu2.wav" />
     <EmbeddedResource Include="Images\redpotion.png" />
     <EmbeddedResource Include="Images\rock100.png" />
     <EmbeddedResource Include="Images\snowy.jpg" />
