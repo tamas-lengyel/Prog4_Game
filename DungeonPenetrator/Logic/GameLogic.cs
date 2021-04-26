@@ -52,7 +52,7 @@ namespace Logic
                 double x = (gameModel.MyPlayer.Cords.X*GameModel.TileSize) - (gameModel.Boss.Cords.X*GameModel.TileSize);
                 double y = gameModel.MyPlayer.Cords.Y * GameModel.TileSize - (gameModel.Boss.Cords.Y * GameModel.TileSize);
                 double magnetude = (Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2)));
-                if (magnetude>200)
+                if (magnetude<200)
                 {
                     gameModel.Boss.PlayerInSight = true;
                 }
@@ -62,12 +62,17 @@ namespace Logic
                 }
             }
         }
+        public void RandomBossMovement(Point bossLocation)
+        {
+            List<Point> possibleMoves = GetRegularEnemyNeighbours(bossLocation);
+            gameModel.Boss.Cords = possibleMoves[rnd.Next(0, possibleMoves.Count())];
+        }
         public void BossPatternShoot(Point bossLocation, int speed, int damage)
         {
             foreach (var item in BossEnemy.ShootingPattern)
             {
                 Point enemLocationCord = new Point((bossLocation.X * GameModel.TileSize) + GameModel.TileSize / 2, (bossLocation.Y * GameModel.TileSize) + GameModel.TileSize / 2);
-                Point patternLocationCord = new Point((bossLocation.X * GameModel.TileSize)+(item.X*GameModel.TileSize), (bossLocation.Y * GameModel.TileSize) + (item.Y * GameModel.TileSize));
+                Point patternLocationCord = new Point(((bossLocation.X * GameModel.TileSize) + GameModel.TileSize / 2) +(item.X*GameModel.TileSize), ((bossLocation.Y * GameModel.TileSize) + GameModel.TileSize / 2) + (item.Y * GameModel.TileSize));
                 Projectile projectile = new Projectile(enemLocationCord, patternLocationCord);
                 projectile.Type = ProjectileType.Enemy;
                 projectile.Damage = damage;
@@ -368,7 +373,6 @@ namespace Logic
                     if (activeGameObjects.Health-damage<=0)
                     {
                         gameModel.Boss.Health = 0;
-                        gameModel.Boss = null;
                         break;
                     }
                     gameModel.Boss.Health  -= damage;
@@ -419,6 +423,8 @@ namespace Logic
         {
             List<GameObjects> rmlist = new List<GameObjects>();
             var lavas = gameModel.Lavas;
+            try
+            {
             foreach (var item in lavas)
             {
                 if (gameModel.MyPlayer.IsCollision(item))
@@ -454,7 +460,7 @@ namespace Logic
                     }
                 }
             }
-            var enemyProjectiles = gameModel.Projectiles.Where(x => x.Type.Equals(ProjectileType.Enemy));
+            var enemyProjectiles = gameModel.Projectiles.Where(x => x.Type.Equals(ProjectileType.Enemy) || x.Type.Equals(ProjectileType.Boss));
             foreach (var item in enemyProjectiles)
             {
                 if (gameModel.MyPlayer.IsCollision(item))
@@ -489,7 +495,10 @@ namespace Logic
                         break;
                 }
             }
-
+            }
+            catch
+            {
+            }
 
         }
         public void Updater()
@@ -560,6 +569,18 @@ namespace Logic
                             if (tracking.Health == 0)
                             {
                                 rmGameObjectList.Add(tracking);
+                            }
+                            rmprojlist.Add(item);
+                        }
+                    }
+                    if (gameModel.Boss!=null)
+                    {
+                        if (gameModel.Boss.IsCollision(item))
+                        {
+                            DamageActiveGameObject(gameModel.Boss, item.Damage);
+                            if (gameModel.Boss.Health == 0)
+                            {
+                                rmGameObjectList.Add(gameModel.Boss);
                             }
                             rmprojlist.Add(item);
                         }

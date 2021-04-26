@@ -388,9 +388,9 @@ namespace Renderer
         private Drawing GetBoss()
         {
             DrawingGroup g = new DrawingGroup();
-            if (oldBoss == null || oldBossPosition != model.Boss.Cords)
+            if (oldBoss == null || model.Boss != null && oldBossPosition != model.Boss.Cords)
             {
-                if (model.LevelCounter % 10 == 0)
+                if (model.LevelCounter % 10 == 0 )
                 {
                     ImageDrawing drawing = new ImageDrawing(GetImage("hoodghost.png"), new Rect(model.Boss.Cords.X * GameModel.TileSize,
                         model.Boss.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
@@ -400,6 +400,10 @@ namespace Renderer
                     oldBoss = g;
                     oldBossPosition = model.Boss.Cords;
                 }
+            }
+            if (model.Boss==null)
+            {
+                return g;
             }
             return oldBoss;
         }
