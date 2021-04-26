@@ -36,7 +36,7 @@ namespace Renderer
 
         Drawing oldPauseScreen;
 
-        Point oldBossPosition = new Point(0, 0);
+        Point oldBossPosition;
         List<Point> oldTrackingMonstersPosition = new List<Point>();
         List<Point> oldShootingMonstersPosition = new List<Point>();
         List<Point> oldFlyingMonstersPosition = new List<Point>();
@@ -92,7 +92,12 @@ namespace Renderer
             dg.Children.Add(GetTrackingMonsters());
             dg.Children.Add(GetPowerups());
             dg.Children.Add(GetFlyingMonsters());
-            //dg.Children.Add(GetBoss());
+
+            if (model.LevelCounter % 10 ==0)
+            {
+                dg.Children.Add(GetBoss());
+            }
+            
             dg.Children.Add(GetProjectiles());
             dg.Children.Add(GetPlayer());
 
@@ -382,12 +387,19 @@ namespace Renderer
 
         private Drawing GetBoss()
         {
+            DrawingGroup g = new DrawingGroup();
             if (oldBoss == null || oldBossPosition != model.Boss.Cords)
             {
-                //Geometry g = new RectangleGeometry(new Rect(model.Boss.Cords.X * GameModel.TileSize, 
-                //    model.Boss.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                //oldBoss = new GeometryDrawing(Brushes.Chocolate, Is, g);
-                //oldBossPosition = model.Boss.Cords;
+                if (model.LevelCounter % 10 == 0)
+                {
+                    ImageDrawing drawing = new ImageDrawing(GetImage("hoodghost.png"), new Rect(model.Boss.Cords.X * GameModel.TileSize,
+                        model.Boss.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+
+                    g.Children.Add(drawing);
+
+                    oldBoss = g;
+                    oldBossPosition = model.Boss.Cords;
+                }
             }
             return oldBoss;
         }

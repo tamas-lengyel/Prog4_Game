@@ -15,6 +15,7 @@
     <None Remove="Images\ct100big.png" />
     <None Remove="Images\goal.png" />
     <None Remove="Images\goallocked.png" />
+    <None Remove="Images\hoodghost.png" />
     <None Remove="Images\hoodtracker.gif" />
     <None Remove="Images\hoodtracker100100.png" />
     <None Remove="Images\lava.png" />
@@ -38,6 +39,7 @@
     <EmbeddedResource Include="Images\ct100big.png" />
     <EmbeddedResource Include="Images\goal.png" />
     <EmbeddedResource Include="Images\goallocked.png" />
+    <EmbeddedResource Include="Images\hoodghost.png" />
     <EmbeddedResource Include="Images\hoodtracker.gif" />
     <EmbeddedResource Include="Images\hoodtracker100100.png" />
     <EmbeddedResource Include="Images\lava.png" />
