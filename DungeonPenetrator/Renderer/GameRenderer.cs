@@ -36,14 +36,14 @@ namespace Renderer
 
         Drawing oldPauseScreen;
 
-        Point oldBossPosition;
+        Point oldBossPosition = new Point(0, 0);
         List<Point> oldTrackingMonstersPosition = new List<Point>();
         List<Point> oldShootingMonstersPosition = new List<Point>();
         List<Point> oldFlyingMonstersPosition = new List<Point>();
         List<Point> oldProjectilePosition = new List<Point>();
         int powerupCount;
         Point oldPlayerPosition;
-        Point oldMousePosition;
+        Point oldMousePosition = new Point(0, 0);
 
         Dictionary<string, Brush> brushes = new Dictionary<string, Brush>();
 

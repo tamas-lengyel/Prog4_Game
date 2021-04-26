@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Model;
 
 namespace DungeonPenetrator
 {
@@ -20,9 +21,32 @@ namespace DungeonPenetrator
     /// </summary>
     public partial class MainWindow : Window
     {
+        IGameModel model;
         public MainWindow()
         {
             InitializeComponent();
+
+            exitButton.Visibility = Visibility.Hidden;
+
+            KeyDown += MainWindow_KeyDown;
+        }
+
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                exitButton.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Are you sure?", "Exit", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                MainMenu menu = new MainMenu();
+                menu.Show();
+                this.Close();
+            }
         }
     }
 }

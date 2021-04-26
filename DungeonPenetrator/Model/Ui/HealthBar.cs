@@ -8,10 +8,10 @@ namespace Model.Ui
 {
     public class HealthBar
     {
-        public int HpBarX => 651;
+        public int HpBarX => 650;
         public int HpBarY => 61;
 
-        public int HpWidth => 99;
+        public int HpWidth => 84;
         public int HpHeight => 700;
     }
 }

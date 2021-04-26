@@ -13,7 +13,6 @@
     <None Remove="Images\bluepotion.png" />
     <None Remove="Images\bullet3.png" />
     <None Remove="Images\ct100big.png" />
-    <None Remove="Images\error-icon-32.png" />
     <None Remove="Images\goal.png" />
     <None Remove="Images\goallocked.png" />
     <None Remove="Images\hoodtracker.gif" />
@@ -37,7 +36,6 @@
     <EmbeddedResource Include="Images\bluepotion.png" />
     <EmbeddedResource Include="Images\bullet3.png" />
     <EmbeddedResource Include="Images\ct100big.png" />
-    <EmbeddedResource Include="Images\error-icon-32.png" />
     <EmbeddedResource Include="Images\goal.png" />
     <EmbeddedResource Include="Images\goallocked.png" />
     <EmbeddedResource Include="Images\hoodtracker.gif" />
