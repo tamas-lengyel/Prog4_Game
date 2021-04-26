@@ -31,7 +31,6 @@ namespace DungeonPenetrator
         DispatcherTimer moveOnce;
         DispatcherTimer reloadTimer;
         DispatcherTimer levelTimer;
-        private Thread soundPlayThread;
         public Control()
         {
             Loaded += Control_Loaded;

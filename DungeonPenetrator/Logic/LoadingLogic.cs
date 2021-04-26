@@ -65,51 +65,62 @@ namespace Logic
             gameModel.LevelFinished = false;
 
             GenerateInitializedEmptyMap();
-            GenerateProps();
-            GenerateCollectables();
-            GenerateBasicEnemies();
-            for (int y = 0; y < gameModel.GameAreaChar.GetLength(1); y++)
+
+            if (gameModel.LevelCounter % 10 == 0)
             {
-                for (int x = 0; x < gameModel.GameAreaChar.GetLength(0); x++)
+                gameModel.Boss = new BossEnemy
                 {
-                    switch (gameModel.GameAreaChar[x,y]) // Some parts here shall not be hardcoded.
+                    Cords = new Point((int)(gameModel.GameWidth / GameModel.TileSize) / 2, (int)(gameModel.GameHeight / GameModel.TileSize) / 2),
+                    Health = 100,
+                    Damage = 20,
+                    PlayerInSight = false,
+                };
+            }
+            else
+            {
+                GenerateProps();
+                GenerateCollectables();
+                GenerateBasicEnemies();
+                for (int y = 0; y < gameModel.GameAreaChar.GetLength(1); y++)
+                {
+                    for (int x = 0; x < gameModel.GameAreaChar.GetLength(0); x++)
                     {
-                        case 'W':
-                            gameModel.Walls.Add(new WallProp { Cords = new Point(x, y) });
-                            break;
-                        case 'L':
-                            gameModel.Lavas.Add(new LavaProp { Cords = new Point(x, y), Damage = 15 }); 
-                            break;
-                        case 'P':
-                            gameModel.Waters.Add(new WaterProp { Cords = new Point(x, y)});
-                            break;
-                        case 'H':
-                            gameModel.Powerups.Add(new Powerups(new Point(x, y), PowerupType.Health));
-                            break;
-                        case 'D':
-                            gameModel.Powerups.Add(new Powerups (new Point(x, y), PowerupType.Damage));
-                            break;
-                        case 'R':
-                            gameModel.Powerups.Add(new Powerups ( new Point(x, y), PowerupType.FiringSpeed));
-                            break;
-                        case 'F':
-                            gameModel.FlyingMonsters.Add(new FlyingEnemy { Cords = new Point(x, y), Damage = 10, Health = 30 });
-                            break;
-                        case 'T':
-                            gameModel.TrackingMonsters.Add(new TrackingEnemy { Cords = new Point(x, y), Damage = 2, Health = 60,CanAttack=true });
-                            break;
-                        case 'S':
-                            gameModel.ShootingMonsters.Add(new ShootingEnemy { Cords = new Point(x, y), Damage = 10, Health = 40 });
-                            break;
-                        case 'B':
-                            gameModel.Boss = new BossEnemy { Cords = new Point(x, y), Damage = 10, Health = 100 };
-                            break;
+                        switch (gameModel.GameAreaChar[x, y]) // Some parts here shall not be hardcoded.
+                        {
+                            case 'W':
+                                gameModel.Walls.Add(new WallProp { Cords = new Point(x, y) });
+                                break;
+                            case 'L':
+                                gameModel.Lavas.Add(new LavaProp { Cords = new Point(x, y), Damage = 15 });
+                                break;
+                            case 'P':
+                                gameModel.Waters.Add(new WaterProp { Cords = new Point(x, y) });
+                                break;
+                            case 'H':
+                                gameModel.Powerups.Add(new Powerups(new Point(x, y), PowerupType.Health));
+                                break;
+                            case 'D':
+                                gameModel.Powerups.Add(new Powerups(new Point(x, y), PowerupType.Damage));
+                                break;
+                            case 'R':
+                                gameModel.Powerups.Add(new Powerups(new Point(x, y), PowerupType.FiringSpeed));
+                                break;
+                            case 'F':
+                                gameModel.FlyingMonsters.Add(new FlyingEnemy { Cords = new Point(x, y), Damage = 10, Health = 30 });
+                                break;
+                            case 'T':
+                                gameModel.TrackingMonsters.Add(new TrackingEnemy { Cords = new Point(x, y), Damage = 2, Health = 60, CanAttack = true });
+                                break;
+                            case 'S':
+                                gameModel.ShootingMonsters.Add(new ShootingEnemy { Cords = new Point(x, y), Damage = 10, Health = 40 });
+                                break;
+                            case 'B':
+                                gameModel.Boss = new BossEnemy { Cords = new Point(x, y), Damage = 10, Health = 100 };
+                                break;
+                        }
                     }
                 }
             }
-
-            ;
-
         }
 
         private void GenerateInitializedEmptyMap()
