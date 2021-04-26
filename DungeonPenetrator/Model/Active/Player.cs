@@ -15,6 +15,7 @@ namespace Model.Active
         public override int Damage { get; set; }
         public double FiringSpeed { get; set; }
         public bool IsReloading { get; set; }
+        public bool BeingDamagedByLava { get; set; }
 
         public override Rect Area { get { return new Rect(Cords.X * GameModel.TileSize, Cords.Y * GameModel.TileSize, GameModel.TileSize - 1, GameModel.TileSize - 1); } }
     }

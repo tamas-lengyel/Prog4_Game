@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace Model
 {
@@ -17,7 +18,7 @@ namespace Model
         static public double TileSize => 50;
         public Point mousePosition { get; set; }
 
-        public Point LevelExit => new Point((int)(GameWidth/TileSize/ 2),0);
+        public Point LevelExit => new Point((int)(GameWidth / TileSize / 2), 0);
         public int LevelCounter { get; set; }
 
         public BossEnemy Boss { get; set; }
@@ -31,10 +32,12 @@ namespace Model
         public List<WallProp> Walls { get; set; }
         public List<Powerups> Powerups { get; set; }
         public char[,] GameAreaChar { get; set; }
-        public bool LevelFinished{ get; set; }
-        public Dictionary<Point,Point> BasicTrackingPath { get; set; } // Key tilecord-> Value->DirectionVector
+        public bool LevelFinished { get; set; }
+        public Dictionary<Point, Point> BasicTrackingPath { get; set; } // Key tilecord-> Value->DirectionVector
         public Dictionary<Point, Point> FlyingTrackingPath { get; set; } // Key tilecord-> Value->DirectionVector
 
         public bool GameIsPaused { get; set; }
+        public DispatcherTimer LavaTickTimer { get; set; }
+        public DispatcherTimer EnemyHitTickTimer { get; set; }
     }
 }

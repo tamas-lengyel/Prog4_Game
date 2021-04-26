@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace Logic
 {
@@ -41,11 +42,12 @@ namespace Logic
                 gameModel = new GameModel();
                 gameModel.MyPlayer = new Player();
                 gameModel.MyPlayer.FiringSpeed = 1;
-                gameModel.MyPlayer.Damage = 255;
+                gameModel.MyPlayer.Damage = 20;
                 gameModel.MyPlayer.Health = 100;
                 gameModel.LevelCounter = 0; // Gets raised to one, must be zero
             }
             gameModel.MyPlayer.IsReloading = false;
+            gameModel.MyPlayer.BeingDamagedByLava = false;
             gameModel.GameIsPaused = false;
             gameModel.Projectiles = new List<Projectile>();
             gameModel.Powerups = new List<Powerups>();
@@ -76,7 +78,7 @@ namespace Logic
                             gameModel.Walls.Add(new WallProp { Cords = new Point(x, y) });
                             break;
                         case 'L':
-                            gameModel.Lavas.Add(new LavaProp { Cords = new Point(x, y), Damage = 5 }); 
+                            gameModel.Lavas.Add(new LavaProp { Cords = new Point(x, y), Damage = 15 }); 
                             break;
                         case 'P':
                             gameModel.Waters.Add(new WaterProp { Cords = new Point(x, y)});
@@ -94,10 +96,10 @@ namespace Logic
                             gameModel.FlyingMonsters.Add(new FlyingEnemy { Cords = new Point(x, y), Damage = 10, Health = 30 });
                             break;
                         case 'T':
-                            gameModel.TrackingMonsters.Add(new TrackingEnemy { Cords = new Point(x, y), Damage = 5, Health = 60 });
+                            gameModel.TrackingMonsters.Add(new TrackingEnemy { Cords = new Point(x, y), Damage = 2, Health = 60,CanAttack=true });
                             break;
                         case 'S':
-                            gameModel.ShootingMonsters.Add(new ShootingEnemy { Cords = new Point(x, y), Damage = 5, Health = 40 });
+                            gameModel.ShootingMonsters.Add(new ShootingEnemy { Cords = new Point(x, y), Damage = 10, Health = 40 });
                             break;
                         case 'B':
                             gameModel.Boss = new BossEnemy { Cords = new Point(x, y), Damage = 10, Health = 100 };
