@@ -71,8 +71,8 @@ namespace Logic
         {
             foreach (var item in BossEnemy.ShootingPattern)
             {
-                Point enemLocationCord = new Point((bossLocation.X * GameModel.TileSize) + GameModel.TileSize / 2, (bossLocation.Y * GameModel.TileSize) + GameModel.TileSize / 2);
-                Point patternLocationCord = new Point(((bossLocation.X * GameModel.TileSize) + GameModel.TileSize / 2) +(item.X*GameModel.TileSize), ((bossLocation.Y * GameModel.TileSize) + GameModel.TileSize / 2) + (item.Y * GameModel.TileSize));
+                Point enemLocationCord = new Point((bossLocation.X * GameModel.TileSize), (bossLocation.Y * GameModel.TileSize));
+                Point patternLocationCord = new Point(((bossLocation.X * GameModel.TileSize)) +(item.X*GameModel.TileSize), ((bossLocation.Y * GameModel.TileSize)) + (item.Y * GameModel.TileSize));
                 Projectile projectile = new Projectile(enemLocationCord, patternLocationCord);
                 projectile.Type = ProjectileType.Enemy;
                 projectile.Damage = damage;
@@ -89,16 +89,19 @@ namespace Logic
             Point enemLocationCord = new Point((enemyLocation.X * GameModel.TileSize) + GameModel.TileSize / 2, (enemyLocation.Y * GameModel.TileSize) + GameModel.TileSize / 2);
             Point playerLocationCord = new Point((gameModel.MyPlayer.Cords.X * GameModel.TileSize) + GameModel.TileSize / 2, (gameModel.MyPlayer.Cords.Y * GameModel.TileSize) + GameModel.TileSize / 2);
             Projectile projectile = new Projectile(enemLocationCord, playerLocationCord);
-            if (gameModel.LevelCounter % 10 == 0)
-            {
-                projectile.Type = ProjectileType.Boss;
-            }
-            else
-            {
-                projectile.Type = ProjectileType.Enemy;
-            }
+            projectile.Type = ProjectileType.Enemy;
             projectile.Damage = damage;
             projectile.Speed = speed; 
+            return projectile;
+        }
+        public Projectile BossShoot(Point bossLocation, int speed, int damage)
+        {
+            Point enemLocationCord = new Point((bossLocation.X * GameModel.TileSize), (bossLocation.Y * GameModel.TileSize) );
+            Point playerLocationCord = new Point((gameModel.MyPlayer.Cords.X * GameModel.TileSize) + GameModel.TileSize / 2, (gameModel.MyPlayer.Cords.Y * GameModel.TileSize) + GameModel.TileSize / 2);
+            Projectile projectile = new Projectile(enemLocationCord, playerLocationCord);
+            projectile.Type = ProjectileType.Boss;
+            projectile.Damage = damage;
+            projectile.Speed = speed;
             return projectile;
         }
         public void CollectPowerup(Powerups powerups)
@@ -485,6 +488,19 @@ namespace Logic
                             rmlist.Add(item);
                         }
                 }
+            }
+            if (gameModel.Boss!=null)
+            {
+                    if (gameModel.MyPlayer.IsCollision(gameModel.Boss))
+                    {
+                        if (!gameModel.MyPlayer.BeingDamagedByLava)
+                        {
+                            DamageActiveGameObject(gameModel.MyPlayer, gameModel.Boss.Damage);
+                            gameModel.MyPlayer.BeingDamagedByLava = true;
+                            gameModel.LavaTickTimer.Start();
+                        }
+                        
+                    }
             }
             foreach (var item in rmlist)
             {

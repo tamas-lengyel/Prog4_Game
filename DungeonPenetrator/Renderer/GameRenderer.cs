@@ -386,13 +386,15 @@ namespace Renderer
             DrawingGroup g = new DrawingGroup();
             if (oldBoss == null || model.Boss != null && oldBossPosition != model.Boss.Cords)
             {
-                    ImageDrawing drawing = new ImageDrawing(GetImage("hoodghost.png"), new Rect((model.Boss.Cords.X * GameModel.TileSize) - ((GameModel.TileSize*3) / 2),
-                        (model.Boss.Cords.Y * GameModel.TileSize) - ((GameModel.TileSize * 3) / 2), GameModel.TileSize*3, GameModel.TileSize*3));
+                ImageDrawing drawing = new ImageDrawing(GetImage("hoodghost.png"), new Rect((model.Boss.Cords.X * GameModel.TileSize) - ((GameModel.TileSize*3) / 2),
+                    (model.Boss.Cords.Y * GameModel.TileSize) - ((GameModel.TileSize * 3) / 2), GameModel.TileSize*3, GameModel.TileSize*3));
+                /*Geometry geo = new RectangleGeometry(model.Boss.Area);
+                GeometryDrawing geodr = new GeometryDrawing(null,Is,geo);
+                g.Children.Add(geodr);*/
+                g.Children.Add(drawing);
 
-                    g.Children.Add(drawing);
-
-                    oldBoss = g;
-                    oldBossPosition = model.Boss.Cords;
+                oldBoss = g;
+                oldBossPosition = model.Boss.Cords;
             }
             if (model.Boss==null)
             {
