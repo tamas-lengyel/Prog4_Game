@@ -161,7 +161,7 @@ namespace DungeonPenetrator
                 }
                 else
                 {
-                    Projectile bossProjectile = gameLogic.EnemyShoot(model.Boss.Cords, rnd.Next(8, 10), model.Boss.Damage);
+                    Projectile bossProjectile = gameLogic.EnemyShoot(model.Boss.Cords, rnd.Next(8, 10), model.Boss.Damage*2);
                     model.Projectiles.Add(bossProjectile);
                     bossProjectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
                     bossProjectile.Timer.Interval = TimeSpan.FromMilliseconds(20);

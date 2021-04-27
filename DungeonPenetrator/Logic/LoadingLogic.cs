@@ -68,7 +68,7 @@ namespace Logic
 
             if (gameModel.LevelCounter % 10 == 0)
             {
-                for (int y = 1; y <= gameModel.GameAreaChar.GetLength(1) - 2; y += 6)
+                /*for (int y = 1; y <= gameModel.GameAreaChar.GetLength(1) - 2; y += 6)
                 {
                     int[] EmptySpaceCords = GenerateEmptySpacesForRow();
                     for (int x = 0; x < gameModel.GameAreaChar.GetLength(0); x++)
@@ -91,7 +91,7 @@ namespace Logic
                         }
                     }
                 }
-                GenerateCollectables();
+                GenerateCollectables();*/
                 gameModel.GameAreaChar[(int)((gameModel.GameWidth / GameModel.TileSize)/ 2),(int)((gameModel.GameHeight / GameModel.TileSize) / 2)] = 'B';
             }
             else
@@ -125,16 +125,16 @@ namespace Logic
                             gameModel.Powerups.Add(new Powerups(new Point(x, y), PowerupType.FiringSpeed));
                             break;
                         case 'F':
-                            gameModel.FlyingMonsters.Add(new FlyingEnemy { Cords = new Point(x, y), Damage = 10, Health = 30 });
+                                gameModel.FlyingMonsters.Add(new FlyingEnemy { Cords = new Point(x, y), Damage = 10, Health = 30*((int)(gameModel.LevelCounter / 10) + 1), });
                             break;
                         case 'T':
-                            gameModel.TrackingMonsters.Add(new TrackingEnemy { Cords = new Point(x, y), Damage = 2, Health = 60, CanAttack = true });
+                            gameModel.TrackingMonsters.Add(new TrackingEnemy { Cords = new Point(x, y), Damage = 2, Health = 60*((int)(gameModel.LevelCounter / 10) + 1), CanAttack = true, });
                             break;
                         case 'S':
-                            gameModel.ShootingMonsters.Add(new ShootingEnemy { Cords = new Point(x, y), Damage = 10, Health = 40 });
+                            gameModel.ShootingMonsters.Add(new ShootingEnemy { Cords = new Point(x, y), Damage = 10, Health = 40*((int)(gameModel.LevelCounter / 10) + 1), });
                             break;
                         case 'B':
-                            gameModel.Boss = new BossEnemy { Cords = new Point(x, y), Damage = 10, Health = 100, PlayerInSight = false };
+                            gameModel.Boss = new BossEnemy { Cords = new Point(x, y), Damage = 15, Health = 3000* ((int)(gameModel.LevelCounter / 10)), PlayerInSight = false, };
                             break;
                     }
                 }

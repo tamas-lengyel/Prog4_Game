@@ -88,17 +88,17 @@ namespace Renderer
             dg.Children.Add(GetLavas());
             dg.Children.Add(GetWaters());
             dg.Children.Add(GetWalls());
-            dg.Children.Add(GetShootingMonsters());
             dg.Children.Add(GetTrackingMonsters());
             dg.Children.Add(GetPowerups());
             dg.Children.Add(GetFlyingMonsters());
 
+            dg.Children.Add(GetProjectiles());
+            dg.Children.Add(GetShootingMonsters());
             if (model.LevelCounter % 10 ==0)
             {
                 dg.Children.Add(GetBoss());
             }
             
-            dg.Children.Add(GetProjectiles());
             dg.Children.Add(GetPlayer());
 
             dg.Children.Add(GetLevelCounter());
@@ -113,8 +113,9 @@ namespace Renderer
         {
             if (!model.GameIsPaused)
             {
-                ImageDrawing drawing = new ImageDrawing(GetImage("stopped.png"), new Rect(1000, 1000, model.GameWidth, model.GameHeight));
-                oldPauseScreen = drawing;
+                /*ImageDrawing drawing = new ImageDrawing(GetImage("stopped.png"), new Rect(1000, 1000, model.GameWidth, model.GameHeight));
+                oldPauseScreen = drawing;*/
+                return new ImageDrawing();
             }
             if (model.GameIsPaused)
             {
@@ -172,7 +173,7 @@ namespace Renderer
         private Drawing GetLevelExit()
         {
             DrawingGroup g = new DrawingGroup();
-            if (oldLevelExit == null || (model.ShootingMonsters.Count == 0 && model.TrackingMonsters.Count == 0 && model.FlyingMonsters.Count == 0))
+            if (oldLevelExit == null || ((model.ShootingMonsters.Count == 0 && model.TrackingMonsters.Count == 0 && model.FlyingMonsters.Count == 0)&& model.Boss==null) )
             {
                 ImageDrawing drawing = new ImageDrawing(GetImage("goal.png"), new Rect(model.LevelExit.X * GameModel.TileSize,
                            model.LevelExit.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
@@ -390,8 +391,6 @@ namespace Renderer
             DrawingGroup g = new DrawingGroup();
             if (oldBoss == null || model.Boss != null && oldBossPosition != model.Boss.Cords)
             {
-                if (model.LevelCounter % 10 == 0 )
-                {
                     ImageDrawing drawing = new ImageDrawing(GetImage("hoodghost.png"), new Rect(model.Boss.Cords.X * GameModel.TileSize,
                         model.Boss.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
 
@@ -399,7 +398,6 @@ namespace Renderer
 
                     oldBoss = g;
                     oldBossPosition = model.Boss.Cords;
-                }
             }
             if (model.Boss==null)
             {
@@ -411,19 +409,25 @@ namespace Renderer
         private Drawing GetProjectiles()
         {
             DrawingGroup g = new DrawingGroup();
-            foreach (var projectile in model.Projectiles)
+            try
             {
-                if (oldFlyingMonsters == null || !oldFlyingMonstersPosition.Contains(projectile.Cords))
+                foreach (var projectile in model.Projectiles)
                 {
-                    ImageDrawing drawing = new ImageDrawing(GetImage("bullet3.png"), new Rect(projectile.Cords.X,
-                           projectile.Cords.Y, 10, 10));
+                    if (oldProjectiles == null || !oldProjectilePosition.Contains(projectile.Cords))
+                    {
+                        ImageDrawing drawing = new ImageDrawing(GetImage("bullet3.png"), new Rect(projectile.Cords.X,
+                               projectile.Cords.Y, 10, 10));
 
-                    g.Children.Add(drawing);
+                        g.Children.Add(drawing);
+                    }
                 }
+                oldProjectiles = g;
+                return oldProjectiles;
             }
-            oldProjectiles = g;
-            return oldProjectiles;
-
+            catch
+            {
+                return g;
+            }
         }
 
         private Drawing GetPlayer()

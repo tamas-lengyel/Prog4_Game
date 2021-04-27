@@ -474,8 +474,16 @@ namespace Logic
             {
                 if (gameModel.MyPlayer.IsCollision(item))
                 {
-                    CollectPowerup(item);
-                    rmlist.Add(item);
+                        if (item.Type.Equals(PowerupType.Health) && gameModel.MyPlayer.Health<100)
+                        {
+                            CollectPowerup(item);
+                            rmlist.Add(item);
+                        }
+                        else if(!item.Type.Equals(PowerupType.Health))
+                        {
+                            CollectPowerup(item);
+                            rmlist.Add(item);
+                        }
                 }
             }
             foreach (var item in rmlist)
@@ -503,7 +511,7 @@ namespace Logic
         }
         public void Updater()
         {
-            if (gameModel.ShootingMonsters.Count == 0 && gameModel.TrackingMonsters.Count == 0 && gameModel.FlyingMonsters.Count == 0 && gameModel.MyPlayer.Cords==gameModel.LevelExit)
+            if (gameModel.ShootingMonsters.Count == 0 && gameModel.TrackingMonsters.Count == 0 && gameModel.FlyingMonsters.Count == 0 && gameModel.Boss==null  && gameModel.MyPlayer.Cords==gameModel.LevelExit)
             {
                 gameModel.LevelFinished = true;
             }
