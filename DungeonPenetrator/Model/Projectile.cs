@@ -37,7 +37,7 @@ namespace Model
                     case ProjectileType.Enemy or ProjectileType.Player:
                         return new Rect(Cords.X, Cords.Y, 10, 10);
                     case ProjectileType.Boss:
-                        return new Rect(Cords.X, Cords.Y, 20, 20);
+                        return new Rect(Cords.X, Cords.Y, 40, 40);
                     default:
                         return new Rect(Cords.X, Cords.Y, 10, 10);
                 }

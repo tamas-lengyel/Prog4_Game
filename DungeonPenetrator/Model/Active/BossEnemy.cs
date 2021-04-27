@@ -24,6 +24,6 @@ namespace Model.Active
             new Point(-1,0),
         };
         public bool PlayerInSight;
-        public override Rect Area { get { return new Rect(Cords.X * GameModel.TileSize, Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize); } }
+        public override Rect Area { get { return new Rect(Cords.X * GameModel.TileSize, Cords.Y * GameModel.TileSize, GameModel.TileSize*3, GameModel.TileSize*3); } }
     }
 }
