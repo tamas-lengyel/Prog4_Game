@@ -1,0 +1,16 @@
+﻿<Window x:Class="DungeonPenetrator.ControlsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DungeonPenetrator"
+        mc:Ignorable="d"
+        Title="ControlsWindow" Height="1028" Width="1492"
+        WindowStartupLocation="CenterScreen">
+    <Window.Background>
+        <ImageBrush ImageSource="/Images/controls.png" />
+    </Window.Background>
+    <Grid>
+        <Button Content="Close" FontSize="40" FontFamily="Berlin Sans FB" Click="Button_Click" Margin="47,876,1205,55"/>
+    </Grid>
+</Window>

@@ -43,7 +43,7 @@
     <EmbeddedResource Include="Images\bluepotion.png" />
     <EmbeddedResource Include="Images\bossbullet.png" />
     <EmbeddedResource Include="Images\bullet3.png" />
-    <EmbeddedResource Include="Images\controls.png" />
+    <Resource Include="Images\controls.png" />
     <EmbeddedResource Include="Images\ct100big.png" />
     <EmbeddedResource Include="Images\goal.png" />
     <EmbeddedResource Include="Images\goallocked.png" />
