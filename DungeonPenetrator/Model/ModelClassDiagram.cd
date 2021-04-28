@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Model.ActiveGameObjects" Collapsed="true">
+    <Position X="8.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACACAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Active\ActiveGameObjects.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.ShootingEnemy" Collapsed="true">
+    <Position X="5.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACACAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Active\ShootingEnemy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.PassiveGameObjects" Collapsed="true">
+    <Position X="21" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Passive\PassiveGameObjects.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.GameModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="25.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QIAAAQAgAhAAAAEgUFAAIAACAAAggEAAACCAACCCAUA=</HashCode>
+      <FileName>GameModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Model.GameObjects" Collapsed="true">
+    <Position X="13" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>GameObjects.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Model.Highscore" Collapsed="true">
+    <Position X="25.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Highscore.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Projectile" Collapsed="true">
+    <Position X="16.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAACAAAAIBAAAAAAAAAQAAAQAEAAA=</HashCode>
+      <FileName>Projectile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Active.BossEnemy" Collapsed="true">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgCACAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAQCAAAA=</HashCode>
+      <FileName>Active\BossEnemy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Active.FlyingEnemy" Collapsed="true">
+    <Position X="9.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACACAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Active\FlyingEnemy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Active.LavaProp" Collapsed="true">
+    <Position X="12" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACACAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Active\LavaProp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Active.Player" Collapsed="true">
+    <Position X="14.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACACAEAAAAAAAAAAAAAIEAAAAAAAAAAAAAQgAAAA=</HashCode>
+      <FileName>Active\Player.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Active.TrackingEnemy" Collapsed="true">
+    <Position X="3" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACACAAAAAAAAAIAAAAAIAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Active\TrackingEnemy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Passive.Powerups" Collapsed="true">
+    <Position X="18.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAAAAAIAAAAAAAAAAQAAAQAAAAA=</HashCode>
+      <FileName>Passive\Powerups.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Passive.WallProp" Collapsed="true">
+    <Position X="21" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Passive\WallProp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Passive.WaterProp" Collapsed="true">
+    <Position X="23.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Passive\WaterProp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Ui.HealthBar" Collapsed="true">
+    <Position X="27.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Ui\HealthBar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Ui.LevelCounter" Collapsed="true">
+    <Position X="27.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACkAAAAAAA=</HashCode>
+      <FileName>Ui\LevelCounter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Model.IGameModel" Collapsed="true">
+    <Position X="25.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QIAAAQAgAhAAAAEgUFAAIAACAAAggEAAACCAACCCAUA=</HashCode>
+      <FileName>IGameModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Model.IGameObjects" Collapsed="true">
+    <Position X="27.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IGameObjects.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="Model.Biome" Collapsed="true">
+    <Position X="25.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAgAAACAAAAA=</HashCode>
+      <FileName>GameModel.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Model.ProjectileType" Collapsed="true">
+    <Position X="25.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Projectile.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Model.Passive.PowerupType" Collapsed="true">
+    <Position X="27.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACACAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Passive\Powerups.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
