@@ -21,6 +21,7 @@ namespace DungeonPenetrator
     public partial class MainMenu : Window
     {
         SaveGameRepository sgRepo = new SaveGameRepository();
+        MediaPlayer player = new MediaPlayer();
 
         public MainMenu()
         {
@@ -33,6 +34,34 @@ namespace DungeonPenetrator
             {
                 newOrContinue.Content = "Continue Game";
             }
+
+            //player.Open(new Uri("pack://application:,,,/Images/rugoskes.mp4", UriKind.Absolute));
+            //VideoDrawing drawing = new VideoDrawing { Rect = new Rect(0, 0, 800, 600), Player = player };
+            //player.Play();
+
+
+
+            ////GeometryDrawing geometryDrawing = new GeometryDrawing(Brushes.Red,null, new RectangleGeometry(new Rect(0,0,800,600)));
+
+            //DrawingBrush brush = new DrawingBrush(drawing);
+            //Background = brush;
+
+            //// Create a MediaTimeline.
+            //MediaTimeline mTimeline =
+            //    new MediaTimeline(new Uri("pack://application:,,,/Images/Niggacat.gif", UriKind.Absolute));
+
+            //// Set the timeline to repeat.
+            //mTimeline.RepeatBehavior = System.Windows.Media.Animation.RepeatBehavior.Forever;
+
+            //// Create a clock from the MediaTimeline.
+            //MediaClock mClock = mTimeline.CreateClock();
+
+            //MediaPlayer repeatingVideoDrawingPlayer = new MediaPlayer();
+            //repeatingVideoDrawingPlayer.Clock = mClock;
+
+            //VideoDrawing repeatingVideoDrawing = new VideoDrawing();
+            //repeatingVideoDrawing.Rect = new Rect(150, 0, 100, 100);
+            //repeatingVideoDrawing.Player = repeatingVideoDrawingPlayer;
         }
 
         private void NewGameBtn_Click(object sender, RoutedEventArgs e)
