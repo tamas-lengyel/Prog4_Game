@@ -1,16 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿// <copyright file="ActiveGameObjects.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace Model
 {
+    using System.Windows;
+
+    /// <summary>
+    /// Active gameobject class.
+    /// </summary>
     public abstract class ActiveGameObjects : GameObjects
     {
+        /// <summary>
+        /// Gets or sets the coordinates.
+        /// </summary>
         public abstract override Point Cords { get; set; }
-        public abstract int Health { get; set; }
-        public abstract int Damage { get; set; }
 
+        /// <summary>
+        /// Gets or sets health.
+        /// </summary>
+        public abstract int Health { get; set; }
+
+        /// <summary>
+        /// Gets or sets the damege.
+        /// </summary>
+        public abstract int Damage { get; set; }
     }
 }

@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LogicTest</name>
+    </assembly>
+    <members>
+        <member name="T:LogicTest.Testing">
+            <summary>
+            Testing class.
+            </summary>
+        </member>
+        <member name="M:LogicTest.Testing.Init">
+            <summary>
+            Initializes the mock repo.
+            </summary>
+        </member>
+        <member name="M:LogicTest.Testing.MovePlayer">
+            <summary>
+            Player movement testing.
+            </summary>
+        </member>
+        <member name="M:LogicTest.Testing.DamageActiveGameObject">
+            <summary>
+            Damage testing.
+            </summary>
+        </member>
+        <member name="M:LogicTest.Testing.MoveFlyingEnemy">
+            <summary>
+            Testing movement of flying enemy.
+            </summary>
+        </member>
+        <member name="M:LogicTest.Testing.MoveRegularEnemy">
+            <summary>
+            Testing movement of regular enemy.
+            </summary>
+        </member>
+        <member name="M:LogicTest.Testing.CollectHealthPotion">
+            <summary>
+            Testing the collection of health potion.
+            </summary>
+        </member>
+        <member name="M:LogicTest.Testing.CollectDamagePowerup">
+            <summary>
+            Testing the collection of damage potion.
+            </summary>
+        </member>
+        <member name="M:LogicTest.Testing.CollectFiringSpeed">
+            <summary>
+            Testing the collection of firing speed potion.
+            </summary>
+        </member>
+        <member name="M:LogicTest.Testing.DropRandomCollectable">
+            <summary>
+            Tests the number of placed collectibles.
+            </summary>
+        </member>
+        <member name="M:LogicTest.Testing.PlayerShoot">
+            <summary>
+            Tests the player shooting.
+            </summary>
+        </member>
+    </members>
+</doc>

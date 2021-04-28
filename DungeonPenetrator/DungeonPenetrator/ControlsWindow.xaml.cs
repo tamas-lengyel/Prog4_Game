@@ -1,28 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿// <copyright file="ControlsWindow.xaml.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace DungeonPenetrator
 {
+    using System.Windows;
+
     /// <summary>
-    /// Interaction logic for ControlsWindow.xaml
+    /// Interaction logic for ControlsWindow.xaml.
     /// </summary>
     public partial class ControlsWindow : Window
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ControlsWindow"/> class.
+        /// </summary>
         public ControlsWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

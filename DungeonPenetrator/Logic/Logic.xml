@@ -1,0 +1,220 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Logic</name>
+    </assembly>
+    <members>
+        <member name="T:Logic.GameLogic">
+            <summary>
+            Contains methods for the maing logic of the game.
+            </summary>
+        </member>
+        <member name="M:Logic.GameLogic.#ctor(Model.IGameModel)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Logic.GameLogic"/> class.
+            Sets up the dependency injection to the game's model.
+            </summary>
+            <param name="gameModel">Model of the game's elements.</param>
+        </member>
+        <member name="M:Logic.GameLogic.Updater">
+            <inheritdoc/>
+        </member>
+        <member name="M:Logic.GameLogic.UpdatePlayerInSight">
+            <inheritdoc/>
+        </member>
+        <member name="M:Logic.GameLogic.RandomBossMovement(System.Windows.Point)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Logic.GameLogic.BossPatternShoot(System.Windows.Point,System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Logic.GameLogic.EnemyShoot(System.Windows.Point,System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Logic.GameLogic.BossShoot(System.Windows.Point,System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Logic.GameLogic.CollectPowerup(Model.Passive.Powerups)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Logic.GameLogic.DropRandomCollectable">
+            <inheritdoc/>
+        </member>
+        <member name="M:Logic.GameLogic.MoveProjectile(Model.Projectile@)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Logic.GameLogic.MovePlayer(System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Logic.GameLogic.PlayerShoot(System.Windows.Point,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Logic.GameLogic.MoveFlyingEnemy(Model.Active.FlyingEnemy)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Logic.GameLogic.MoveRegularEnemy(Model.ActiveGameObjects)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Logic.GameLogic.DamageActiveGameObject(Model.ActiveGameObjects,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Logic.IGameLogic">
+            <summary>
+            Interface for GameLogic.
+            </summary>
+        </member>
+        <member name="M:Logic.IGameLogic.MovePlayer(System.Int32,System.Int32)">
+            <summary>
+            Moves the player to new cordinates if possible.
+            </summary>
+            <param name="dx">Defines the displacement on the X axis.</param>
+            <param name="dy">Defines the displacement on the Y axis.</param>
+        </member>
+        <member name="M:Logic.IGameLogic.PlayerShoot(System.Windows.Point,System.Int32)">
+            <summary>
+            Shoots a projectile torwards the mouse's position.
+            </summary>
+            <param name="mousePos">Defines the position of the mouse.</param>
+            <param name="speed">Defines the speed of the bullet.</param>
+        </member>
+        <member name="M:Logic.IGameLogic.MoveFlyingEnemy(Model.Active.FlyingEnemy)">
+            <summary>
+            Moves a flying enemy due to it's moving pattern.
+            </summary>
+            <param name="flyingEnemy">Defines the flying enemy which we want to move.</param>
+        </member>
+        <member name="M:Logic.IGameLogic.MoveRegularEnemy(Model.ActiveGameObjects)">
+            <summary>
+            Moves an active enemy due to the regular moving pattern.
+            </summary>
+            <param name="activeGameObjects">Defines the flying enemy which we want to move.</param>
+        </member>
+        <member name="M:Logic.IGameLogic.EnemyShoot(System.Windows.Point,System.Int32,System.Int32)">
+            <summary>
+            Creates a new projectile torwards the players position for basic enemy projectiles.
+            </summary>
+            <param name="enemyLocation">Defines the starting location of the new projectile.</param>
+            <param name="speed">Defines the speed of the new projectile.</param>
+            <param name="damage">Defines the damage of the projectile.</param>
+            <returns>A projectile which is setup to be moved.</returns>
+        </member>
+        <member name="M:Logic.IGameLogic.UpdatePlayerInSight">
+            <summary>
+            Updates the boss's sight whether the player is in range.
+            </summary>
+        </member>
+        <member name="M:Logic.IGameLogic.BossPatternShoot(System.Windows.Point,System.Int32,System.Int32)">
+            <summary>
+            Creates bullets due to the boss's shooting pattern.
+            </summary>
+            <param name="bossLocation">Defines the starting point for the projectiles.</param>
+            <param name="speed">Defines the speed of the projectile.</param>
+            <param name="damage">Defines the damage of the projectile.</param>
+        </member>
+        <member name="M:Logic.IGameLogic.RandomBossMovement(System.Windows.Point)">
+            <summary>
+            Randomly moves the boss according to the regular moving pattern.
+            </summary>
+            <param name="bossLocation">Defines the location of the boss.</param>
+        </member>
+        <member name="M:Logic.IGameLogic.BossShoot(System.Windows.Point,System.Int32,System.Int32)">
+            <summary>
+            Creates a new projectile torwards the players position for basic boss type projectiles.
+            </summary>
+            <param name="bossLocation">Defines the starting location of the new projectile.</param>
+            <param name="speed">Defines the speed of the new projectile.</param>
+            <param name="damage">Defines the damage of the projectile.</param>
+            <returns>A projectile which is setup to be moved.</returns>
+        </member>
+        <member name="M:Logic.IGameLogic.Updater">
+            <summary>
+            The main updater of the game checks basic intersects and game states.
+            </summary>
+        </member>
+        <member name="M:Logic.IGameLogic.MoveProjectile(Model.Projectile@)">
+            <summary>
+            Moves a projectile torwards it's direction.
+            </summary>
+            <param name="projectile">Defines the projectile which should be moved.</param>
+        </member>
+        <member name="M:Logic.IGameLogic.CollectPowerup(Model.Passive.Powerups)">
+            <summary>
+            Defines the behavior of powerups when the player collects them.
+            </summary>
+            <param name="powerups">Defines the powerup which is currently picked up.</param>
+        </member>
+        <member name="M:Logic.IGameLogic.DamageActiveGameObject(Model.ActiveGameObjects,System.Int32)">
+            <summary>
+            Defines basic damaging of the game objects.
+            </summary>
+            <param name="activeGameObjects">Defines the objects which is taking daming.</param>
+            <param name="damage">Defines the damage which is taken from the damaged object.</param>
+        </member>
+        <member name="M:Logic.IGameLogic.DropRandomCollectable">
+            <summary>
+            Drops a randomly generated collectable on an empty spot of the map.
+            </summary>
+        </member>
+        <member name="T:Logic.ILoadingLogic">
+            <summary>
+            Interface for LoadingLogic.
+            </summary>
+        </member>
+        <member name="M:Logic.ILoadingLogic.EndGame(System.String)">
+            <summary>
+            Defines the game state changes when the gameplay is over.
+            </summary>
+            <param name="name">Defines the name for saving purposes.</param>
+        </member>
+        <member name="M:Logic.ILoadingLogic.GenerateMap">
+            <summary>
+            Generates a map whether it's moving between levels or if it's the first generation.
+            </summary>
+        </member>
+        <member name="M:Logic.ILoadingLogic.GetHighscores">
+            <summary>
+            Gets all the saved highscores.
+            </summary>
+            <returns>A pre defined highscore entity.</returns>
+        </member>
+        <member name="M:Logic.ILoadingLogic.NextLevel">
+            <summary>
+            Updates the game state to the next level.
+            </summary>
+        </member>
+        <member name="M:Logic.ILoadingLogic.Play">
+            <summary>
+            Loads in a gamestate either from a saved or newly generated one.
+            </summary>
+            <returns>The game state.</returns>
+        </member>
+        <member name="T:Logic.LoadingLogic">
+            <summary>
+            Defines the loading of a game state.
+            </summary>
+        </member>
+        <member name="M:Logic.LoadingLogic.#ctor(Model.IGameModel,Repository.ISaveGameRepository,Repository.IHighscoreRepository)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Logic.LoadingLogic"/> class.
+            </summary>
+            <param name="gameModel">Defines a gamestate.</param>
+            <param name="saveGameRepository">Defines the repository of the gamesaving.</param>
+            <param name="highscoreRepository">Defines the repository of the highscore system.</param>
+        </member>
+        <member name="M:Logic.LoadingLogic.GetHighscores">
+            <inheritdoc/>
+        </member>
+        <member name="M:Logic.LoadingLogic.NextLevel">
+            <inheritdoc/>
+        </member>
+        <member name="M:Logic.LoadingLogic.Play">
+            <inheritdoc/>
+        </member>
+        <member name="M:Logic.LoadingLogic.EndGame(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Logic.LoadingLogic.GenerateMap">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>

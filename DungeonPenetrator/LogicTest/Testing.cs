@@ -1,16 +1,22 @@
-﻿using Logic;
-using Model;
-using Model.Active;
-using Model.Passive;
-using Moq;
-using NUnit.Framework;
-using Repository;
-using System;
-using System.Collections.Generic;
-using System.Windows;
+﻿// <copyright file="Testing.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace LogicTest
 {
+    using System.Collections.Generic;
+    using System.Windows;
+    using Logic;
+    using Model;
+    using Model.Active;
+    using Model.Passive;
+    using Moq;
+    using NUnit.Framework;
+    using Repository;
+
+    /// <summary>
+    /// Testing class.
+    /// </summary>
     [TestFixture]
     public class Testing
     {
@@ -20,6 +26,9 @@ namespace LogicTest
         private static Mock<ISaveGameRepository> saveGameRepositoryMock;
         private static Mock<GameModel> gameModelMock;
 
+        /// <summary>
+        /// Initializes the mock repo.
+        /// </summary>
         [SetUp]
         public void Init()
         {
@@ -37,10 +46,9 @@ namespace LogicTest
                     gameModelMock.Object.GameAreaChar[x, y] = 'E'; // Generates Empty Cell
                 }
             }
+
             gameModelMock.Object.GameAreaChar[(int)gameModelMock.Object.MyPlayer.Cords.X, (int)gameModelMock.Object.MyPlayer.Cords.Y] = 'C'; // Sets Character->Player pos
             gameModelMock.Object.GameAreaChar[(int)gameModelMock.Object.LevelExit.X, (int)gameModelMock.Object.LevelExit.Y] = 'G';
-
-
 
             // Walls
             gameModelMock.Object.Walls = new List<WallProp>();
@@ -59,6 +67,7 @@ namespace LogicTest
             {
                 gameModelMock.Object.GameAreaChar[(int)item.Cords.X, (int)item.Cords.Y] = 'W';
             }
+
             gameModelMock.Object.Waters = new List<WaterProp>();
             gameModelMock.Object.Waters.Add(new WaterProp { Cords = new Point(0, 2) });
             gameModelMock.Object.Waters.Add(new WaterProp { Cords = new Point(1, 3) });
@@ -67,6 +76,7 @@ namespace LogicTest
             {
                 gameModelMock.Object.GameAreaChar[(int)item.Cords.X, (int)item.Cords.Y] = 'P';
             }
+
             gameModelMock.Object.Lavas = new List<LavaProp>();
             gameModelMock.Object.Lavas.Add(new LavaProp { Cords = new Point(2, 1), Damage = 5 });
             gameModelMock.Object.Lavas.Add(new LavaProp { Cords = new Point(4, 1), Damage = 5 });
@@ -75,18 +85,21 @@ namespace LogicTest
             {
                 gameModelMock.Object.GameAreaChar[(int)item.Cords.X, (int)item.Cords.Y] = 'L';
             }
+
             gameModelMock.Object.ShootingMonsters = new List<ShootingEnemy>();
             gameModelMock.Object.ShootingMonsters.Add(new ShootingEnemy { Cords = new Point(1, 4), Damage = 5, Health = 40 });
             foreach (var item in gameModelMock.Object.ShootingMonsters)
             {
                 gameModelMock.Object.GameAreaChar[(int)item.Cords.X, (int)item.Cords.Y] = 'S';
             }
+
             gameModelMock.Object.TrackingMonsters = new List<TrackingEnemy>();
             gameModelMock.Object.TrackingMonsters.Add(new TrackingEnemy { Cords = new Point(2, 5), Damage = 5, Health = 60 });
             foreach (var item in gameModelMock.Object.TrackingMonsters)
             {
                 gameModelMock.Object.GameAreaChar[(int)item.Cords.X, (int)item.Cords.Y] = 'T';
             }
+
             gameModelMock.Object.FlyingMonsters = new List<FlyingEnemy>();
             gameModelMock.Object.FlyingMonsters.Add(new FlyingEnemy { Cords = new Point(4, 3), Damage = 10, Health = 30 });
             foreach (var item in gameModelMock.Object.FlyingMonsters)
@@ -95,9 +108,9 @@ namespace LogicTest
             }
 
             gameModelMock.Object.Powerups = new List<Powerups>();
-            gameModelMock.Object.Powerups.Add(new Powerups (new Point(0, 2), PowerupType.Health ));
-            gameModelMock.Object.Powerups.Add(new Powerups (new Point(2, 2), PowerupType.Damage ));
-            gameModelMock.Object.Powerups.Add(new Powerups (new Point(5, 2), PowerupType.FiringSpeed ));
+            gameModelMock.Object.Powerups.Add(new Powerups(new Point(0, 2), PowerupType.Health));
+            gameModelMock.Object.Powerups.Add(new Powerups(new Point(2, 2), PowerupType.Damage));
+            gameModelMock.Object.Powerups.Add(new Powerups(new Point(5, 2), PowerupType.FiringSpeed));
             foreach (var item in gameModelMock.Object.Powerups)
             {
                 switch (item.Type)
@@ -105,28 +118,39 @@ namespace LogicTest
                     case PowerupType.Health:
                         gameModelMock.Object.GameAreaChar[(int)item.Cords.X, (int)item.Cords.Y] = 'H';
                         break;
+
                     case PowerupType.Damage:
                         gameModelMock.Object.GameAreaChar[(int)item.Cords.X, (int)item.Cords.Y] = 'D';
                         break;
+
                     case PowerupType.FiringSpeed:
                         gameModelMock.Object.GameAreaChar[(int)item.Cords.X, (int)item.Cords.Y] = 'R';
                         break;
                 }
             }
+
             gameModelMock.Object.Projectiles = new List<Projectile>();
 
             gameLogicTest = new GameLogic(gameModelMock.Object);
             loadingLogicTest = new LoadingLogic(gameModelMock.Object, saveGameRepositoryMock.Object, highscoreRepoMock.Object);
         }
+
+        /// <summary>
+        /// Player movement testing.
+        /// </summary>
         [Test]
         public void MovePlayer()
         {
             Point starting = gameModelMock.Object.MyPlayer.Cords;
             Point moveToPossible = new Point(starting.X - 1, starting.Y - 1);
-            gameLogicTest.MovePlayer(-1,-1);
+            gameLogicTest.MovePlayer(-1, -1);
 
             Assert.That(gameModelMock.Object.MyPlayer.Cords, Is.EqualTo(moveToPossible));
         }
+
+        /// <summary>
+        /// Damage testing.
+        /// </summary>
         [Test]
         public void DamageActiveGameObject()
         {
@@ -135,25 +159,10 @@ namespace LogicTest
             gameLogicTest.DamageActiveGameObject(f, 10);
             Assert.That(gameModelMock.Object.FlyingMonsters[0].Health, Is.EqualTo(damagedHealth));
         }
-        [Test]
-        public void DisposeBullet()
-        {
-            Projectile p = new Projectile(new Point(0,0), new Point(100,100));
-            p.Damage = 5;
-            gameModelMock.Object.Projectiles.Add(p);
 
-            gameLogicTest.DisposeBullet(p);
-
-            Assert.That(gameModelMock.Object.Projectiles, Does.Not.Contain(p));
-        }
-        [Test]
-        public void DisposeEnemy()
-        {
-            ShootingEnemy s = new ShootingEnemy();
-            gameModelMock.Object.ShootingMonsters.Add(s);
-            gameLogicTest.DisposeEnemy(s);
-            Assert.That(gameModelMock.Object.ShootingMonsters, Does.Not.Contain(s));
-        }
+        /// <summary>
+        /// Testing movement of flying enemy.
+        /// </summary>
         [Test]
         public void MoveFlyingEnemy()
         {
@@ -163,6 +172,10 @@ namespace LogicTest
 
             Assert.That(gameModelMock.Object.FlyingMonsters[0].Cords, Is.EqualTo(nextStep));
         }
+
+        /// <summary>
+        /// Testing movement of regular enemy.
+        /// </summary>
         [Test]
         public void MoveRegularEnemy()
         {
@@ -172,6 +185,10 @@ namespace LogicTest
 
             Assert.That(gameModelMock.Object.TrackingMonsters[0].Cords, Is.EqualTo(nextStep));
         }
+
+        /// <summary>
+        /// Testing the collection of health potion.
+        /// </summary>
         [Test]
         public void CollectHealthPotion()
         {
@@ -181,6 +198,10 @@ namespace LogicTest
             gameLogicTest.CollectPowerup(healthPotion);
             Assert.That(gameModelMock.Object.MyPlayer.Health, Is.EqualTo(entryHealth + healthPotion.ModifyRate));
         }
+
+        /// <summary>
+        /// Testing the collection of damage potion.
+        /// </summary>
         [Test]
         public void CollectDamagePowerup()
         {
@@ -190,6 +211,10 @@ namespace LogicTest
             gameLogicTest.CollectPowerup(damagePotion);
             Assert.That(gameModelMock.Object.MyPlayer.Damage, Is.EqualTo(entryDamage + damagePotion.ModifyRate));
         }
+
+        /// <summary>
+        /// Testing the collection of firing speed potion.
+        /// </summary>
         [Test]
         public void CollectFiringSpeed()
         {
@@ -200,26 +225,30 @@ namespace LogicTest
 
             Assert.That(gameModelMock.Object.MyPlayer.FiringSpeed, Is.EqualTo(entryFiringSpeed + firingSpeedPotion.ModifyRate));
         }
+
+        /// <summary>
+        /// Tests the number of placed collectibles.
+        /// </summary>
         [Test]
         public void DropRandomCollectable()
         {
             int collectables = gameModelMock.Object.Powerups.Count;
-            int expectedCollectableNumbers = collectables+1;
+            int expectedCollectableNumbers = collectables + 1;
             gameLogicTest.DropRandomCollectable();
             Assert.That(gameModelMock.Object.Powerups.Count, Is.EqualTo(expectedCollectableNumbers));
         }
+
+        /// <summary>
+        /// Tests the player shooting.
+        /// </summary>
         [Test]
         public void PlayerShoot()
         {
-           /* Point shootTo = new Point(200, 500);
+            Point shootTo = new Point(200, 500);
             int shootingSpeed = 10;
-            Point playercords = new Point(gameModelMock.Object.MyPlayer.Cords.X * GameModel.TileSize, gameModelMock.Object.MyPlayer.Cords.Y * GameModel.TileSize);
-            Projectile expectedProjectile = new Projectile(playercords, shootTo);
-            expectedProjectile.Type = ProjectileType.Player;
-            expectedProjectile.Speed = shootingSpeed;
-            Projectile shootProjectile = gameLogicTest.PlayerShoot(shootTo, shootingSpeed);
-            Assert.That(shootProjectile,Is.EqualTo(expectedProjectile));*/
-           
+            int expectedProjectilesCount = gameModelMock.Object.Projectiles.Count + 1;
+            gameLogicTest.PlayerShoot(shootTo, shootingSpeed);
+            Assert.That(gameModelMock.Object.Projectiles.Count, Is.EqualTo(expectedProjectilesCount));
         }
     }
 }

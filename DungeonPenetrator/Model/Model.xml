@@ -1,0 +1,680 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Model</name>
+    </assembly>
+    <members>
+        <member name="T:Model.ActiveGameObjects">
+            <summary>
+            Active gameobject class.
+            </summary>
+        </member>
+        <member name="P:Model.ActiveGameObjects.Cords">
+            <summary>
+            Gets or sets the coordinates.
+            </summary>
+        </member>
+        <member name="P:Model.ActiveGameObjects.Health">
+            <summary>
+            Gets or sets health.
+            </summary>
+        </member>
+        <member name="P:Model.ActiveGameObjects.Damage">
+            <summary>
+            Gets or sets the damege.
+            </summary>
+        </member>
+        <member name="T:Model.Active.BossEnemy">
+            <summary>
+            Boss class.
+            </summary>
+        </member>
+        <member name="F:Model.Active.BossEnemy.ShootingPattern">
+            <summary>
+            Shooting pattern for the boss's shooting mechanism.
+            </summary>
+        </member>
+        <member name="F:Model.Active.BossEnemy.PlayerInSight">
+            <summary>
+            Whether the player is an area around the boss.
+            </summary>
+        </member>
+        <member name="P:Model.Active.BossEnemy.Cords">
+            <summary>
+            Gets or sets the coordinates.
+            </summary>
+        </member>
+        <member name="P:Model.Active.BossEnemy.Health">
+            <summary>
+            Gets or sets health.
+            </summary>
+        </member>
+        <member name="P:Model.Active.BossEnemy.Damage">
+            <summary>
+            Gets or sets the damege.
+            </summary>
+        </member>
+        <member name="P:Model.Active.BossEnemy.Area">
+            <summary>
+            Gets the Area.
+            </summary>
+        </member>
+        <member name="T:Model.Active.FlyingEnemy">
+            <summary>
+            Flying enemy class.
+            </summary>
+        </member>
+        <member name="P:Model.Active.FlyingEnemy.Cords">
+            <summary>
+            Gets or sets the coordinates.
+            </summary>
+        </member>
+        <member name="P:Model.Active.FlyingEnemy.Health">
+            <summary>
+            Gets or sets health.
+            </summary>
+        </member>
+        <member name="P:Model.Active.FlyingEnemy.Damage">
+            <summary>
+            Gets or sets the damage.
+            </summary>
+        </member>
+        <member name="P:Model.Active.FlyingEnemy.Area">
+            <summary>
+            Gets the Area.
+            </summary>
+        </member>
+        <member name="T:Model.Active.LavaProp">
+            <summary>
+            Lava prop class.
+            </summary>
+        </member>
+        <member name="P:Model.Active.LavaProp.Cords">
+            <summary>
+            Gets or sets the coordinates.
+            </summary>
+        </member>
+        <member name="P:Model.Active.LavaProp.Health">
+            <summary>
+            Gets or sets health.
+            </summary>
+        </member>
+        <member name="P:Model.Active.LavaProp.Damage">
+            <summary>
+            Gets or sets the damage.
+            </summary>
+        </member>
+        <member name="P:Model.Active.LavaProp.Area">
+            <summary>
+            Gets the Area.
+            </summary>
+        </member>
+        <member name="T:Model.Active.Player">
+            <summary>
+            Player class.
+            </summary>
+        </member>
+        <member name="P:Model.Active.Player.Cords">
+            <summary>
+            Gets or sets the coordinates.
+            </summary>
+        </member>
+        <member name="P:Model.Active.Player.Health">
+            <summary>
+            Gets or sets health.
+            </summary>
+        </member>
+        <member name="P:Model.Active.Player.Damage">
+            <summary>
+            Gets or sets the damage.
+            </summary>
+        </member>
+        <member name="P:Model.Active.Player.FiringSpeed">
+            <summary>
+            Gets or sets the firing speed.
+            </summary>
+        </member>
+        <member name="P:Model.Active.Player.IsReloading">
+            <summary>
+            Gets or sets a value indicating whether the player is reloding.
+            </summary>
+        </member>
+        <member name="P:Model.Active.Player.BeingDamagedByLava">
+            <summary>
+            Gets or sets a value indicating whether the player is being damaged by lava.
+            </summary>
+        </member>
+        <member name="P:Model.Active.Player.Area">
+            <summary>
+            Gets the Area.
+            </summary>
+        </member>
+        <member name="T:Model.Active.TrackingEnemy">
+            <summary>
+            Tracking enemy class.
+            </summary>
+        </member>
+        <member name="P:Model.Active.TrackingEnemy.Cords">
+            <summary>
+            Gets or sets the coordinates.
+            </summary>
+        </member>
+        <member name="P:Model.Active.TrackingEnemy.Health">
+            <summary>
+            Gets or sets health.
+            </summary>
+        </member>
+        <member name="P:Model.Active.TrackingEnemy.Damage">
+            <summary>
+            Gets or sets the damage.
+            </summary>
+        </member>
+        <member name="P:Model.Active.TrackingEnemy.Area">
+            <summary>
+            Gets the area.
+            </summary>
+        </member>
+        <member name="P:Model.Active.TrackingEnemy.CanAttack">
+            <summary>
+            Gets or sets a value indicating whether the enemy can attack.
+            </summary>
+        </member>
+        <member name="T:Model.ShootingEnemy">
+            <summary>
+            Shooting enemy class.
+            </summary>
+        </member>
+        <member name="P:Model.ShootingEnemy.Cords">
+            <summary>
+            Gets or sets the coordinates.
+            </summary>
+        </member>
+        <member name="P:Model.ShootingEnemy.Health">
+            <summary>
+            Gets or sets health.
+            </summary>
+        </member>
+        <member name="P:Model.ShootingEnemy.Damage">
+            <summary>
+            Gets or sets the damage.
+            </summary>
+        </member>
+        <member name="P:Model.ShootingEnemy.Area">
+            <summary>
+            Gets the Area.
+            </summary>
+        </member>
+        <member name="T:Model.Biome">
+            <summary>
+            Defines the biome of a map.
+            </summary>
+        </member>
+        <member name="F:Model.Biome.Snowy">
+            <summary>Defines a snowy biome.</summary>
+        </member>
+        <member name="F:Model.Biome.Desert">
+            <summary>Defines a desert biome.</summary>
+        </member>
+        <member name="F:Model.Biome.Plains">
+            <summary>Defines a plains biome.</summary>
+        </member>
+        <member name="T:Model.GameModel">
+            <summary>
+            GameModel class.
+            </summary>
+        </member>
+        <member name="P:Model.GameModel.TileSize">
+            <summary>
+            Gets the tile size.
+            </summary>
+        </member>
+        <member name="P:Model.GameModel.GameWidth">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.GameHeight">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.BiomeType">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.MousePosition">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.LevelExit">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.LevelCounter">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.Boss">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.MyPlayer">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.Projectiles">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.FlyingMonsters">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.ShootingMonsters">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.TrackingMonsters">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.Lavas">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.Waters">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.Walls">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.Powerups">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.GameAreaChar">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.LevelFinished">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.BasicTrackingPath">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.FlyingTrackingPath">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.GameIsPaused">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.LavaTickTimer">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameModel.EnemyHitTickTimer">
+            <inheritdoc/>
+        </member>
+        <member name="T:Model.GameObjects">
+            <summary>
+            GameObject class.
+            </summary>
+        </member>
+        <member name="P:Model.GameObjects.Cords">
+            <inheritdoc/>
+        </member>
+        <member name="P:Model.GameObjects.Area">
+            <summary>
+            Gets the Area.
+            </summary>
+        </member>
+        <member name="M:Model.GameObjects.IsCollision(Model.GameObjects)">
+            <summary>
+            Intersect examination.
+            </summary>
+            <param name="other">Other game object.</param>
+            <returns>Whether two objects collided.</returns>
+        </member>
+        <member name="T:Model.Highscore">
+            <summary>
+            Highscore class.
+            </summary>
+        </member>
+        <member name="P:Model.Highscore.Name">
+            <summary>
+            Gets or sets the Name.
+            </summary>
+        </member>
+        <member name="P:Model.Highscore.Level">
+            <summary>
+            Gets or sets the Level.
+            </summary>
+        </member>
+        <member name="T:Model.IGameModel">
+            <summary>
+            Interface for the GameModel.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.GameWidth">
+            <summary>
+            Gets the GameWidth.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.GameHeight">
+            <summary>
+            Gets the GameHeight.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.BiomeType">
+            <summary>
+            Gets or sets the BiomeType.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.TileSize">
+            <summary>
+            Gets the TileSize.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.MousePosition">
+            <summary>
+            Gets or sets the mousePosition.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.LevelExit">
+            <summary>
+            Gets the LevelExit.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.LevelCounter">
+            <summary>
+            Gets or sets the LevelCounter.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.Boss">
+            <summary>
+            Gets or sets the Boss.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.MyPlayer">
+            <summary>
+            Gets or sets the Player.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.Projectiles">
+            <summary>
+            Gets or sets the Projectiles.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.FlyingMonsters">
+            <summary>
+            Gets or sets the Flying Monsters.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.ShootingMonsters">
+            <summary>
+            Gets or sets the Shooting Monsters.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.TrackingMonsters">
+            <summary>
+            Gets or sets the Tracking Monsters.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.Lavas">
+            <summary>
+            Gets or sets the Lavas.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.Waters">
+            <summary>
+            Gets or sets the Waters.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.Walls">
+            <summary>
+            Gets or sets the Rocks.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.Powerups">
+            <summary>
+            Gets or sets the Powerups.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.GameAreaChar">
+            <summary>
+            Gets or sets the Game Area.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.LevelFinished">
+            <summary>
+            Gets or sets a value indicating whether the level is finished.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.BasicTrackingPath">
+            <summary>
+            Gets or sets the Tracking Path.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.FlyingTrackingPath">
+            <summary>
+            Gets or sets the Flying Monster Tracking Path.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.GameIsPaused">
+            <summary>
+            Gets or sets a value indicating whether the game is paused.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.LavaTickTimer">
+            <summary>
+            Gets or sets the Lava tick timer.
+            </summary>
+        </member>
+        <member name="P:Model.IGameModel.EnemyHitTickTimer">
+            <summary>
+            Gets or sets the Enemy Hit tick timer.
+            </summary>
+        </member>
+        <member name="T:Model.IGameObjects">
+            <summary>
+            Interface for the GameObjects.
+            </summary>
+        </member>
+        <member name="P:Model.IGameObjects.Cords">
+            <summary>
+            Gets or sets the Coordinate.
+            </summary>
+        </member>
+        <member name="T:Model.PassiveGameObjects">
+            <summary>
+            Passive GameObjects class.
+            </summary>
+        </member>
+        <member name="P:Model.PassiveGameObjects.Cords">
+            <summary>
+            Gets or sets the coordinates.
+            </summary>
+        </member>
+        <member name="T:Model.Passive.PowerupType">
+            <summary>
+            PowerType enum.
+            </summary>
+        </member>
+        <member name="F:Model.Passive.PowerupType.Health">
+            <summary>
+            Health type.
+            </summary>
+        </member>
+        <member name="F:Model.Passive.PowerupType.Damage">
+            <summary>
+            Damage type.
+            </summary>
+        </member>
+        <member name="F:Model.Passive.PowerupType.FiringSpeed">
+            <summary>
+            FiringSpeed type.
+            </summary>
+        </member>
+        <member name="T:Model.Passive.Powerups">
+            <summary>
+            Powerups class.
+            </summary>
+        </member>
+        <member name="M:Model.Passive.Powerups.#ctor(System.Windows.Point,Model.Passive.PowerupType)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Model.Passive.Powerups"/> class.
+            </summary>
+            <param name="cords">Cords param.</param>
+            <param name="type">Type param.</param>
+        </member>
+        <member name="P:Model.Passive.Powerups.Cords">
+            <summary>
+            Gets or sets the coordinates.
+            </summary>
+        </member>
+        <member name="P:Model.Passive.Powerups.Type">
+            <summary>
+            Gets or sets the type.
+            </summary>
+        </member>
+        <member name="P:Model.Passive.Powerups.ModifyRate">
+            <summary>
+            Gets the modify rate.
+            </summary>
+        </member>
+        <member name="P:Model.Passive.Powerups.Area">
+            <summary>
+            Gets the Area.
+            </summary>
+        </member>
+        <member name="T:Model.Passive.WallProp">
+            <summary>
+            WallProp class.
+            </summary>
+        </member>
+        <member name="P:Model.Passive.WallProp.Cords">
+            <summary>
+            Gets or sets the coordinates.
+            </summary>
+        </member>
+        <member name="P:Model.Passive.WallProp.Area">
+            <summary>
+            Gets the Area.
+            </summary>
+        </member>
+        <member name="T:Model.Passive.WaterProp">
+            <summary>
+            WaterProp class.
+            </summary>
+        </member>
+        <member name="P:Model.Passive.WaterProp.Cords">
+            <summary>
+            Gets or sets the coordinate.
+            </summary>
+        </member>
+        <member name="P:Model.Passive.WaterProp.Area">
+            <summary>
+            Gets the Area.
+            </summary>
+        </member>
+        <member name="T:Model.ProjectileType">
+            <summary>
+            Projectile type.
+            </summary>
+        </member>
+        <member name="F:Model.ProjectileType.Enemy">
+            <summary>
+            Enemy type.
+            </summary>
+        </member>
+        <member name="F:Model.ProjectileType.Player">
+            <summary>
+            Player type.
+            </summary>
+        </member>
+        <member name="F:Model.ProjectileType.Boss">
+            <summary>
+            Boss type.
+            </summary>
+        </member>
+        <member name="T:Model.Projectile">
+            <summary>
+            Projectile class.
+            </summary>
+        </member>
+        <member name="F:Model.Projectile.Direction">
+            <summary>
+            Direction Point.
+            </summary>
+        </member>
+        <member name="M:Model.Projectile.#ctor(System.Windows.Point,System.Windows.Point)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Model.Projectile"/> class.
+            </summary>
+            <param name="from">From Point.</param>
+            <param name="to">To Point.</param>
+        </member>
+        <member name="P:Model.Projectile.Speed">
+            <summary>
+            Gets or sets the speed.
+            </summary>
+        </member>
+        <member name="P:Model.Projectile.Cords">
+            <summary>
+            Gets or sets the Coordinate.
+            </summary>
+        </member>
+        <member name="P:Model.Projectile.Damage">
+            <summary>
+            Gets or sets the damage.
+            </summary>
+        </member>
+        <member name="P:Model.Projectile.Type">
+            <summary>
+            Gets or sets the Projectile type.
+            </summary>
+        </member>
+        <member name="P:Model.Projectile.Area">
+            <summary>
+            Gets the Area.
+            </summary>
+        </member>
+        <member name="P:Model.Projectile.Timer">
+            <summary>
+            Gets or sets the Timer.
+            </summary>
+        </member>
+        <member name="T:Model.Ui.HealthBar">
+            <summary>
+            HealthBar class.
+            </summary>
+        </member>
+        <member name="P:Model.Ui.HealthBar.HpBarX">
+            <summary>
+            Gets the HpBar X coordinate.
+            </summary>
+        </member>
+        <member name="P:Model.Ui.HealthBar.HpBarY">
+            <summary>
+            Gets the HpBar Y coordinate.
+            </summary>
+        </member>
+        <member name="P:Model.Ui.HealthBar.HpWidth">
+            <summary>
+            Gets the HpWidth.
+            </summary>
+        </member>
+        <member name="P:Model.Ui.HealthBar.HpHeight">
+            <summary>
+            Gets the HpHeight.
+            </summary>
+        </member>
+        <member name="T:Model.Ui.LevelCounter">
+            <summary>
+            LevelCounter class.
+            </summary>
+        </member>
+        <member name="P:Model.Ui.LevelCounter.LvlCounterX">
+            <summary>
+            Gets the LvlCounter X coordinate.
+            </summary>
+        </member>
+        <member name="P:Model.Ui.LevelCounter.LvlCounterY">
+            <summary>
+            Gets the LvlCounter Y coordinate.
+            </summary>
+        </member>
+        <member name="P:Model.Ui.LevelCounter.LvlCounterWidth">
+            <summary>
+            Gets the LvlCounterWidth.
+            </summary>
+        </member>
+        <member name="P:Model.Ui.LevelCounter.LvlCounterHeight">
+            <summary>
+            Gets the LvlCounterHeight.
+            </summary>
+        </member>
+    </members>
+</doc>

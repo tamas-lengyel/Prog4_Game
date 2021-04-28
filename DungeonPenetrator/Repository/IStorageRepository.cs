@@ -1,10 +1,22 @@
-﻿using System;
-using System.Linq;
+﻿// <copyright file="IStorageRepository.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+[assembly: System.CLSCompliant(false)]
 
 namespace Repository
 {
-    public interface IStorageRepository<T> where T:class
+    /// <summary>
+    /// Interface for all repositories.
+    /// </summary>
+    /// <typeparam name="T">Generic type.</typeparam>
+    public interface IStorageRepository<T>
+        where T : class
     {
+        /// <summary>
+        /// Insert method.
+        /// </summary>
+        /// <param name="entity">Generic type entity.</param>
         void Insert(T entity);
     }
 }

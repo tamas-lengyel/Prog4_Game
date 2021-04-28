@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DungeonPenetrator</name>
+    </assembly>
+    <members>
+        <member name="T:oenik_prog4_2021_1_eg6bpp_jatfmq.App">
+            <summary>
+            Interaction logic for App.xaml.
+            </summary>
+            <summary>
+            App
+            </summary>
+        </member>
+        <member name="M:oenik_prog4_2021_1_eg6bpp_jatfmq.App.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="M:oenik_prog4_2021_1_eg6bpp_jatfmq.App.Main">
+            <summary>
+            Application Entry Point.
+            </summary>
+        </member>
+        <member name="T:DungeonPenetrator.Control">
+            <summary>
+            Control class.
+            </summary>
+        </member>
+        <member name="M:DungeonPenetrator.Control.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:DungeonPenetrator.Control"/> class.
+            </summary>
+        </member>
+        <member name="M:DungeonPenetrator.Control.OnRender(System.Windows.Media.DrawingContext)">
+            <summary>
+            Draws the drawing froup from Renderer DLL.
+            </summary>
+            <param name="drawingContext">Context.</param>
+        </member>
+        <member name="T:DungeonPenetrator.ControlsWindow">
+            <summary>
+            Interaction logic for ControlsWindow.xaml.
+            </summary>
+            <summary>
+            ControlsWindow
+            </summary>
+        </member>
+        <member name="M:DungeonPenetrator.ControlsWindow.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:DungeonPenetrator.ControlsWindow"/> class.
+            </summary>
+        </member>
+        <member name="M:DungeonPenetrator.ControlsWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:DungeonPenetrator.GameOverWindow">
+            <summary>
+            Interaction logic for GameOverWindow.xaml.
+            </summary>
+            <summary>
+            GameOverWindow
+            </summary>
+        </member>
+        <member name="M:DungeonPenetrator.GameOverWindow.#ctor(Logic.ILoadingLogic,Repository.ISaveGameRepository)">
+            <summary>
+            Initializes a new instance of the <see cref="T:DungeonPenetrator.GameOverWindow"/> class.
+            </summary>
+            <param name="logic">loadinglogic repo.</param>
+            <param name="sgRepo">savegame repo.</param>
+        </member>
+        <member name="M:DungeonPenetrator.GameOverWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:DungeonPenetrator.HighScoreWindow">
+            <summary>
+            Interaction logic for HighScoreWindow.xaml.
+            </summary>
+            <summary>
+            HighScoreWindow
+            </summary>
+        </member>
+        <member name="M:DungeonPenetrator.HighScoreWindow.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:DungeonPenetrator.HighScoreWindow"/> class.
+            </summary>
+        </member>
+        <member name="P:DungeonPenetrator.HighScoreWindow.HighScores">
+            <summary>
+            Gets the highscores.
+            </summary>
+        </member>
+        <member name="M:DungeonPenetrator.HighScoreWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:DungeonPenetrator.MainMenu">
+            <summary>
+            Interaction logic for MainMenu.xaml.
+            </summary>
+            <summary>
+            MainMenu
+            </summary>
+        </member>
+        <member name="M:DungeonPenetrator.MainMenu.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:DungeonPenetrator.MainMenu"/> class.
+            </summary>
+        </member>
+        <member name="M:DungeonPenetrator.MainMenu.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:DungeonPenetrator.MainWindow">
+            <summary>
+            Interaction logic for MainWindow.xaml.
+            </summary>
+            <summary>
+            MainWindow
+            </summary>
+        </member>
+        <member name="M:DungeonPenetrator.MainWindow.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:DungeonPenetrator.MainWindow"/> class.
+            </summary>
+        </member>
+        <member name="M:DungeonPenetrator.MainWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+    </members>
+</doc>

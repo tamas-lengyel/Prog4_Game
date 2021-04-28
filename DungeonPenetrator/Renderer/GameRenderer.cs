@@ -1,58 +1,105 @@
-using System;
-using Model;
-using System.Windows.Media;
-using System.Windows;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Windows.Media.Imaging;
-using System.Reflection;
+// <copyright file="GameRenderer.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+[assembly: System.CLSCompliant(false)]
 
 namespace Renderer
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Reflection;
+    using System.Windows;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+    using Model;
+
+    /// <summary>
+    /// GameRenderer class.
+    /// </summary>
     public class GameRenderer
     {
-        IGameModel model;
-        Random rnd = new Random();
+        private IGameModel model;
 
-        Drawing oldBackground;
-        Drawing oldLevelExit;
-        Drawing oldPlayer;
-        Drawing oldProjectiles;
-        Drawing oldFlyingMonsters;
-        Drawing oldShootingMonsters;
-        Drawing oldTrackingMonsters;
-        Drawing oldLavas;
-        Drawing oldWaters;
-        Drawing oldWalls;
-        Drawing oldPowerups;
-        Drawing oldBoss;
+        private Drawing oldBackground;
+        private Drawing oldLevelExit;
+        private Drawing oldPlayer;
+        private Drawing oldProjectiles;
+        private Drawing oldFlyingMonsters;
+        private Drawing oldShootingMonsters;
+        private Drawing oldTrackingMonsters;
+        private Drawing oldLavas;
+        private Drawing oldWaters;
+        private Drawing oldWalls;
+        private Drawing oldPowerups;
+        private Drawing oldBoss;
 
-        Model.Ui.HealthBar hpBar = new Model.Ui.HealthBar();
-        Drawing oldHpBar;
-        int oldPlayerHealth;
+        private Model.Ui.HealthBar hpBar = new Model.Ui.HealthBar();
+        private Drawing oldHpBar;
+        private int oldPlayerHealth;
 
-        Model.Ui.LevelCounter lvlCounter = new Model.Ui.LevelCounter();
-        Drawing oldLvlCounter;
-        int oldModelLvlCounter;
+        private Model.Ui.LevelCounter lvlCounter = new Model.Ui.LevelCounter();
+        private Drawing oldLvlCounter;
+        private int oldModelLvlCounter;
 
-        Drawing oldPauseScreen;
+        private Drawing oldPauseScreen;
 
-        Point oldBossPosition;
-        List<Point> oldTrackingMonstersPosition = new List<Point>();
-        List<Point> oldShootingMonstersPosition = new List<Point>();
-        List<Point> oldFlyingMonstersPosition = new List<Point>();
-        List<Point> oldProjectilePosition = new List<Point>();
-        int powerupCount;
-        Point oldPlayerPosition;
-        Point oldMousePosition = new Point(0, 0);
+        private Point oldBossPosition;
+        private List<Point> oldTrackingMonstersPosition = new List<Point>();
+        private List<Point> oldShootingMonstersPosition = new List<Point>();
+        private List<Point> oldFlyingMonstersPosition = new List<Point>();
+        private List<Point> oldProjectilePosition = new List<Point>();
+        private int powerupCount;
+        private Point oldPlayerPosition;
+        private Point oldMousePosition = new Point(0, 0);
 
-        Pen Is = new Pen(Brushes.Black, 1);
+        private Pen iss = new Pen(Brushes.Black, 1);
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GameRenderer"/> class.
+        /// </summary>
+        /// <param name="model">GameModel.</param>
         public GameRenderer(IGameModel model)
         {
             this.model = model;
         }
 
+        /// <summary>
+        /// Groups all the things that needs to be drawn out on the screen.
+        /// </summary>
+        /// <returns>A drwing group with all things that needs to be drawn out on the screen.</returns>
+        public Drawing BuildDrawing()
+        {
+            DrawingGroup dg = new DrawingGroup();
+            dg.Children.Add(this.GetBackground());
+            dg.Children.Add(this.GetLevelExit());
+            dg.Children.Add(this.GetLavas());
+            dg.Children.Add(this.GetWaters());
+            dg.Children.Add(this.GetWalls());
+            dg.Children.Add(this.GetTrackingMonsters());
+            dg.Children.Add(this.GetPowerups());
+            dg.Children.Add(this.GetFlyingMonsters());
+            dg.Children.Add(this.GetProjectiles());
+            dg.Children.Add(this.GetShootingMonsters());
+            if (this.model.LevelCounter % 10 == 0)
+            {
+                dg.Children.Add(this.GetBoss());
+            }
+
+            dg.Children.Add(this.GetPlayer());
+            dg.Children.Add(this.GetLevelCounter());
+            dg.Children.Add(this.GetHpBar());
+            dg.Children.Add(this.GetPauseScreen());
+
+            return dg;
+        }
+
+        /// <summary>
+        /// Loads the image, based on the parameter filename.
+        /// </summary>
+        /// <param name="fileName">filename.</param>
+        /// <returns>A bitmap image.</returns>
         internal static BitmapImage GetImage(string fileName)
         {
             BitmapImage bmp = new BitmapImage();
@@ -62,187 +109,205 @@ namespace Renderer
             return bmp;
         }
 
-        public Drawing BuildDrawing()
-        {
-            DrawingGroup dg = new DrawingGroup();
-            dg.Children.Add(GetBackground());
-            dg.Children.Add(GetLevelExit());
-            dg.Children.Add(GetLavas());
-            dg.Children.Add(GetWaters());
-            dg.Children.Add(GetWalls());
-            dg.Children.Add(GetTrackingMonsters());
-            dg.Children.Add(GetPowerups());
-            dg.Children.Add(GetFlyingMonsters());
-            dg.Children.Add(GetProjectiles());
-            dg.Children.Add(GetShootingMonsters());
-            if (model.LevelCounter % 10 ==0)
-            {
-                dg.Children.Add(GetBoss());
-            }
-            dg.Children.Add(GetPlayer());
-            dg.Children.Add(GetLevelCounter());
-            dg.Children.Add(GetHpBar());
-            dg.Children.Add(GetPauseScreen());
-            
-            return dg;
-        }
-
+        /// <summary>
+        /// Draws out a Pause screen.
+        /// </summary>
+        /// <returns>A drawing.</returns>
         private Drawing GetPauseScreen()
         {
-            if (!model.GameIsPaused)
+            if (!this.model.GameIsPaused)
             {
                 /*ImageDrawing drawing = new ImageDrawing(GetImage("stopped.png"), new Rect(1000, 1000, model.GameWidth, model.GameHeight));
                 oldPauseScreen = drawing;*/
                 return new ImageDrawing();
             }
-            if (model.GameIsPaused)
+
+            if (this.model.GameIsPaused)
             {
-                ImageDrawing drawing = new ImageDrawing(GetImage("stopped.png"), new Rect(0, 0, model.GameWidth, model.GameHeight));
-                oldPauseScreen = drawing;
+                ImageDrawing drawing = new ImageDrawing(GetImage("stopped.png"), new Rect(0, 0, this.model.GameWidth, this.model.GameHeight));
+                this.oldPauseScreen = drawing;
             }
-           
-            return oldPauseScreen;
+
+            return this.oldPauseScreen;
         }
 
+        /// <summary>
+        /// Draws out a level counter.
+        /// </summary>
+        /// <returns>a drawing.</returns>
         private Drawing GetLevelCounter()
         {
             DrawingGroup group = new DrawingGroup();
-            if (oldLvlCounter == null || model.LevelCounter != oldModelLvlCounter)
+            if (this.oldLvlCounter == null || this.model.LevelCounter != this.oldModelLvlCounter)
             {
-                oldModelLvlCounter = model.LevelCounter;
-                GeometryDrawing box = new GeometryDrawing(Brushes.Gray, Is, new RectangleGeometry(new Rect(lvlCounter.LvlCounterX, lvlCounter.LvlCounterY, lvlCounter.LvlCounterWidth, lvlCounter.LvlCounterHeight)));
+                this.oldModelLvlCounter = this.model.LevelCounter;
+                GeometryDrawing box = new GeometryDrawing(Brushes.Gray, this.iss, new RectangleGeometry(new Rect(this.lvlCounter.LvlCounterX, this.lvlCounter.LvlCounterY, this.lvlCounter.LvlCounterWidth, this.lvlCounter.LvlCounterHeight)));
 
-                FormattedText text = new FormattedText(oldModelLvlCounter.ToString(), CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black);
+                FormattedText text = new FormattedText(this.oldModelLvlCounter.ToString(), CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black, 1);
                 text.TextAlignment = TextAlignment.Center;
-                Geometry geo = text.BuildGeometry(new Point(lvlCounter.LvlCounterX + (lvlCounter.LvlCounterWidth / 2), lvlCounter.LvlCounterY + (lvlCounter.LvlCounterHeight / 4.2)));
+                Geometry geo = text.BuildGeometry(new Point(this.lvlCounter.LvlCounterX + (this.lvlCounter.LvlCounterWidth / 2), this.lvlCounter.LvlCounterY + (this.lvlCounter.LvlCounterHeight / 4.2)));
                 GeometryDrawing textGeo = new GeometryDrawing(Brushes.Black, null, geo);
 
                 group.Children.Add(box);
                 group.Children.Add(textGeo);
 
-                oldLvlCounter = group;
+                this.oldLvlCounter = group;
             }
-            return oldLvlCounter;
+
+            return this.oldLvlCounter;
         }
 
+        /// <summary>
+        /// Draws out the player's Hp bar.
+        /// </summary>
+        /// <returns>a drawing.</returns>
         private Drawing GetHpBar()
         {
-            if (oldHpBar == null || model.MyPlayer.Health != oldPlayerHealth)
+            if (this.oldHpBar == null || this.model.MyPlayer.Health != this.oldPlayerHealth)
             {
-                oldPlayerHealth = model.MyPlayer.Health;
-                Geometry g = new RectangleGeometry(new Rect(hpBar.HpBarX, hpBar.HpBarY, hpBar.HpWidth, oldPlayerHealth * 7));
-                g.Transform = new RotateTransform(180, hpBar.HpBarX + hpBar.HpWidth/2, hpBar.HpBarY + hpBar.HpHeight/2);
-                oldHpBar = new GeometryDrawing(Brushes.Red, Is, g);
+                this.oldPlayerHealth = this.model.MyPlayer.Health;
+                Geometry g = new RectangleGeometry(new Rect(this.hpBar.HpBarX, this.hpBar.HpBarY, this.hpBar.HpWidth, this.oldPlayerHealth * 7));
+                g.Transform = new RotateTransform(180, this.hpBar.HpBarX + (this.hpBar.HpWidth / 2), this.hpBar.HpBarY + (this.hpBar.HpHeight / 2));
+                this.oldHpBar = new GeometryDrawing(Brushes.Red, this.iss, g);
             }
-            return oldHpBar;
+
+            return this.oldHpBar;
         }
 
+        /// <summary>
+        /// Draws out the background.
+        /// </summary>
+        /// <returns>a drawing.</returns>
         private Drawing GetBackground()
         {
-            if (oldBackground == null)
+            if (this.oldBackground == null)
             {
-                int random = rnd.Next(0, 4);
                 ImageDrawing drawing;
-                switch (random)
+                switch (this.model.BiomeType)
                 {
-                    case 1:
-                        drawing = new ImageDrawing(GetImage("bggreen.png"), new Rect(0, 0, model.GameWidth, model.GameHeight));
+                    case Biome.Plains:
+                        drawing = new ImageDrawing(GetImage("bggreen.png"), new Rect(0, 0, this.model.GameWidth, this.model.GameHeight));
                         break;
-                    case 2:
-                        drawing = new ImageDrawing(GetImage("backgroundtan.png"), new Rect(0, 0, model.GameWidth, model.GameHeight));
+
+                    case Biome.Desert:
+                        drawing = new ImageDrawing(GetImage("backgroundtan.png"), new Rect(0, 0, this.model.GameWidth, this.model.GameHeight));
                         break;
-                    case 3:
-                        drawing = new ImageDrawing(GetImage("backgroundsnowy.png"), new Rect(0, 0, model.GameWidth, model.GameHeight));
+
+                    case Biome.Snowy:
+                        drawing = new ImageDrawing(GetImage("backgroundsnowy.png"), new Rect(0, 0, this.model.GameWidth, this.model.GameHeight));
                         break;
+
                     default:
-                        drawing = new ImageDrawing(GetImage("bggreen.png"), new Rect(0, 0, model.GameWidth, model.GameHeight));
+                        drawing = new ImageDrawing(GetImage("bggreen.png"), new Rect(0, 0, this.model.GameWidth, this.model.GameHeight));
                         break;
                 }
-                
-                oldBackground = drawing;
+
+                this.oldBackground = drawing;
             }
 
-            return oldBackground;
+            return this.oldBackground;
         }
 
+        /// <summary>
+        /// Draws out the level exit.
+        /// </summary>
+        /// <returns>a drawing.</returns>
         private Drawing GetLevelExit()
         {
             DrawingGroup g = new DrawingGroup();
-            if (oldLevelExit == null || ((model.ShootingMonsters.Count == 0 && model.TrackingMonsters.Count == 0 && model.FlyingMonsters.Count == 0)&& model.Boss==null) )
+            if (this.oldLevelExit == null || ((this.model.ShootingMonsters.Count == 0 && this.model.TrackingMonsters.Count == 0 && this.model.FlyingMonsters.Count == 0) && this.model.Boss == null))
             {
-                ImageDrawing drawing = new ImageDrawing(GetImage("goal.png"), new Rect(model.LevelExit.X * GameModel.TileSize,
-                           model.LevelExit.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                ImageDrawing drawing = new ImageDrawing(GetImage("goal.png"), new Rect(this.model.LevelExit.X * GameModel.TileSize, this.model.LevelExit.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
 
                 g.Children.Add(drawing);
-                oldLevelExit = g;
+                this.oldLevelExit = g;
             }
             else
             {
-                ImageDrawing drawing = new ImageDrawing(GetImage("goallocked.png"), new Rect(model.LevelExit.X * GameModel.TileSize,
-                           model.LevelExit.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                ImageDrawing drawing = new ImageDrawing(GetImage("goallocked.png"), new Rect(this.model.LevelExit.X * GameModel.TileSize, this.model.LevelExit.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
 
                 g.Children.Add(drawing);
-                oldLevelExit = g;
+                this.oldLevelExit = g;
             }
-            return oldLevelExit;
+
+            return this.oldLevelExit;
         }
 
+        /// <summary>
+        /// Draws out the lavas.
+        /// </summary>
+        /// <returns>a drawing.</returns>
         private Drawing GetLavas()
         {
-            if (oldLavas == null)
+            if (this.oldLavas == null)
             {
                 DrawingGroup g = new DrawingGroup();
-                foreach (var lava in model.Lavas)
+                foreach (var lava in this.model.Lavas)
                 {
-                    ImageDrawing drawing = new ImageDrawing(GetImage("lava.png"), new Rect(lava.Cords.X * GameModel.TileSize,
-                        lava.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                    ImageDrawing drawing = new ImageDrawing(GetImage("lava.png"), new Rect(lava.Cords.X * GameModel.TileSize, lava.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                     g.Children.Add(drawing);
                 }
-                oldLavas = g;
+
+                this.oldLavas = g;
             }
-            return oldLavas;
+
+            return this.oldLavas;
         }
 
+        /// <summary>
+        /// Draws out the waters.
+        /// </summary>
+        /// <returns>a drawing.</returns>
         private Drawing GetWaters()
         {
-            if (oldWaters == null)
+            if (this.oldWaters == null)
             {
                 DrawingGroup g = new DrawingGroup();
-                foreach (var water in model.Waters)
+                foreach (var water in this.model.Waters)
                 {
-                    ImageDrawing drawing = new ImageDrawing(GetImage("water2.png"), new Rect(water.Cords.X * GameModel.TileSize,
-                        water.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                    ImageDrawing drawing = new ImageDrawing(GetImage("water2.png"), new Rect(water.Cords.X * GameModel.TileSize, water.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                     g.Children.Add(drawing);
                 }
-                oldWaters = g;
+
+                this.oldWaters = g;
             }
-            return oldWaters;
+
+            return this.oldWaters;
         }
 
+        /// <summary>
+        /// Draws out the rocks.
+        /// </summary>
+        /// <returns>a drawing.</returns>
         private Drawing GetWalls()
         {
-            if (oldWalls == null)
+            if (this.oldWalls == null)
             {
                 DrawingGroup g = new DrawingGroup();
-                foreach (var wall in model.Walls)
+                foreach (var wall in this.model.Walls)
                 {
-                    ImageDrawing drawing = new ImageDrawing(GetImage("rock100.png"), new Rect(wall.Cords.X * GameModel.TileSize,
-                        wall.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                    ImageDrawing drawing = new ImageDrawing(GetImage("rock100.png"), new Rect(wall.Cords.X * GameModel.TileSize, wall.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                     g.Children.Add(drawing);
                 }
-                oldWalls = g;
+
+                this.oldWalls = g;
             }
-            return oldWalls;
+
+            return this.oldWalls;
         }
 
+        /// <summary>
+        /// Draws out the shooting enemies.
+        /// </summary>
+        /// <returns>a drawing.</returns>
         private Drawing GetShootingMonsters()
         {
             DrawingGroup g = new DrawingGroup();
-            foreach (var enemy in model.ShootingMonsters)
+            foreach (var enemy in this.model.ShootingMonsters)
             {
-                if (oldShootingMonsters == null || !oldShootingMonstersPosition.Contains(enemy.Cords))
+                if (this.oldShootingMonsters == null || !this.oldShootingMonstersPosition.Contains(enemy.Cords))
                 {
-                    Point p = new Point((model.MyPlayer.Cords.X * GameModel.TileSize) - (enemy.Cords.X * GameModel.TileSize), (model.MyPlayer.Cords.Y * GameModel.TileSize) - (enemy.Cords.Y * GameModel.TileSize));
+                    Point p = new Point((this.model.MyPlayer.Cords.X * GameModel.TileSize) - (enemy.Cords.X * GameModel.TileSize), (this.model.MyPlayer.Cords.Y * GameModel.TileSize) - (enemy.Cords.Y * GameModel.TileSize));
                     double rotation = Math.Atan2(p.Y, p.X) * 180 / Math.PI;
                     BitmapImage bmp = GetImage("ct100big.png");
                     TransformedBitmap tb = new TransformedBitmap();
@@ -251,194 +316,225 @@ namespace Renderer
                     tb.Transform = new RotateTransform(90);
                     tb.EndInit();
 
-                    ImageDrawing drawing = new ImageDrawing(tb, new Rect(enemy.Cords.X * GameModel.TileSize,
-                        enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                    ImageDrawing drawing = new ImageDrawing(tb, new Rect(enemy.Cords.X * GameModel.TileSize, enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
 
-                    RotateTransform rotate = new RotateTransform(rotation, (enemy.Cords.X * GameModel.TileSize) + GameModel.TileSize/2 , (enemy.Cords.Y * GameModel.TileSize) + GameModel.TileSize / 2);
+                    RotateTransform rotate = new RotateTransform(rotation, (enemy.Cords.X * GameModel.TileSize) + (GameModel.TileSize / 2), (enemy.Cords.Y * GameModel.TileSize) + (GameModel.TileSize / 2));
 
                     g.Children.Add(new DrawingGroup() { Children = { drawing }, Transform = rotate });
                 }
             }
-            oldShootingMonsters = g;
-            return oldShootingMonsters;
+
+            this.oldShootingMonsters = g;
+            return this.oldShootingMonsters;
         }
 
+        /// <summary>
+        /// Draws out the tracking enemies.
+        /// </summary>
+        /// <returns>a drawing.</returns>
         private Drawing GetTrackingMonsters()
         {
             DrawingGroup g = new DrawingGroup();
-            foreach (var enemy in model.TrackingMonsters)
+            foreach (var enemy in this.model.TrackingMonsters)
             {
-                if (oldTrackingMonsters == null || !oldTrackingMonstersPosition.Contains(enemy.Cords))
+                if (this.oldTrackingMonsters == null || !this.oldTrackingMonstersPosition.Contains(enemy.Cords))
                 {
                     BitmapImage bmp = GetImage("hoodtracker100100.png");
                     TransformedBitmap tb = new TransformedBitmap();
                     tb.BeginInit();
                     tb.Source = bmp;
-                    switch (model.BasicTrackingPath[enemy.Cords])
+                    switch (this.model.BasicTrackingPath[enemy.Cords])
                     {
-                        case { } Point when Point == new Point(1, 0):
+                        case { } point when point == new Point(1, 0):
                             tb.Transform = new RotateTransform(270);
                             break;
-                        case { } Point when Point == new Point(0, 1):
+
+                        case { } point when point == new Point(0, 1):
                             tb.Transform = new RotateTransform(0);
                             break;
-                        case { } Point when Point == new Point(-1, 0):
+
+                        case { } point when point == new Point(-1, 0):
                             tb.Transform = new RotateTransform(90);
                             break;
-                        case { } Point when Point == new Point(0, -1):
+
+                        case { } point when point == new Point(0, -1):
                             tb.Transform = new RotateTransform(180);
                             break;
+
                         default:
                             break;
                     }
+
                     tb.EndInit();
 
-                    ImageDrawing drawing = new ImageDrawing(tb, new Rect(enemy.Cords.X * GameModel.TileSize,
-                        enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                    ImageDrawing drawing = new ImageDrawing(tb, new Rect(enemy.Cords.X * GameModel.TileSize, enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
 
                     g.Children.Add(drawing);
                 }
             }
-            oldTrackingMonsters = g;
-            return oldTrackingMonsters;
+
+            this.oldTrackingMonsters = g;
+            return this.oldTrackingMonsters;
         }
 
+        /// <summary>
+        /// Draws out all the powerups.
+        /// </summary>
+        /// <returns>a drawing.</returns>
         private Drawing GetPowerups()
         {
-            if (oldPowerups == null || powerupCount!=model.Powerups.Count)
+            if (this.oldPowerups == null || this.powerupCount != this.model.Powerups.Count)
             {
                 DrawingGroup g = new DrawingGroup();
-                foreach (var powerup in model.Powerups)
+                foreach (var powerup in this.model.Powerups)
                 {
                     ImageDrawing drawing;
                     switch (powerup.Type)
                     {
                         case Model.Passive.PowerupType.Health:
-                            drawing = new ImageDrawing(GetImage("redpotion.png"), new Rect(powerup.Cords.X * GameModel.TileSize,
-                                powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                            drawing = new ImageDrawing(GetImage("redpotion.png"), new Rect(powerup.Cords.X * GameModel.TileSize, powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                             break;
+
                         case Model.Passive.PowerupType.Damage:
-                            drawing = new ImageDrawing(GetImage("bluepotion.png"), new Rect(powerup.Cords.X * GameModel.TileSize,
-                                powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                            drawing = new ImageDrawing(GetImage("bluepotion.png"), new Rect(powerup.Cords.X * GameModel.TileSize, powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                             break;
+
                         case Model.Passive.PowerupType.FiringSpeed:
-                            drawing = new ImageDrawing(GetImage("yellowpotion.png"), new Rect(powerup.Cords.X * GameModel.TileSize,
-                                powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                            drawing = new ImageDrawing(GetImage("yellowpotion.png"), new Rect(powerup.Cords.X * GameModel.TileSize, powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                             break;
+
                         default:
-                            drawing = new ImageDrawing(GetImage("error-icon-32.png"), new Rect(powerup.Cords.X * GameModel.TileSize,
-                                powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                            break;       
+                            drawing = new ImageDrawing(GetImage("error-icon-32.png"), new Rect(powerup.Cords.X * GameModel.TileSize, powerup.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                            break;
                     }
+
                     g.Children.Add(drawing);
                 }
-                if (powerupCount != model.Powerups.Count)
+
+                if (this.powerupCount != this.model.Powerups.Count)
                 {
-                    powerupCount = model.Powerups.Count;
+                    this.powerupCount = this.model.Powerups.Count;
                 }
-                oldPowerups = g;
+
+                this.oldPowerups = g;
             }
-            return oldPowerups;
+
+            return this.oldPowerups;
         }
 
+        /// <summary>
+        /// Draws out all the flying enemies.
+        /// </summary>
+        /// <returns>a drawing.</returns>
         private Drawing GetFlyingMonsters()
         {
             DrawingGroup g = new DrawingGroup();
-            foreach (var enemy in model.FlyingMonsters)
+            foreach (var enemy in this.model.FlyingMonsters)
             {
-                if (oldFlyingMonsters == null || !oldFlyingMonstersPosition.Contains(enemy.Cords))
+                if (this.oldFlyingMonsters == null || !this.oldFlyingMonstersPosition.Contains(enemy.Cords))
                 {
                     BitmapImage bmp = GetImage("missle100.png");
                     TransformedBitmap tb = new TransformedBitmap();
                     tb.BeginInit();
                     tb.Source = bmp;
-                    switch (model.FlyingTrackingPath[enemy.Cords])
+                    switch (this.model.FlyingTrackingPath[enemy.Cords])
                     {
-                        case { } Point when Point == new Point(1, 0):
+                        case { } point when point == new Point(1, 0):
                             tb.Transform = new RotateTransform(90);
                             break;
-                        case { } Point when Point == new Point(0, 1):
+
+                        case { } point when point == new Point(0, 1):
                             tb.Transform = new RotateTransform(180);
                             break;
-                        case { } Point when Point == new Point(-1, 0):
+
+                        case { } point when point == new Point(-1, 0):
                             tb.Transform = new RotateTransform(270);
                             break;
-                        case { } Point when Point == new Point(0, -1):
+
+                        case { } point when point == new Point(0, -1):
                             tb.Transform = new RotateTransform(0);
                             break;
+
                         default:
                             break;
                     }
+
                     tb.EndInit();
 
-                    ImageDrawing drawing = new ImageDrawing(tb, new Rect(enemy.Cords.X * GameModel.TileSize,
-                        enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                    ImageDrawing drawing = new ImageDrawing(tb, new Rect(enemy.Cords.X * GameModel.TileSize, enemy.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
 
                     g.Children.Add(drawing);
                 }
             }
-            oldFlyingMonsters = g;
-            return oldFlyingMonsters;
+
+            this.oldFlyingMonsters = g;
+            return this.oldFlyingMonsters;
         }
 
+        /// <summary>
+        /// Draws out the boss.
+        /// </summary>
+        /// <returns>a drawing.</returns>
         private Drawing GetBoss()
         {
             DrawingGroup g = new DrawingGroup();
-            if (oldBoss == null || model.Boss != null && oldBossPosition != model.Boss.Cords)
+            if (this.oldBoss == null || (this.model.Boss != null && this.oldBossPosition != this.model.Boss.Cords))
             {
-                ImageDrawing drawing = new ImageDrawing(GetImage("hoodghost.png"), new Rect((model.Boss.Cords.X * GameModel.TileSize) - ((GameModel.TileSize*3) / 2),
-                    (model.Boss.Cords.Y * GameModel.TileSize) - ((GameModel.TileSize * 3) / 2), GameModel.TileSize*3, GameModel.TileSize*3));
-                /*Geometry geo = new RectangleGeometry(model.Boss.Area);
-                GeometryDrawing geodr = new GeometryDrawing(null,Is,geo);
-                g.Children.Add(geodr);*/
+                ImageDrawing drawing = new ImageDrawing(GetImage("hoodghost.png"), new Rect((this.model.Boss.Cords.X * GameModel.TileSize) - ((GameModel.TileSize * 3) / 2), (this.model.Boss.Cords.Y * GameModel.TileSize) - ((GameModel.TileSize * 3) / 2), GameModel.TileSize * 3, GameModel.TileSize * 3));
+
                 g.Children.Add(drawing);
 
-                oldBoss = g;
-                oldBossPosition = model.Boss.Cords;
+                this.oldBoss = g;
+                this.oldBossPosition = this.model.Boss.Cords;
             }
-            if (model.Boss==null)
+
+            if (this.model.Boss == null)
             {
                 return g;
             }
-            return oldBoss;
+
+            return this.oldBoss;
         }
 
+        /// <summary>
+        /// Draws out all the projectiles.
+        /// </summary>
+        /// <returns>a drawing.</returns>
         private Drawing GetProjectiles()
         {
             DrawingGroup g = new DrawingGroup();
             try
             {
                 ImageDrawing drawing;
-                foreach (var projectile in model.Projectiles)
+                foreach (var projectile in this.model.Projectiles)
                 {
-                    if (oldProjectiles == null || !oldProjectilePosition.Contains(projectile.Cords))
+                    if (this.oldProjectiles == null || !this.oldProjectilePosition.Contains(projectile.Cords))
                     {
                         switch (projectile.Type)
                         {
                             case ProjectileType.Enemy:
-                                drawing = new ImageDrawing(GetImage("bullet3.png"), new Rect(projectile.Cords.X,
-                               projectile.Cords.Y, 10, 10));
+                                drawing = new ImageDrawing(GetImage("bullet3.png"), new Rect(projectile.Cords.X, projectile.Cords.Y, 10, 10));
                                 break;
+
                             case ProjectileType.Player:
-                                drawing = new ImageDrawing(GetImage("bullet3.png"), new Rect(projectile.Cords.X,
-                               projectile.Cords.Y, 10, 10));
+                                drawing = new ImageDrawing(GetImage("bullet3.png"), new Rect(projectile.Cords.X, projectile.Cords.Y, 10, 10));
                                 break;
+
                             case ProjectileType.Boss:
-                                drawing = new ImageDrawing(GetImage("bossbullet.png"), new Rect(projectile.Cords.X,
-                               projectile.Cords.Y, 40, 40));
+                                drawing = new ImageDrawing(GetImage("bossbullet.png"), new Rect(projectile.Cords.X, projectile.Cords.Y, 40, 40));
                                 break;
+
                             default:
-                                drawing = new ImageDrawing(GetImage("bullet3.png"), new Rect(projectile.Cords.X,
-                               projectile.Cords.Y, 10, 10));
+                                drawing = new ImageDrawing(GetImage("bullet3.png"), new Rect(projectile.Cords.X, projectile.Cords.Y, 10, 10));
                                 break;
                         }
-                        
 
                         g.Children.Add(drawing);
                     }
                 }
-                oldProjectiles = g;
-                return oldProjectiles;
+
+                this.oldProjectiles = g;
+                return this.oldProjectiles;
             }
             catch
             {
@@ -446,13 +542,16 @@ namespace Renderer
             }
         }
 
+        /// <summary>
+        /// Draws out the player.
+        /// </summary>
+        /// <returns>a drawing.</returns>
         private Drawing GetPlayer()
         {
             DrawingGroup g = new DrawingGroup();
-            if (oldPlayer == null || oldPlayerPosition != model.MyPlayer.Cords || model.mousePosition != oldMousePosition)
+            if (this.oldPlayer == null || this.oldPlayerPosition != this.model.MyPlayer.Cords || this.model.MousePosition != this.oldMousePosition)
             {
-                
-                Point p = new Point(model.mousePosition.X - (model.MyPlayer.Cords.X * GameModel.TileSize), model.mousePosition.Y - (model.MyPlayer.Cords.Y * GameModel.TileSize));
+                Point p = new Point(this.model.MousePosition.X - (this.model.MyPlayer.Cords.X * GameModel.TileSize), this.model.MousePosition.Y - (this.model.MyPlayer.Cords.Y * GameModel.TileSize));
                 double rotation = Math.Atan2(p.Y, p.X) * 180 / Math.PI;
 
                 BitmapImage bmp = GetImage("100.png");
@@ -462,17 +561,17 @@ namespace Renderer
                 tb.Transform = new RotateTransform(90);
                 tb.EndInit();
 
-                ImageDrawing drawing = new ImageDrawing(tb, new Rect(model.MyPlayer.Cords.X * GameModel.TileSize,
-                    model.MyPlayer.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
+                ImageDrawing drawing = new ImageDrawing(tb, new Rect(this.model.MyPlayer.Cords.X * GameModel.TileSize, this.model.MyPlayer.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
 
-                RotateTransform rotate = new RotateTransform(rotation, (model.MyPlayer.Cords.X * GameModel.TileSize) + GameModel.TileSize / 2, (model.MyPlayer.Cords.Y * GameModel.TileSize) + GameModel.TileSize / 2);
+                RotateTransform rotate = new RotateTransform(rotation, (this.model.MyPlayer.Cords.X * GameModel.TileSize) + (GameModel.TileSize / 2), (this.model.MyPlayer.Cords.Y * GameModel.TileSize) + (GameModel.TileSize / 2));
 
                 g.Children.Add(new DrawingGroup() { Children = { drawing }, Transform = rotate });
 
-                oldPlayer = g;
-                oldPlayerPosition = model.MyPlayer.Cords;
+                this.oldPlayer = g;
+                this.oldPlayerPosition = this.model.MyPlayer.Cords;
             }
-            return oldPlayer;
+
+            return this.oldPlayer;
         }
     }
 }

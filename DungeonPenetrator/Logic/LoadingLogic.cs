@@ -1,24 +1,34 @@
-﻿using Model;
-using Model.Active;
-using Model.Passive;
-using Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Threading;
+﻿// <copyright file="LoadingLogic.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace Logic
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Windows;
+    using Model;
+    using Model.Active;
+    using Model.Passive;
+    using Repository;
+
+    /// <summary>
+    /// Defines the loading of a game state.
+    /// </summary>
     public class LoadingLogic : ILoadingLogic
     {
-        Random rnd = new Random();
-        IGameModel gameModel;
-        ISaveGameRepository saveGameRepository;
-        IHighscoreRepository highscoreRepository;
+        private Random rnd = new Random();
+        private IGameModel gameModel;
+        private ISaveGameRepository saveGameRepository;
+        private IHighscoreRepository highscoreRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LoadingLogic"/> class.
+        /// </summary>
+        /// <param name="gameModel">Defines a gamestate.</param>
+        /// <param name="saveGameRepository">Defines the repository of the gamesaving.</param>
+        /// <param name="highscoreRepository">Defines the repository of the highscore system.</param>
         public LoadingLogic(IGameModel gameModel, ISaveGameRepository saveGameRepository, IHighscoreRepository highscoreRepository)
         {
             this.gameModel = gameModel;
@@ -26,47 +36,94 @@ namespace Logic
             this.highscoreRepository = highscoreRepository;
         }
 
+        /// <inheritdoc/>
+        public IQueryable<Highscore> GetHighscores()
+        {
+            return this.highscoreRepository.GetAll().OrderBy(x => x.Level);
+        }
+
+        /// <inheritdoc/>
+        public void NextLevel()
+        {
+            this.GenerateMap();
+        }
+
+        /// <inheritdoc/>
+        public IGameModel Play()
+        {
+            this.gameModel = this.saveGameRepository.GetSaveGame();
+            if (this.gameModel == null)
+            {
+                this.GenerateMap();
+                this.saveGameRepository.Insert(this.gameModel as GameModel);
+                return this.gameModel;
+            }
+
+            return this.gameModel;
+        }
+
+        /// <inheritdoc/>
         public void EndGame(string name)
         {
             Highscore h = new Highscore();
-            h.Level = gameModel.LevelCounter;
+            h.Level = this.gameModel.LevelCounter;
             h.Name = name;
-            highscoreRepository.Insert(h);
-            saveGameRepository.Insert(default);
+            this.highscoreRepository.Insert(h);
+            this.saveGameRepository.Insert(default);
         }
 
+        /// <inheritdoc/>
         public void GenerateMap()
         {
-            if (gameModel == null) // static starting values of a newly created map
+            // static starting values of a newly created map
+            if (this.gameModel == null)
             {
-                gameModel = new GameModel();
-                gameModel.MyPlayer = new Player();
-                gameModel.MyPlayer.FiringSpeed = 1;
-                gameModel.MyPlayer.Damage = 20;
-                gameModel.MyPlayer.Health = 100;
-                gameModel.LevelCounter = 0; // Gets raised to one, must be zero
+                this.gameModel = new GameModel();
+                this.gameModel.MyPlayer = new Player();
+                this.gameModel.MyPlayer.FiringSpeed = 1;
+                this.gameModel.MyPlayer.Damage = 20;
+                this.gameModel.MyPlayer.Health = 100;
+                this.gameModel.LevelCounter = 0; // Gets raised to one, must be zero
             }
-            gameModel.MyPlayer.IsReloading = false;
-            gameModel.MyPlayer.BeingDamagedByLava = false;
-            gameModel.GameIsPaused = false;
-            gameModel.Projectiles = new List<Projectile>();
-            gameModel.Powerups = new List<Powerups>();
-            gameModel.FlyingMonsters = new List<FlyingEnemy>();
-            gameModel.ShootingMonsters = new List<ShootingEnemy>();
-            gameModel.TrackingMonsters = new List<TrackingEnemy>();
-            gameModel.Lavas = new List<LavaProp>();
-            gameModel.Walls = new List<WallProp>();
-            gameModel.Waters = new List<WaterProp>();
-            gameModel.GameAreaChar = new char[(int)(gameModel.GameWidth / GameModel.TileSize), (int)(gameModel.GameHeight / GameModel.TileSize)];
-            gameModel.LevelCounter++;
-            gameModel.MyPlayer.Cords = new Point(
-                (int)(gameModel.GameWidth / GameModel.TileSize / 2),
-                (int)(gameModel.GameHeight / GameModel.TileSize) - 1);
-            gameModel.LevelFinished = false;
 
-            GenerateInitializedEmptyMap();
+            int rndBiome = this.rnd.Next(0, 3);
+            switch (rndBiome)
+            {
+                case 0:
+                    this.gameModel.BiomeType = Biome.Plains;
+                    break;
+                case 1:
+                    this.gameModel.BiomeType = Biome.Desert;
+                    break;
+                case 2:
+                    this.gameModel.BiomeType = Biome.Snowy;
+                    break;
+                default:
+                    this.gameModel.BiomeType = Biome.Plains;
+                    break;
+            }
 
-            if (gameModel.LevelCounter % 10 == 0)
+            this.gameModel.MyPlayer.IsReloading = false;
+            this.gameModel.MyPlayer.BeingDamagedByLava = false;
+            this.gameModel.GameIsPaused = false;
+            this.gameModel.Projectiles = new List<Projectile>();
+            this.gameModel.Powerups = new List<Powerups>();
+            this.gameModel.FlyingMonsters = new List<FlyingEnemy>();
+            this.gameModel.ShootingMonsters = new List<ShootingEnemy>();
+            this.gameModel.TrackingMonsters = new List<TrackingEnemy>();
+            this.gameModel.Lavas = new List<LavaProp>();
+            this.gameModel.Walls = new List<WallProp>();
+            this.gameModel.Waters = new List<WaterProp>();
+            this.gameModel.GameAreaChar = new char[(int)(this.gameModel.GameWidth / GameModel.TileSize), (int)(this.gameModel.GameHeight / GameModel.TileSize)];
+            this.gameModel.LevelCounter++;
+            this.gameModel.MyPlayer.Cords = new Point(
+                (int)(this.gameModel.GameWidth / GameModel.TileSize / 2),
+                (int)(this.gameModel.GameHeight / GameModel.TileSize) - 1);
+            this.gameModel.LevelFinished = false;
+
+            this.GenerateInitializedEmptyMap();
+
+            if (this.gameModel.LevelCounter % 10 == 0)
             {
                 /*for (int y = 1; y <= gameModel.GameAreaChar.GetLength(1) - 2; y += 6)
                 {
@@ -81,9 +138,11 @@ namespace Logic
                                 case < 150:
                                     gameModel.GameAreaChar[x, y] = 'W'; // Generates Wall
                                     break;
+
                                 case > 150 and < 180:
                                     gameModel.GameAreaChar[x, y] = 'P'; // Generates "Puddle" (Water)
                                     break;
+
                                 case > 180 and < 200:
                                     gameModel.GameAreaChar[x, y] = 'L'; // Generates Lava
                                     break;
@@ -92,49 +151,60 @@ namespace Logic
                     }
                 }
                 GenerateCollectables();*/
-                gameModel.GameAreaChar[(int)((gameModel.GameWidth / GameModel.TileSize)/ 2),(int)((gameModel.GameHeight / GameModel.TileSize) / 2)] = 'B';
+                this.gameModel.GameAreaChar[(int)((this.gameModel.GameWidth / GameModel.TileSize) / 2), (int)((this.gameModel.GameHeight / GameModel.TileSize) / 2)] = 'B';
             }
             else
             {
-                GenerateProps();
-                GenerateCollectables();
-                GenerateBasicEnemies();
+                this.GenerateProps();
+                this.GenerateCollectables();
+                this.GenerateBasicEnemies();
             }
-            for (int y = 0; y < gameModel.GameAreaChar.GetLength(1); y++)
+
+            for (int y = 0; y < this.gameModel.GameAreaChar.GetLength(1); y++)
             {
-                for (int x = 0; x < gameModel.GameAreaChar.GetLength(0); x++)
+                for (int x = 0; x < this.gameModel.GameAreaChar.GetLength(0); x++)
                 {
-                    switch (gameModel.GameAreaChar[x, y]) // Some parts here shall not be hardcoded.
+                    // Some parts here shall not be hardcoded.
+                    switch (this.gameModel.GameAreaChar[x, y])
                     {
                         case 'W':
-                            gameModel.Walls.Add(new WallProp { Cords = new Point(x, y) });
+                            this.gameModel.Walls.Add(new WallProp { Cords = new Point(x, y) });
                             break;
+
                         case 'L':
-                            gameModel.Lavas.Add(new LavaProp { Cords = new Point(x, y), Damage = 15 });
+                            this.gameModel.Lavas.Add(new LavaProp { Cords = new Point(x, y), Damage = 15 });
                             break;
+
                         case 'P':
-                            gameModel.Waters.Add(new WaterProp { Cords = new Point(x, y) });
+                            this.gameModel.Waters.Add(new WaterProp { Cords = new Point(x, y) });
                             break;
+
                         case 'H':
-                            gameModel.Powerups.Add(new Powerups(new Point(x, y), PowerupType.Health));
+                            this.gameModel.Powerups.Add(new Powerups(new Point(x, y), PowerupType.Health));
                             break;
+
                         case 'D':
-                            gameModel.Powerups.Add(new Powerups(new Point(x, y), PowerupType.Damage));
+                            this.gameModel.Powerups.Add(new Powerups(new Point(x, y), PowerupType.Damage));
                             break;
+
                         case 'R':
-                            gameModel.Powerups.Add(new Powerups(new Point(x, y), PowerupType.FiringSpeed));
+                            this.gameModel.Powerups.Add(new Powerups(new Point(x, y), PowerupType.FiringSpeed));
                             break;
+
                         case 'F':
-                                gameModel.FlyingMonsters.Add(new FlyingEnemy { Cords = new Point(x, y), Damage = 10, Health = 30*((int)(gameModel.LevelCounter / 10) + 1), });
+                            this.gameModel.FlyingMonsters.Add(new FlyingEnemy { Cords = new Point(x, y), Damage = 10, Health = 30 * ((int)(this.gameModel.LevelCounter / 10) + 1), });
                             break;
+
                         case 'T':
-                            gameModel.TrackingMonsters.Add(new TrackingEnemy { Cords = new Point(x, y), Damage = 2, Health = 60*((int)(gameModel.LevelCounter / 10) + 1), CanAttack = true, });
+                            this.gameModel.TrackingMonsters.Add(new TrackingEnemy { Cords = new Point(x, y), Damage = 2, Health = 60 * ((int)(this.gameModel.LevelCounter / 10) + 1), CanAttack = true, });
                             break;
+
                         case 'S':
-                            gameModel.ShootingMonsters.Add(new ShootingEnemy { Cords = new Point(x, y), Damage = 10, Health = 40*((int)(gameModel.LevelCounter / 10) + 1), });
+                            this.gameModel.ShootingMonsters.Add(new ShootingEnemy { Cords = new Point(x, y), Damage = 10, Health = 40 * ((int)(this.gameModel.LevelCounter / 10) + 1), });
                             break;
+
                         case 'B':
-                            gameModel.Boss = new BossEnemy { Cords = new Point(x, y), Damage = 15, Health = 3000* ((int)(gameModel.LevelCounter / 10)), PlayerInSight = false, };
+                            this.gameModel.Boss = new BossEnemy { Cords = new Point(x, y), Damage = 15, Health = 3000 * ((int)(this.gameModel.LevelCounter / 10)), PlayerInSight = false, };
                             break;
                     }
                 }
@@ -143,61 +213,68 @@ namespace Logic
 
         private void GenerateInitializedEmptyMap()
         {
-            for (int y = 0; y < gameModel.GameAreaChar.GetLength(1); y++)
+            for (int y = 0; y < this.gameModel.GameAreaChar.GetLength(1); y++)
             {
-                for (int x = 0; x < gameModel.GameAreaChar.GetLength(0); x++)
+                for (int x = 0; x < this.gameModel.GameAreaChar.GetLength(0); x++)
                 {
-                    gameModel.GameAreaChar[x, y] = 'E'; // Generates Empty Cell
+                    this.gameModel.GameAreaChar[x, y] = 'E'; // Generates Empty Cell
                 }
             }
-            gameModel.GameAreaChar[(int)gameModel.MyPlayer.Cords.X,(int)gameModel.MyPlayer.Cords.Y] = 'C'; // Sets Character->Player pos
-            gameModel.GameAreaChar[(int)gameModel.LevelExit.X, (int)gameModel.LevelExit.Y] = 'G'; // Sets Goal->LevelExit pos
+
+            this.gameModel.GameAreaChar[(int)this.gameModel.MyPlayer.Cords.X, (int)this.gameModel.MyPlayer.Cords.Y] = 'C'; // Sets Character->Player pos
+            this.gameModel.GameAreaChar[(int)this.gameModel.LevelExit.X, (int)this.gameModel.LevelExit.Y] = 'G'; // Sets Goal->LevelExit pos
         }
+
         private void GenerateBasicEnemies()
         {
-            int rndObjectNum = rnd.Next(15, (int)((int)(gameModel.GameWidth / GameModel.TileSize) * (int)(gameModel.GameHeight / GameModel.TileSize) / (GameModel.TileSize/4)));
+            int rndObjectNum = this.rnd.Next(15, (int)((int)(this.gameModel.GameWidth / GameModel.TileSize) * (int)(this.gameModel.GameHeight / GameModel.TileSize) / (GameModel.TileSize / 4)));
             for (int i = 0; i < rndObjectNum; i++)
             {
-                Tuple<int, int> rndCord = new Tuple<int, int>(rnd.Next(2,(int)(gameModel.GameWidth / GameModel.TileSize)-2), rnd.Next(3,(int)(gameModel.GameHeight / GameModel.TileSize)-3));
-                if (!(rndCord.Item1 == gameModel.MyPlayer.Cords.X && rndCord.Item2 == gameModel.MyPlayer.Cords.Y)
-                    && !(rndCord.Item1 == gameModel.LevelExit.X && rndCord.Item2 == gameModel.LevelExit.Y))
+                Tuple<int, int> rndCord = new Tuple<int, int>(this.rnd.Next(2, (int)(this.gameModel.GameWidth / GameModel.TileSize) - 2), this.rnd.Next(3, (int)(this.gameModel.GameHeight / GameModel.TileSize) - 3));
+                if (!(rndCord.Item1 == this.gameModel.MyPlayer.Cords.X && rndCord.Item2 == this.gameModel.MyPlayer.Cords.Y)
+                    && !(rndCord.Item1 == this.gameModel.LevelExit.X && rndCord.Item2 == this.gameModel.LevelExit.Y))
                 {
-                    int randomObject = rnd.Next(0, 100);
+                    int randomObject = this.rnd.Next(0, 100);
                     switch (randomObject)
                     {
-                        case <75:
-                            gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'T'; // Generates Tracking monster
+                        case < 75:
+                            this.gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'T'; // Generates Tracking monster
                             break;
-                        case >75 and <87:
-                            gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'F'; // Generates Flying monster
+
+                        case > 75 and < 87:
+                            this.gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'F'; // Generates Flying monster
                             break;
-                        case >87:
-                            gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'S'; // Generates shooting monster
+
+                        case > 87:
+                            this.gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'S'; // Generates shooting monster
                             break;
                     }
                 }
             }
         }
+
         private void GenerateCollectables()
         {
-            int rndObjectNum = rnd.Next(0,(int)((int)(gameModel.GameWidth / GameModel.TileSize) * (int)(gameModel.GameHeight / GameModel.TileSize) / (GameModel.TileSize/2)));
+            int rndObjectNum = this.rnd.Next(0, (int)((int)(this.gameModel.GameWidth / GameModel.TileSize) * (int)(this.gameModel.GameHeight / GameModel.TileSize) / (GameModel.TileSize / 2)));
             for (int i = 0; i < rndObjectNum; i++)
             {
-                Tuple<int, int> rndCord = new Tuple<int, int>(rnd.Next((int)(gameModel.GameWidth / GameModel.TileSize)), rnd.Next((int)(gameModel.GameHeight / GameModel.TileSize)));
-                if (!(rndCord.Item1 == gameModel.MyPlayer.Cords.X && rndCord.Item2 == gameModel.MyPlayer.Cords.Y)
-                    && !(rndCord.Item1 == gameModel.LevelExit.X && rndCord.Item2 == gameModel.LevelExit.Y))
+                Tuple<int, int> rndCord = new Tuple<int, int>(this.rnd.Next((int)(this.gameModel.GameWidth / GameModel.TileSize)), this.rnd.Next((int)(this.gameModel.GameHeight / GameModel.TileSize)));
+                if (!(rndCord.Item1 == this.gameModel.MyPlayer.Cords.X && rndCord.Item2 == this.gameModel.MyPlayer.Cords.Y)
+                    && !(rndCord.Item1 == this.gameModel.LevelExit.X && rndCord.Item2 == this.gameModel.LevelExit.Y))
                 {
-                    int randomObject = rnd.Next(0, 3);
+                    int randomObject = this.rnd.Next(0, 3);
                     switch (randomObject)
                     {
                         case 0:
-                            gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'H'; // Generates HP powerup
+                            this.gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'H'; // Generates HP powerup
                             break;
+
                         case 1:
-                            gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'D'; // Generates Damage powerup
+                            this.gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'D'; // Generates Damage powerup
                             break;
+
                         case 2:
-                            gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'R'; // Generates "Reload speed" firing powerup
+                            this.gameModel.GameAreaChar[rndCord.Item1, rndCord.Item2] = 'R'; // Generates "Reload speed" firing powerup
                             break;
                     }
                 }
@@ -206,24 +283,26 @@ namespace Logic
 
         private void GenerateProps()
         {
-            for (int y = 1; y <= gameModel.GameAreaChar.GetLength(1) - 2; y += 2)
+            for (int y = 1; y <= this.gameModel.GameAreaChar.GetLength(1) - 2; y += 2)
             {
-                int[] EmptySpaceCords = GenerateEmptySpacesForRow();
-                for (int x = 0; x < gameModel.GameAreaChar.GetLength(0); x++)
+                int[] emptySpaceCords = this.GenerateEmptySpacesForRow();
+                for (int x = 0; x < this.gameModel.GameAreaChar.GetLength(0); x++)
                 {
-                    if (!EmptySpaceCords.Contains(x))
+                    if (!emptySpaceCords.Contains(x))
                     {
-                        int randomProp = rnd.Next(0, 200);
+                        int randomProp = this.rnd.Next(0, 200);
                         switch (randomProp)
                         {
-                            case <150:
-                                gameModel.GameAreaChar[x, y] = 'W'; // Generates Wall
+                            case < 150:
+                                this.gameModel.GameAreaChar[x, y] = 'W'; // Generates Wall
                                 break;
-                            case >150 and <180:
-                                gameModel.GameAreaChar[x, y] = 'P'; // Generates "Puddle" (Water)
+
+                            case > 150 and < 180:
+                                this.gameModel.GameAreaChar[x, y] = 'P'; // Generates "Puddle" (Water)
                                 break;
-                            case >180 and <200:
-                                gameModel.GameAreaChar[x, y] = 'L'; // Generates Lava
+
+                            case > 180 and < 200:
+                                this.gameModel.GameAreaChar[x, y] = 'L'; // Generates Lava
                                 break;
                         }
                     }
@@ -233,35 +312,13 @@ namespace Logic
 
         private int[] GenerateEmptySpacesForRow()
         {
-            int[] EmptySpaceCords = new int[rnd.Next(3, (int)(gameModel.GameWidth / GameModel.TileSize) - 1)];
-            for (int i = 0; i < EmptySpaceCords.Length; i++)
+            int[] emptySpaceCords = new int[this.rnd.Next(3, (int)(this.gameModel.GameWidth / GameModel.TileSize) - 1)];
+            for (int i = 0; i < emptySpaceCords.Length; i++)
             {
-                EmptySpaceCords[i] = rnd.Next(0, (int)(gameModel.GameWidth / GameModel.TileSize));
+                emptySpaceCords[i] = this.rnd.Next(0, (int)(this.gameModel.GameWidth / GameModel.TileSize));
             }
 
-            return EmptySpaceCords;
-        }
-
-        public IQueryable<Highscore> GetHighscores()
-        {
-            return highscoreRepository.GetAll().OrderBy(x => x.Level);
-        }
-
-        public void NextLevel()
-        {
-            GenerateMap();
-        }
-
-        public IGameModel Play()
-        {
-            gameModel = saveGameRepository.GetSaveGame();
-            if (gameModel == null)
-            {
-                GenerateMap();
-                saveGameRepository.Insert(gameModel as GameModel);
-                return gameModel;
-            }
-            return gameModel;
+            return emptySpaceCords;
         }
     }
 }
