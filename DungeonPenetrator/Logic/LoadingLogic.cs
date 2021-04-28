@@ -66,7 +66,7 @@ namespace Logic
         public void EndGame(string name)
         {
             Highscore h = new Highscore();
-            h.Level = this.gameModel.LevelCounter;
+            h.Level = this.gameModel.LevelCounter - 1;
             h.Name = name;
             this.highscoreRepository.Insert(h);
             this.saveGameRepository.Insert(default);
