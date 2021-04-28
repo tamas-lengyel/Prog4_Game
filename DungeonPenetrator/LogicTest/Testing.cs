@@ -160,33 +160,6 @@ namespace LogicTest
             Assert.That(gameModelMock.Object.FlyingMonsters[0].Health, Is.EqualTo(damagedHealth));
         }
 
-        /*/// <summary>
-        /// Testing if bullets dissapear after collision.
-        /// </summary>
-        [Test]
-        public void DisposeBullet()
-        {
-            Projectile p = new Projectile(new Point(0, 0), new Point(100, 100));
-            p.Damage = 5;
-            gameModelMock.Object.Projectiles.Add(p);
-
-            gameLogicTest.DisposeBullet(p);
-
-            Assert.That(gameModelMock.Object.Projectiles, Does.Not.Contain(p));
-        }
-
-        /// <summary>
-        /// Tests if Enemy dissapears after death.
-        /// </summary>
-        [Test]
-        public void DisposeEnemy()
-        {
-            ShootingEnemy s = new ShootingEnemy();
-            gameModelMock.Object.ShootingMonsters.Add(s);
-            gameLogicTest.DisposeEnemy(s);
-            Assert.That(gameModelMock.Object.ShootingMonsters, Does.Not.Contain(s));
-        }*/
-
         /// <summary>
         /// Testing movement of flying enemy.
         /// </summary>
@@ -271,14 +244,11 @@ namespace LogicTest
         [Test]
         public void PlayerShoot()
         {
-            /* Point shootTo = new Point(200, 500);
-             int shootingSpeed = 10;
-             Point playercords = new Point(gameModelMock.Object.MyPlayer.Cords.X * GameModel.TileSize, gameModelMock.Object.MyPlayer.Cords.Y * GameModel.TileSize);
-             Projectile expectedProjectile = new Projectile(playercords, shootTo);
-             expectedProjectile.Type = ProjectileType.Player;
-             expectedProjectile.Speed = shootingSpeed;
-             Projectile shootProjectile = gameLogicTest.PlayerShoot(shootTo, shootingSpeed);
-             Assert.That(shootProjectile,Is.EqualTo(expectedProjectile));*/
+            Point shootTo = new Point(200, 500);
+            int shootingSpeed = 10;
+            int expectedProjectilesCount = gameModelMock.Object.Projectiles.Count + 1;
+            gameLogicTest.PlayerShoot(shootTo, shootingSpeed);
+            Assert.That(gameModelMock.Object.Projectiles.Count, Is.EqualTo(expectedProjectilesCount));
         }
     }
 }
