@@ -21,7 +21,6 @@ namespace Renderer
     public class GameRenderer
     {
         private IGameModel model;
-        private Random rnd = new Random();
 
         private Drawing oldBackground;
         private Drawing oldLevelExit;
@@ -144,7 +143,7 @@ namespace Renderer
                 this.oldModelLvlCounter = this.model.LevelCounter;
                 GeometryDrawing box = new GeometryDrawing(Brushes.Gray, this.iss, new RectangleGeometry(new Rect(this.lvlCounter.LvlCounterX, this.lvlCounter.LvlCounterY, this.lvlCounter.LvlCounterWidth, this.lvlCounter.LvlCounterHeight)));
 
-                FormattedText text = new FormattedText(this.oldModelLvlCounter.ToString(), CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black);
+                FormattedText text = new FormattedText(this.oldModelLvlCounter.ToString(), CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black, 1);
                 text.TextAlignment = TextAlignment.Center;
                 Geometry geo = text.BuildGeometry(new Point(this.lvlCounter.LvlCounterX + (this.lvlCounter.LvlCounterWidth / 2), this.lvlCounter.LvlCounterY + (this.lvlCounter.LvlCounterHeight / 4.2)));
                 GeometryDrawing textGeo = new GeometryDrawing(Brushes.Black, null, geo);
@@ -183,19 +182,18 @@ namespace Renderer
         {
             if (this.oldBackground == null)
             {
-                int random = this.rnd.Next(0, 4);
                 ImageDrawing drawing;
-                switch (random)
+                switch (this.model.BiomeType)
                 {
-                    case 1:
+                    case Biome.Plains:
                         drawing = new ImageDrawing(GetImage("bggreen.png"), new Rect(0, 0, this.model.GameWidth, this.model.GameHeight));
                         break;
 
-                    case 2:
+                    case Biome.Desert:
                         drawing = new ImageDrawing(GetImage("backgroundtan.png"), new Rect(0, 0, this.model.GameWidth, this.model.GameHeight));
                         break;
 
-                    case 3:
+                    case Biome.Snowy:
                         drawing = new ImageDrawing(GetImage("backgroundsnowy.png"), new Rect(0, 0, this.model.GameWidth, this.model.GameHeight));
                         break;
 

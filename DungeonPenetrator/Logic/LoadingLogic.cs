@@ -86,6 +86,23 @@ namespace Logic
                 this.gameModel.LevelCounter = 0; // Gets raised to one, must be zero
             }
 
+            int rndBiome = this.rnd.Next(0, 3);
+            switch (rndBiome)
+            {
+                case 0:
+                    this.gameModel.BiomeType = Biome.Plains;
+                    break;
+                case 1:
+                    this.gameModel.BiomeType = Biome.Desert;
+                    break;
+                case 2:
+                    this.gameModel.BiomeType = Biome.Snowy;
+                    break;
+                default:
+                    this.gameModel.BiomeType = Biome.Plains;
+                    break;
+            }
+
             this.gameModel.MyPlayer.IsReloading = false;
             this.gameModel.MyPlayer.BeingDamagedByLava = false;
             this.gameModel.GameIsPaused = false;

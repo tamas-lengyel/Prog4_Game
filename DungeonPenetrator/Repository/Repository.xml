@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Repository</name>
+    </assembly>
+    <members>
+        <member name="T:Repository.HighscoreRepository">
+            <summary>
+            Highscore repo, this manages the highscores.
+            </summary>
+        </member>
+        <member name="M:Repository.HighscoreRepository.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Repository.HighscoreRepository"/> class.
+            </summary>
+        </member>
+        <member name="M:Repository.HighscoreRepository.GetAll">
+            <summary>
+            Gets the Highscores as a Queryable.
+            </summary>
+            <returns>A Highscore type Queryable.</returns>
+        </member>
+        <member name="M:Repository.HighscoreRepository.Insert(Model.Highscore)">
+            <summary>
+            Inserts a highscore into a file as json.
+            </summary>
+            <param name="entity">Highscore type object.</param>
+        </member>
+        <member name="T:Repository.IHighscoreRepository">
+            <summary>
+            Interface for Highscore repo.
+            </summary>
+        </member>
+        <member name="M:Repository.IHighscoreRepository.GetAll">
+            <summary>
+            Gets all Highscores from highscore.json file.
+            </summary>
+            <returns>A Highscore type Queryable.</returns>
+        </member>
+        <member name="T:Repository.ISaveGameRepository">
+            <summary>
+            Interface for SaveGame repo.
+            </summary>
+        </member>
+        <member name="M:Repository.ISaveGameRepository.GetSaveGame">
+            <summary>
+            Gets a GameModel from a savegame.json file.
+            </summary>
+            <returns>A GameModel.</returns>
+        </member>
+        <member name="T:Repository.IStorageRepository`1">
+            <summary>
+            Interface for all repositories.
+            </summary>
+            <typeparam name="T">Generic type.</typeparam>
+        </member>
+        <member name="M:Repository.IStorageRepository`1.Insert(`0)">
+            <summary>
+            Insert method.
+            </summary>
+            <param name="entity">Generic type entity.</param>
+        </member>
+        <member name="T:Repository.SaveGameRepository">
+            <summary>
+            SaveGame repo, this manages the saves.
+            </summary>
+        </member>
+        <member name="M:Repository.SaveGameRepository.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Repository.SaveGameRepository"/> class.
+            </summary>
+        </member>
+        <member name="M:Repository.SaveGameRepository.GetSaveGame">
+            <summary>
+            Gets a GameModel from a savegame.json file.
+            </summary>
+            <returns>A GameModel.</returns>
+        </member>
+        <member name="M:Repository.SaveGameRepository.Insert(Model.GameModel)">
+            <summary>
+            Inserts a GameModel into the save file as json.
+            </summary>
+            <param name="entity">A GameModel type object.</param>
+        </member>
+        <member name="T:Repository.StorageRepository`1">
+            <summary>
+            Storage repo.
+            </summary>
+            <typeparam name="T">Generic type.</typeparam>
+        </member>
+        <member name="M:Repository.StorageRepository`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Repository.StorageRepository`1"/> class.
+            </summary>
+        </member>
+        <member name="M:Repository.StorageRepository`1.Insert(`0)">
+            <summary>
+            Insert a Generic type as json into a file.
+            </summary>
+            <param name="entity">Generic type.</param>
+        </member>
+    </members>
+</doc>

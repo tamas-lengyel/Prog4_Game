@@ -28,6 +28,11 @@ namespace Model
         double GameHeight { get; }
 
         /// <summary>
+        /// Gets or sets the BiomeType.
+        /// </summary>
+        Biome BiomeType { get; set; }
+
+        /// <summary>
         /// Gets the TileSize.
         /// </summary>
         static double TileSize { get; }

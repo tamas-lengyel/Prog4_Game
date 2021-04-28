@@ -11,6 +11,21 @@ namespace Model
     using Model.Passive;
 
     /// <summary>
+    /// Defines the biome of a map.
+    /// </summary>
+    public enum Biome
+    {
+        /// <summary>Defines a snowy biome.</summary>
+        Snowy,
+
+        /// <summary>Defines a desert biome.</summary>
+        Desert,
+
+        /// <summary>Defines a plains biome.</summary>
+        Plains,
+    }
+
+    /// <summary>
     /// GameModel class.
     /// </summary>
     public class GameModel : IGameModel
@@ -25,6 +40,9 @@ namespace Model
 
         /// <inheritdoc/>
         public double GameHeight => 800;
+
+        /// <inheritdoc/>
+        public Biome BiomeType { get; set; }
 
         /// <inheritdoc/>
         public Point MousePosition { get; set; }

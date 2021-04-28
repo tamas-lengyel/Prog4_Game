@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Renderer</name>
+    </assembly>
+    <members>
+        <member name="T:Renderer.GameRenderer">
+            <summary>
+            GameRenderer class.
+            </summary>
+        </member>
+        <member name="M:Renderer.GameRenderer.#ctor(Model.IGameModel)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renderer.GameRenderer"/> class.
+            </summary>
+            <param name="model">GameModel.</param>
+        </member>
+        <member name="M:Renderer.GameRenderer.BuildDrawing">
+            <summary>
+            Groups all the things that needs to be drawn out on the screen.
+            </summary>
+            <returns>A drwing group with all things that needs to be drawn out on the screen.</returns>
+        </member>
+        <member name="M:Renderer.GameRenderer.GetImage(System.String)">
+            <summary>
+            Loads the image, based on the parameter filename.
+            </summary>
+            <param name="fileName">filename.</param>
+            <returns>A bitmap image.</returns>
+        </member>
+        <member name="M:Renderer.GameRenderer.GetPauseScreen">
+            <summary>
+            Draws out a Pause screen.
+            </summary>
+            <returns>A drawing.</returns>
+        </member>
+        <member name="M:Renderer.GameRenderer.GetLevelCounter">
+            <summary>
+            Draws out a level counter.
+            </summary>
+            <returns>a drawing.</returns>
+        </member>
+        <member name="M:Renderer.GameRenderer.GetHpBar">
+            <summary>
+            Draws out the player's Hp bar.
+            </summary>
+            <returns>a drawing.</returns>
+        </member>
+        <member name="M:Renderer.GameRenderer.GetBackground">
+            <summary>
+            Draws out the background.
+            </summary>
+            <returns>a drawing.</returns>
+        </member>
+        <member name="M:Renderer.GameRenderer.GetLevelExit">
+            <summary>
+            Draws out the level exit.
+            </summary>
+            <returns>a drawing.</returns>
+        </member>
+        <member name="M:Renderer.GameRenderer.GetLavas">
+            <summary>
+            Draws out the lavas.
+            </summary>
+            <returns>a drawing.</returns>
+        </member>
+        <member name="M:Renderer.GameRenderer.GetWaters">
+            <summary>
+            Draws out the waters.
+            </summary>
+            <returns>a drawing.</returns>
+        </member>
+        <member name="M:Renderer.GameRenderer.GetWalls">
+            <summary>
+            Draws out the rocks.
+            </summary>
+            <returns>a drawing.</returns>
+        </member>
+        <member name="M:Renderer.GameRenderer.GetShootingMonsters">
+            <summary>
+            Draws out the shooting enemies.
+            </summary>
+            <returns>a drawing.</returns>
+        </member>
+        <member name="M:Renderer.GameRenderer.GetTrackingMonsters">
+            <summary>
+            Draws out the tracking enemies.
+            </summary>
+            <returns>a drawing.</returns>
+        </member>
+        <member name="M:Renderer.GameRenderer.GetPowerups">
+            <summary>
+            Draws out all the powerups.
+            </summary>
+            <returns>a drawing.</returns>
+        </member>
+        <member name="M:Renderer.GameRenderer.GetFlyingMonsters">
+            <summary>
+            Draws out all the flying enemies.
+            </summary>
+            <returns>a drawing.</returns>
+        </member>
+        <member name="M:Renderer.GameRenderer.GetBoss">
+            <summary>
+            Draws out the boss.
+            </summary>
+            <returns>a drawing.</returns>
+        </member>
+        <member name="M:Renderer.GameRenderer.GetProjectiles">
+            <summary>
+            Draws out all the projectiles.
+            </summary>
+            <returns>a drawing.</returns>
+        </member>
+        <member name="M:Renderer.GameRenderer.GetPlayer">
+            <summary>
+            Draws out the player.
+            </summary>
+            <returns>a drawing.</returns>
+        </member>
+    </members>
+</doc>
