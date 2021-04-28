@@ -1,47 +1,104 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Threading;
+﻿// <copyright file="Projectile.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace Model
 {
+    using System;
+    using System.Windows;
+    using System.Windows.Threading;
+
+    /// <summary>
+    /// Projectile type.
+    /// </summary>
     public enum ProjectileType
     {
-        Enemy,Player,Boss
-    };
+        /// <summary>
+        /// Enemy type.
+        /// </summary>
+        Enemy,
+
+        /// <summary>
+        /// Player type.
+        /// </summary>
+        Player,
+
+        /// <summary>
+        /// Boss type.
+        /// </summary>
+        Boss,
+    }
+
+    /// <summary>
+    /// Projectile class.
+    /// </summary>
     public class Projectile : GameObjects
     {
-        public int Speed { get; set; }
-        public override Point Cords { get; set; }
-        public Point direction;
-        public int Damage { get; set; }
-        public Projectile(Point From, Point To)
+        /// <summary>
+        /// Direction Point.
+        /// </summary>
+        public Point Direction;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Projectile"/> class.
+        /// </summary>
+        /// <param name="from">From Point.</param>
+        /// <param name="to">To Point.</param>
+        public Projectile(Point from, Point to)
         {
-            this.Cords = From;
+            this.Cords = from;
 
-            //this.direction = new Point(To.X-From.X, To.Y-From.Y );
-            double x = To.X - From.X;
-            double y = To.Y - From.Y;
-            double magnetude = (Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2)));
-            this.direction = new Point( x/magnetude, y / magnetude);
-
+            // this.direction = new Point(To.X-From.X, To.Y-From.Y );
+            double x = to.X - from.X;
+            double y = to.Y - from.Y;
+            double magnetude = Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
+            this.Direction = new Point(x / magnetude, y / magnetude);
         }
+
+        /// <summary>
+        /// Gets or sets the speed.
+        /// </summary>
+        public int Speed { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Coordinate.
+        /// </summary>
+        public override Point Cords { get; set; }
+
+        /// <summary>
+        /// Gets or sets the damage.
+        /// </summary>
+        public int Damage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Projectile type.
+        /// </summary>
         public ProjectileType Type { get; set; }
-        public override Rect Area { get
+
+        /// <summary>
+        /// Gets the Area.
+        /// </summary>
+        public override Rect Area
+        {
+            get
             {
-                switch (Type)
+                switch (this.Type)
                 {
                     case ProjectileType.Enemy or ProjectileType.Player:
-                        return new Rect(Cords.X, Cords.Y, 10, 10);
+                        return new Rect(this.Cords.X, this.Cords.Y, 10, 10);
+
                     case ProjectileType.Boss:
-                        return new Rect(Cords.X, Cords.Y, 40, 40);
+                        return new Rect(this.Cords.X, this.Cords.Y, 40, 40);
+
                     default:
-                        return new Rect(Cords.X, Cords.Y, 10, 10);
+                        return new Rect(this.Cords.X, this.Cords.Y, 10, 10);
                 }
-            } }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the Timer.
+        /// </summary>
         public DispatcherTimer Timer { get; set; }
         /*public override bool Equals(object obj)
         {
@@ -52,7 +109,6 @@ namespace Model
                     this.Damage == prj.Damage &&
                     this.direction == prj.direction &&
                     this.Speed == prj.Speed;
-
             }
             return false;
         }

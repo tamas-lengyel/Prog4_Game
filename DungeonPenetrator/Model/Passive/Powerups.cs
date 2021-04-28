@@ -1,40 +1,83 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿// <copyright file="Powerups.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace Model.Passive
 {
+    using System.Windows;
+
+    /// <summary>
+    /// PowerType enum.
+    /// </summary>
     public enum PowerupType
     {
-        Health, Damage, FiringSpeed
+        /// <summary>
+        /// Health type.
+        /// </summary>
+        Health,
+
+        /// <summary>
+        /// Damage type.
+        /// </summary>
+        Damage,
+
+        /// <summary>
+        /// FiringSpeed type.
+        /// </summary>
+        FiringSpeed,
     }
 
+    /// <summary>
+    /// Powerups class.
+    /// </summary>
     public class Powerups : PassiveGameObjects
     {
-        public override Point Cords { get; set; }
-        public PowerupType Type { get; set; }
-        public double ModifyRate { get; }
-        public Powerups(Point Cords, PowerupType Type)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Powerups"/> class.
+        /// </summary>
+        /// <param name="cords">Cords param.</param>
+        /// <param name="type">Type param.</param>
+        public Powerups(Point cords, PowerupType type)
         {
-            this.Cords = Cords;
-            this.Type = Type;
+            this.Cords = cords;
+            this.Type = type;
             switch (this.Type)
             {
                 case PowerupType.Health:
-                    ModifyRate = 20;
+                    this.ModifyRate = 20;
                     break;
+
                 case PowerupType.Damage:
-                    ModifyRate = 2;
+                    this.ModifyRate = 2;
                     break;
+
                 case PowerupType.FiringSpeed:
-                    ModifyRate = 0.1d;
+                    this.ModifyRate = 0.1d;
                     break;
             }
         }
-        public override Rect Area { get { return new Rect(Cords.X * GameModel.TileSize, Cords.Y * GameModel.TileSize, GameModel.TileSize - 1, GameModel.TileSize - 1); } }
 
+        /// <summary>
+        /// Gets or sets the coordinates.
+        /// </summary>
+        public override Point Cords { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type.
+        /// </summary>
+        public PowerupType Type { get; set; }
+
+        /// <summary>
+        /// Gets the modify rate.
+        /// </summary>
+        public double ModifyRate { get; }
+
+        /// <summary>
+        /// Gets the Area.
+        /// </summary>
+        public override Rect Area
+        {
+            get { return new Rect(this.Cords.X * GameModel.TileSize, this.Cords.Y * GameModel.TileSize, GameModel.TileSize - 1, GameModel.TileSize - 1); }
+        }
     }
 }

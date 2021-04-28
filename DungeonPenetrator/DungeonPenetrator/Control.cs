@@ -177,7 +177,7 @@ namespace DungeonPenetrator
 
         private void Win_MouseMove(object sender, MouseEventArgs e)
         {
-            model.mousePosition = e.GetPosition(this);
+            model.MousePosition = e.GetPosition(this);
         }
 
         private void UpdateScreen(object sender, EventArgs e)

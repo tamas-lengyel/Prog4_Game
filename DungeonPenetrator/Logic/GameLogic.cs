@@ -280,8 +280,8 @@ namespace Logic
         }
         public void MoveProjectile(ref Projectile projectile)
         {
-            double x = projectile.direction.X;
-            double y = projectile.direction.Y;
+            double x = projectile.Direction.X;
+            double y = projectile.Direction.Y;
             /*double magnetude = Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
             double ux = x / magnetude;
             double uy = y / magnetude;
@@ -289,8 +289,8 @@ namespace Logic
             double newY = projectile.Cords.Y + (uy*projectile.Speed);*/
 
 
-            double newX = projectile.Cords.X + (projectile.direction.X * projectile.Speed);
-            double newY = projectile.Cords.Y + (projectile.direction.Y * projectile.Speed);
+            double newX = projectile.Cords.X + (projectile.Direction.X * projectile.Speed);
+            double newY = projectile.Cords.Y + (projectile.Direction.Y * projectile.Speed);
             if ((newX < 0 || newX >= gameModel.GameWidth) || (newY < 0 || newY >= gameModel.GameHeight))
             {
                 projectile.Timer.Stop();
