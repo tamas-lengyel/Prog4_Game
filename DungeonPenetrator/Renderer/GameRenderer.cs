@@ -12,6 +12,7 @@ namespace Renderer
     public class GameRenderer
     {
         IGameModel model;
+        Random rnd = new Random();
 
         Drawing oldBackground;
         Drawing oldLevelExit;
@@ -43,27 +44,13 @@ namespace Renderer
         List<Point> oldProjectilePosition = new List<Point>();
         int powerupCount;
         Point oldPlayerPosition;
-        Point oldMousePosition;
-
-        Dictionary<string, Brush> brushes = new Dictionary<string, Brush>();
+        Point oldMousePosition = new Point(0, 0);
 
         Pen Is = new Pen(Brushes.Black, 1);
 
-        Brush BackgroundBrush { get { return GetBrush("bg3.png", false); } }
-
-        Brush GetBrush(string fname, bool isTiled)
+        public GameRenderer(IGameModel model)
         {
-            if (!brushes.ContainsKey(fname))
-            {
-                BitmapImage bmp = new BitmapImage();
-                bmp.BeginInit();
-                bmp.StreamSource = Assembly.LoadFrom("DungeonPenetrator").GetManifestResourceStream("DungeonPenetrator.Images." + fname);
-                bmp.EndInit();
-                ImageBrush ib = new ImageBrush(bmp);
-
-                brushes.Add(fname, ib);
-            }
-            return brushes[fname];
+            this.model = model;
         }
 
         internal static BitmapImage GetImage(string fileName)
@@ -75,11 +62,6 @@ namespace Renderer
             return bmp;
         }
 
-        public GameRenderer(IGameModel model)
-        {
-            this.model = model;
-        }
-
         public Drawing BuildDrawing()
         {
             DrawingGroup dg = new DrawingGroup();
@@ -88,17 +70,18 @@ namespace Renderer
             dg.Children.Add(GetLavas());
             dg.Children.Add(GetWaters());
             dg.Children.Add(GetWalls());
-            dg.Children.Add(GetShootingMonsters());
             dg.Children.Add(GetTrackingMonsters());
             dg.Children.Add(GetPowerups());
             dg.Children.Add(GetFlyingMonsters());
-            //dg.Children.Add(GetBoss());
             dg.Children.Add(GetProjectiles());
+            dg.Children.Add(GetShootingMonsters());
+            if (model.LevelCounter % 10 ==0)
+            {
+                dg.Children.Add(GetBoss());
+            }
             dg.Children.Add(GetPlayer());
-
             dg.Children.Add(GetLevelCounter());
             dg.Children.Add(GetHpBar());
-            
             dg.Children.Add(GetPauseScreen());
             
             return dg;
@@ -108,8 +91,9 @@ namespace Renderer
         {
             if (!model.GameIsPaused)
             {
-                ImageDrawing drawing = new ImageDrawing(GetImage("stopped.png"), new Rect(1000, 1000, model.GameWidth, model.GameHeight));
-                oldPauseScreen = drawing;
+                /*ImageDrawing drawing = new ImageDrawing(GetImage("stopped.png"), new Rect(1000, 1000, model.GameWidth, model.GameHeight));
+                oldPauseScreen = drawing;*/
+                return new ImageDrawing();
             }
             if (model.GameIsPaused)
             {
@@ -157,17 +141,34 @@ namespace Renderer
         {
             if (oldBackground == null)
             {
-                Geometry g = new RectangleGeometry(new Rect(0, 0, model.GameWidth, model.GameHeight));
-                oldBackground = new GeometryDrawing(BackgroundBrush, null, g);
+                int random = rnd.Next(0, 4);
+                ImageDrawing drawing;
+                switch (random)
+                {
+                    case 1:
+                        drawing = new ImageDrawing(GetImage("bggreen.png"), new Rect(0, 0, model.GameWidth, model.GameHeight));
+                        break;
+                    case 2:
+                        drawing = new ImageDrawing(GetImage("backgroundtan.png"), new Rect(0, 0, model.GameWidth, model.GameHeight));
+                        break;
+                    case 3:
+                        drawing = new ImageDrawing(GetImage("backgroundsnowy.png"), new Rect(0, 0, model.GameWidth, model.GameHeight));
+                        break;
+                    default:
+                        drawing = new ImageDrawing(GetImage("bggreen.png"), new Rect(0, 0, model.GameWidth, model.GameHeight));
+                        break;
+                }
+                
+                oldBackground = drawing;
             }
-            
+
             return oldBackground;
         }
 
         private Drawing GetLevelExit()
         {
             DrawingGroup g = new DrawingGroup();
-            if (oldLevelExit == null || (model.ShootingMonsters.Count == 0 && model.TrackingMonsters.Count == 0 && model.FlyingMonsters.Count == 0))
+            if (oldLevelExit == null || ((model.ShootingMonsters.Count == 0 && model.TrackingMonsters.Count == 0 && model.FlyingMonsters.Count == 0)&& model.Boss==null) )
             {
                 ImageDrawing drawing = new ImageDrawing(GetImage("goal.png"), new Rect(model.LevelExit.X * GameModel.TileSize,
                            model.LevelExit.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
@@ -209,7 +210,7 @@ namespace Renderer
                 DrawingGroup g = new DrawingGroup();
                 foreach (var water in model.Waters)
                 {
-                    ImageDrawing drawing = new ImageDrawing(GetImage("water.png"), new Rect(water.Cords.X * GameModel.TileSize,
+                    ImageDrawing drawing = new ImageDrawing(GetImage("water2.png"), new Rect(water.Cords.X * GameModel.TileSize,
                         water.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
                     g.Children.Add(drawing);
                 }
@@ -382,12 +383,22 @@ namespace Renderer
 
         private Drawing GetBoss()
         {
-            if (oldBoss == null || oldBossPosition != model.Boss.Cords)
+            DrawingGroup g = new DrawingGroup();
+            if (oldBoss == null || model.Boss != null && oldBossPosition != model.Boss.Cords)
             {
-                //Geometry g = new RectangleGeometry(new Rect(model.Boss.Cords.X * GameModel.TileSize, 
-                //    model.Boss.Cords.Y * GameModel.TileSize, GameModel.TileSize, GameModel.TileSize));
-                //oldBoss = new GeometryDrawing(Brushes.Chocolate, Is, g);
-                //oldBossPosition = model.Boss.Cords;
+                ImageDrawing drawing = new ImageDrawing(GetImage("hoodghost.png"), new Rect((model.Boss.Cords.X * GameModel.TileSize) - ((GameModel.TileSize*3) / 2),
+                    (model.Boss.Cords.Y * GameModel.TileSize) - ((GameModel.TileSize * 3) / 2), GameModel.TileSize*3, GameModel.TileSize*3));
+                /*Geometry geo = new RectangleGeometry(model.Boss.Area);
+                GeometryDrawing geodr = new GeometryDrawing(null,Is,geo);
+                g.Children.Add(geodr);*/
+                g.Children.Add(drawing);
+
+                oldBoss = g;
+                oldBossPosition = model.Boss.Cords;
+            }
+            if (model.Boss==null)
+            {
+                return g;
             }
             return oldBoss;
         }
@@ -395,19 +406,44 @@ namespace Renderer
         private Drawing GetProjectiles()
         {
             DrawingGroup g = new DrawingGroup();
-            foreach (var projectile in model.Projectiles)
+            try
             {
-                if (oldFlyingMonsters == null || !oldFlyingMonstersPosition.Contains(projectile.Cords))
+                ImageDrawing drawing;
+                foreach (var projectile in model.Projectiles)
                 {
-                    ImageDrawing drawing = new ImageDrawing(GetImage("bullet3.png"), new Rect(projectile.Cords.X,
-                           projectile.Cords.Y, 10, 10));
+                    if (oldProjectiles == null || !oldProjectilePosition.Contains(projectile.Cords))
+                    {
+                        switch (projectile.Type)
+                        {
+                            case ProjectileType.Enemy:
+                                drawing = new ImageDrawing(GetImage("bullet3.png"), new Rect(projectile.Cords.X,
+                               projectile.Cords.Y, 10, 10));
+                                break;
+                            case ProjectileType.Player:
+                                drawing = new ImageDrawing(GetImage("bullet3.png"), new Rect(projectile.Cords.X,
+                               projectile.Cords.Y, 10, 10));
+                                break;
+                            case ProjectileType.Boss:
+                                drawing = new ImageDrawing(GetImage("bossbullet.png"), new Rect(projectile.Cords.X,
+                               projectile.Cords.Y, 40, 40));
+                                break;
+                            default:
+                                drawing = new ImageDrawing(GetImage("bullet3.png"), new Rect(projectile.Cords.X,
+                               projectile.Cords.Y, 10, 10));
+                                break;
+                        }
+                        
 
-                    g.Children.Add(drawing);
+                        g.Children.Add(drawing);
+                    }
                 }
+                oldProjectiles = g;
+                return oldProjectiles;
             }
-            oldProjectiles = g;
-            return oldProjectiles;
-
+            catch
+            {
+                return g;
+            }
         }
 
         private Drawing GetPlayer()

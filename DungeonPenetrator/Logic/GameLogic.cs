@@ -45,6 +45,45 @@ namespace Logic
                 gameModel.EnemyHitTickTimer.Stop();
             };
         }
+        public void UpdatePlayerInSight()
+        {
+            if (gameModel.LevelCounter%10==0)
+            {
+                double x = (gameModel.MyPlayer.Cords.X*GameModel.TileSize) - (gameModel.Boss.Cords.X*GameModel.TileSize);
+                double y = gameModel.MyPlayer.Cords.Y * GameModel.TileSize - (gameModel.Boss.Cords.Y * GameModel.TileSize);
+                double magnetude = (Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2)));
+                if (magnetude<200)
+                {
+                    gameModel.Boss.PlayerInSight = true;
+                }
+                else
+                {
+                    gameModel.Boss.PlayerInSight = false;
+                }
+            }
+        }
+        public void RandomBossMovement(Point bossLocation)
+        {
+            List<Point> possibleMoves = GetRegularEnemyNeighbours(bossLocation);
+            gameModel.Boss.Cords = possibleMoves[rnd.Next(0, possibleMoves.Count())];
+        }
+        public void BossPatternShoot(Point bossLocation, int speed, int damage)
+        {
+            foreach (var item in BossEnemy.ShootingPattern)
+            {
+                Point enemLocationCord = new Point((bossLocation.X * GameModel.TileSize), (bossLocation.Y * GameModel.TileSize));
+                Point patternLocationCord = new Point(((bossLocation.X * GameModel.TileSize)) +(item.X*GameModel.TileSize), ((bossLocation.Y * GameModel.TileSize)) + (item.Y * GameModel.TileSize));
+                Projectile projectile = new Projectile(enemLocationCord, patternLocationCord);
+                projectile.Type = ProjectileType.Enemy;
+                projectile.Damage = damage;
+                projectile.Speed = speed;
+                projectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
+                projectile.Timer.Interval = TimeSpan.FromMilliseconds(20);
+                projectile.Timer.Tick += new EventHandler((sender, e) => ProjectileTick(this, e, ref projectile));
+                projectile.Timer.Start();
+                gameModel.Projectiles.Add(projectile);
+            }
+        }
         public Projectile EnemyShoot(Point enemyLocation, int speed, int damage) 
         {
             Point enemLocationCord = new Point((enemyLocation.X * GameModel.TileSize) + GameModel.TileSize / 2, (enemyLocation.Y * GameModel.TileSize) + GameModel.TileSize / 2);
@@ -53,6 +92,16 @@ namespace Logic
             projectile.Type = ProjectileType.Enemy;
             projectile.Damage = damage;
             projectile.Speed = speed; 
+            return projectile;
+        }
+        public Projectile BossShoot(Point bossLocation, int speed, int damage)
+        {
+            Point enemLocationCord = new Point((bossLocation.X * GameModel.TileSize), (bossLocation.Y * GameModel.TileSize) );
+            Point playerLocationCord = new Point((gameModel.MyPlayer.Cords.X * GameModel.TileSize) + GameModel.TileSize / 2, (gameModel.MyPlayer.Cords.Y * GameModel.TileSize) + GameModel.TileSize / 2);
+            Projectile projectile = new Projectile(enemLocationCord, playerLocationCord);
+            projectile.Type = ProjectileType.Boss;
+            projectile.Damage = damage;
+            projectile.Speed = speed;
             return projectile;
         }
         public void CollectPowerup(Powerups powerups)
@@ -277,7 +326,7 @@ namespace Logic
 
             projectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
             projectile.Timer.Interval = TimeSpan.FromMilliseconds(20);
-            projectile.Timer.Tick += new EventHandler((sender, e) => Timer_Tick(this,e,ref projectile));
+            projectile.Timer.Tick += new EventHandler((sender, e) => ProjectileTick(this,e,ref projectile));
             Thread soundPlayThread = new Thread(() => {
                 new System.Media.SoundPlayer(Assembly.LoadFrom("DungeonPenetrator").GetManifestResourceStream("DungeonPenetrator.Images.piu2.wav")).Play();
             });
@@ -288,7 +337,7 @@ namespace Logic
             //return projectile;
         }
 
-        private void Timer_Tick(object sender, EventArgs e,ref Projectile projectile)
+        private void ProjectileTick(object sender, EventArgs e,ref Projectile projectile)
         {
 
             MoveProjectile(ref projectile);
@@ -327,7 +376,6 @@ namespace Logic
                     if (activeGameObjects.Health-damage<=0)
                     {
                         gameModel.Boss.Health = 0;
-                        gameModel.Boss = null;
                         break;
                     }
                     gameModel.Boss.Health  -= damage;
@@ -378,6 +426,8 @@ namespace Logic
         {
             List<GameObjects> rmlist = new List<GameObjects>();
             var lavas = gameModel.Lavas;
+            try
+            {
             foreach (var item in lavas)
             {
                 if (gameModel.MyPlayer.IsCollision(item))
@@ -413,7 +463,7 @@ namespace Logic
                     }
                 }
             }
-            var enemyProjectiles = gameModel.Projectiles.Where(x => x.Type.Equals(ProjectileType.Enemy));
+            var enemyProjectiles = gameModel.Projectiles.Where(x => x.Type.Equals(ProjectileType.Enemy) || x.Type.Equals(ProjectileType.Boss));
             foreach (var item in enemyProjectiles)
             {
                 if (gameModel.MyPlayer.IsCollision(item))
@@ -427,9 +477,30 @@ namespace Logic
             {
                 if (gameModel.MyPlayer.IsCollision(item))
                 {
-                    CollectPowerup(item);
-                    rmlist.Add(item);
+                        if (item.Type.Equals(PowerupType.Health) && gameModel.MyPlayer.Health<100)
+                        {
+                            CollectPowerup(item);
+                            rmlist.Add(item);
+                        }
+                        else if(!item.Type.Equals(PowerupType.Health))
+                        {
+                            CollectPowerup(item);
+                            rmlist.Add(item);
+                        }
                 }
+            }
+            if (gameModel.Boss!=null)
+            {
+                    if (gameModel.MyPlayer.IsCollision(gameModel.Boss))
+                    {
+                        if (!gameModel.MyPlayer.BeingDamagedByLava)
+                        {
+                            DamageActiveGameObject(gameModel.MyPlayer, gameModel.Boss.Damage);
+                            gameModel.MyPlayer.BeingDamagedByLava = true;
+                            gameModel.LavaTickTimer.Start();
+                        }
+                        
+                    }
             }
             foreach (var item in rmlist)
             {
@@ -448,12 +519,15 @@ namespace Logic
                         break;
                 }
             }
-
+            }
+            catch
+            {
+            }
 
         }
         public void Updater()
         {
-            if (gameModel.ShootingMonsters.Count == 0 && gameModel.TrackingMonsters.Count == 0 && gameModel.FlyingMonsters.Count == 0 && gameModel.MyPlayer.Cords==gameModel.LevelExit)
+            if (gameModel.ShootingMonsters.Count == 0 && gameModel.TrackingMonsters.Count == 0 && gameModel.FlyingMonsters.Count == 0 && gameModel.Boss==null  && gameModel.MyPlayer.Cords==gameModel.LevelExit)
             {
                 gameModel.LevelFinished = true;
             }
@@ -466,72 +540,90 @@ namespace Logic
             List<ActiveGameObjects> rmGameObjectList = new List<ActiveGameObjects>();
             List<Projectile> rmprojlist = new List<Projectile>();
             var projectiles = gameModel.Projectiles;
-            foreach (var item in projectiles)
+            try
             {
-                foreach (var walls in gameModel.Walls)
+                foreach (var item in projectiles)
                 {
-                    if (walls.IsCollision(item))
+                    foreach (var walls in gameModel.Walls)
                     {
-                        rmprojlist.Add(item);
+                        if (walls.IsCollision(item))
+                        {
+                            rmprojlist.Add(item);
+                        }
                     }
                 }
-            }
-            foreach (var item in rmprojlist)
-            {
-                item.Timer.Stop();
-                gameModel.Projectiles.Remove(item);
-            }
-            projectiles = gameModel.Projectiles.Where(x => x.Type.Equals(ProjectileType.Player)).ToList();
+                foreach (var item in rmprojlist)
+                {
+                    item.Timer.Stop();
+                    gameModel.Projectiles.Remove(item);
+                }
+                projectiles = gameModel.Projectiles.Where(x => x.Type.Equals(ProjectileType.Player)).ToList();
 
-            foreach (var item in projectiles)
-            {
-                foreach (var flying in gameModel.FlyingMonsters)
+                foreach (var item in projectiles)
                 {
-                    if (flying.IsCollision(item))
+                    foreach (var flying in gameModel.FlyingMonsters)
                     {
-                        DamageActiveGameObject(flying, item.Damage);
-                        if (flying.Health == 0)
+                        if (flying.IsCollision(item))
                         {
-                            rmGameObjectList.Add(flying);
+                            DamageActiveGameObject(flying, item.Damage);
+                            if (flying.Health == 0)
+                            {
+                                rmGameObjectList.Add(flying);
+                            }
+                            rmprojlist.Add(item);
                         }
-                        rmprojlist.Add(item);
+                    }
+                    foreach (var shooting in gameModel.ShootingMonsters)
+                    {
+                        if (shooting.IsCollision(item))
+                        {
+                            DamageActiveGameObject(shooting, item.Damage);
+                            if (shooting.Health == 0)
+                            {
+                                rmGameObjectList.Add(shooting);
+                            }
+                            rmprojlist.Add(item);
+                        }
+                    }
+                    foreach (var tracking in gameModel.TrackingMonsters)
+                    {
+                        if (tracking.IsCollision(item))
+                        {
+                            DamageActiveGameObject(tracking, item.Damage);
+                            if (tracking.Health == 0)
+                            {
+                                rmGameObjectList.Add(tracking);
+                            }
+                            rmprojlist.Add(item);
+                        }
+                    }
+                    if (gameModel.Boss!=null)
+                    {
+                        if (gameModel.Boss.IsCollision(item))
+                        {
+                            DamageActiveGameObject(gameModel.Boss, item.Damage);
+                            if (gameModel.Boss.Health == 0)
+                            {
+                                rmGameObjectList.Add(gameModel.Boss);
+                            }
+                            rmprojlist.Add(item);
+                        }
                     }
                 }
-                foreach (var shooting in gameModel.ShootingMonsters)
+                foreach (var item in rmprojlist)
                 {
-                    if (shooting.IsCollision(item))
-                    {
-                        DamageActiveGameObject(shooting, item.Damage);
-                        if (shooting.Health == 0)
-                        {
-                            rmGameObjectList.Add(shooting);
-                        }
-                        rmprojlist.Add(item);
-                    }
+                    item.Timer.Stop();
+                    gameModel.Projectiles.Remove(item);
                 }
-                foreach (var tracking in gameModel.TrackingMonsters)
+                foreach (var item in rmGameObjectList)
                 {
-                    if (tracking.IsCollision(item))
-                    {
-                        DamageActiveGameObject(tracking, item.Damage);
-                        if (tracking.Health==0)
-                        {
-                            rmGameObjectList.Add(tracking);
-                        }
-                        rmprojlist.Add(item);
-                    }
+                    DisposeEnemy(item);
                 }
             }
-            foreach (var item in rmprojlist)
+            catch
             {
-                item.Timer.Stop();
-                gameModel.Projectiles.Remove(item);
+
             }
-            foreach (var item in rmGameObjectList)
-            {
-                DisposeEnemy(item);
-            }
-            
         }
 
     }

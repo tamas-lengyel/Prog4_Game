@@ -58,5 +58,11 @@ namespace DungeonPenetrator
                 this.Close();
             }
         }
+
+        private void ControlsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ControlsWindow win = new ControlsWindow();
+            win.Show();
+        }
     }
 }

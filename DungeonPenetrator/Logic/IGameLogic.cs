@@ -18,6 +18,10 @@ namespace Logic
         void MoveRegularEnemy(ActiveGameObjects activeGameObjects);
         Projectile EnemyShoot(Point enemyLocation, int speed, int damage);
         void DisposeEnemy(ActiveGameObjects activeGameObject);
+        void UpdatePlayerInSight();
+        void BossPatternShoot(Point bossLocation, int speed, int damage);
+        void RandomBossMovement(Point bossLocation);
+        Projectile BossShoot(Point bossLocation, int speed, int damage);
 
         void Updater();
         void MoveProjectile(ref Projectile projectile);

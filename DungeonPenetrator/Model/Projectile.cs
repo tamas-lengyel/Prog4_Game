@@ -10,7 +10,7 @@ namespace Model
 {
     public enum ProjectileType
     {
-        Enemy,Player
+        Enemy,Player,Boss
     };
     public class Projectile : GameObjects
     {
@@ -30,7 +30,18 @@ namespace Model
 
         }
         public ProjectileType Type { get; set; }
-        public override Rect Area { get { return new Rect(Cords.X , Cords.Y , 10, 10); } }
+        public override Rect Area { get
+            {
+                switch (Type)
+                {
+                    case ProjectileType.Enemy or ProjectileType.Player:
+                        return new Rect(Cords.X, Cords.Y, 10, 10);
+                    case ProjectileType.Boss:
+                        return new Rect(Cords.X, Cords.Y, 40, 40);
+                    default:
+                        return new Rect(Cords.X, Cords.Y, 10, 10);
+                }
+            } }
         public DispatcherTimer Timer { get; set; }
         /*public override bool Equals(object obj)
         {

@@ -27,10 +27,10 @@ namespace Model.Passive
                     ModifyRate = 20;
                     break;
                 case PowerupType.Damage:
-                    ModifyRate = 5;
+                    ModifyRate = 2;
                     break;
                 case PowerupType.FiringSpeed:
-                    ModifyRate = 0.2d;
+                    ModifyRate = 0.1d;
                     break;
             }
         }
