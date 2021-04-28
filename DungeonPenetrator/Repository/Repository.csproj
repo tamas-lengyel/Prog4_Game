@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj" />
+    <FrameworkReference Include="Microsoft.WindowsDesktop.App" />
   </ItemGroup>
 
 </Project>
