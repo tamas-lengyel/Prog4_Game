@@ -160,7 +160,7 @@ namespace LogicTest
             Assert.That(gameModelMock.Object.FlyingMonsters[0].Health, Is.EqualTo(damagedHealth));
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Testing if bullets dissapear after collision.
         /// </summary>
         [Test]
@@ -185,7 +185,7 @@ namespace LogicTest
             gameModelMock.Object.ShootingMonsters.Add(s);
             gameLogicTest.DisposeEnemy(s);
             Assert.That(gameModelMock.Object.ShootingMonsters, Does.Not.Contain(s));
-        }
+        }*/
 
         /// <summary>
         /// Testing movement of flying enemy.
