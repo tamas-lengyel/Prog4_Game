@@ -1,35 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using Repository;
-using Model;
+﻿// <copyright file="HighScoreWindow.xaml.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace DungeonPenetrator
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Windows;
+    using Model;
+    using Repository;
+
     /// <summary>
-    /// Interaction logic for HighScoreWindow.xaml
+    /// Interaction logic for HighScoreWindow.xaml.
     /// </summary>
     public partial class HighScoreWindow : Window
     {
-        public List<Highscore> HighScores { get; private set; }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HighScoreWindow"/> class.
+        /// </summary>
         public HighScoreWindow()
         {
             HighscoreRepository hsRepo = new HighscoreRepository();
-            
-            HighScores = hsRepo.GetAll().OrderByDescending(x=>x.Level).ToList();
 
-            InitializeComponent();
+            this.HighScores = hsRepo.GetAll().OrderByDescending(x => x.Level).ToList();
+
+            this.InitializeComponent();
+
             if (this.HighScores.Count == 0)
             {
                 MessageBox.Show("No highscores yeti!");
@@ -40,12 +36,17 @@ namespace DungeonPenetrator
             }
         }
 
+        /// <summary>
+        /// Gets the highscores.
+        /// </summary>
+        public List<Highscore> HighScores { get; private set; }
+
         private void SetUpListBox()
         {
             this.listBox.Items.Add("Character Name\t Levels Completed");
-            foreach (var item in HighScores)
+            foreach (var item in this.HighScores)
             {
-                listBox.Items.Add($"{item.Name}: \t\t {item.Level}");
+                this.listBox.Items.Add($"{item.Name}: \t\t {item.Level}");
             }
         }
     }

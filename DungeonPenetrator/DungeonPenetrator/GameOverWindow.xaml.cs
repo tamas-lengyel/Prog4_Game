@@ -1,39 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using Repository;
-using Model;
-using Logic;
+﻿// <copyright file="GameOverWindow.xaml.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace DungeonPenetrator
 {
+    using System.Windows;
+    using Logic;
+    using Repository;
+
     /// <summary>
-    /// Interaction logic for GameOverWindow.xaml
+    /// Interaction logic for GameOverWindow.xaml.
     /// </summary>
     public partial class GameOverWindow : Window
     {
         private ISaveGameRepository sgRepo;
         private ILoadingLogic logic;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GameOverWindow"/> class.
+        /// </summary>
+        /// <param name="logic">loadinglogic repo.</param>
+        /// <param name="sgRepo">savegame repo.</param>
         public GameOverWindow(ILoadingLogic logic, ISaveGameRepository sgRepo)
         {
             this.logic = logic;
             this.sgRepo = sgRepo;
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            logic.EndGame(input.Text);
+            this.logic.EndGame(this.input.Text);
 
             MainMenu menu = new MainMenu();
             menu.Show();
@@ -42,7 +39,7 @@ namespace DungeonPenetrator
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            sgRepo.Insert(default);
+            this.sgRepo.Insert(default);
             MainMenu menu = new MainMenu();
             menu.Show();
             this.Close();

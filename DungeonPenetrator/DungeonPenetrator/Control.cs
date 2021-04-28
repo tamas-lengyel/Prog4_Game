@@ -1,16 +1,23 @@
-﻿using Logic;
-using Model;
-using Renderer;
-using Repository;
-using System;
-using System.Timers;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Threading;
+﻿// <copyright file="Control.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace DungeonPenetrator
 {
+    using System;
+    using System.Timers;
+    using System.Windows;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Threading;
+    using Logic;
+    using Model;
+    using Renderer;
+    using Repository;
+
+    /// <summary>
+    /// Control class.
+    /// </summary>
     internal class Control : FrameworkElement
     {
         private IGameLogic gameLogic;
@@ -29,301 +36,327 @@ namespace DungeonPenetrator
         private DispatcherTimer levelTimer;
         private DispatcherTimer moveBossTimer;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Control"/> class.
+        /// </summary>
         public Control()
         {
-            Loaded += Control_Loaded;
+            this.Loaded += this.Control_Loaded;
+        }
+
+        /// <summary>
+        /// Draws the drawing froup from Renderer DLL.
+        /// </summary>
+        /// <param name="drawingContext">Context.</param>
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            if (this.renderer != null)
+            {
+                drawingContext.DrawDrawing(this.renderer.BuildDrawing());
+            }
         }
 
         private void Control_Loaded(object sender, RoutedEventArgs e)
         {
-            model = new GameModel();
-            saveGameRepo = new SaveGameRepository();
-            highscoreRepo = new HighscoreRepository();
-            loadigLogic = new LoadingLogic(model, saveGameRepo, highscoreRepo);
-            model = loadigLogic.Play();
-            gameLogic = new GameLogic(model);
-            renderer = new GameRenderer(model);
+            this.model = new GameModel();
+            this.saveGameRepo = new SaveGameRepository();
+            this.highscoreRepo = new HighscoreRepository();
+            this.loadigLogic = new LoadingLogic(this.model, this.saveGameRepo, this.highscoreRepo);
+            this.model = this.loadigLogic.Play();
+            this.gameLogic = new GameLogic(this.model);
+            this.renderer = new GameRenderer(this.model);
             Window win = Window.GetWindow(this);
             if (win != null)
             {
-                win.KeyDown += Win_KeyDown;
+                win.KeyDown += this.Win_KeyDown;
                 win.MouseLeftButtonDown += this.Left_MouseButtonDown;
-                win.MouseMove += Win_MouseMove;
+                win.MouseMove += this.Win_MouseMove;
             }
-            updateTimer = new System.Timers.Timer();
-            updateTimer.Elapsed += new ElapsedEventHandler(this.UpdateScreen);
-            updateTimer.Interval = 30;
-            updateTimer.AutoReset = true;
-            updateTimer.Enabled = true;
-            shootOnce = new DispatcherTimer();
-            shootOnce.Interval = TimeSpan.FromMilliseconds(rnd.Next(1000, 2000));
-            shootOnce.Tick += ShootingEnemies;
-            moveOnce = new DispatcherTimer();
-            moveOnce.Interval = TimeSpan.FromMilliseconds(rnd.Next(200, 500));
-            moveOnce.Tick += MoveEnemies;
-            moveBossTimer = new DispatcherTimer();
-            moveBossTimer.Interval = TimeSpan.FromMilliseconds(800);
-            moveBossTimer.Tick += MoveBoss;
-            levelTimer = new DispatcherTimer();
-            levelTimer.Interval = TimeSpan.FromMilliseconds(200);
-            levelTimer.Tick += LevelTimer_Tick;
-            levelTimer.Start();
+
+            this.updateTimer = new System.Timers.Timer();
+            this.updateTimer.Elapsed += new ElapsedEventHandler(this.UpdateScreen);
+            this.updateTimer.Interval = 30;
+            this.updateTimer.AutoReset = true;
+            this.updateTimer.Enabled = true;
+            this.shootOnce = new DispatcherTimer();
+            this.shootOnce.Interval = TimeSpan.FromMilliseconds(this.rnd.Next(1000, 2000));
+            this.shootOnce.Tick += this.ShootingEnemies;
+            this.moveOnce = new DispatcherTimer();
+            this.moveOnce.Interval = TimeSpan.FromMilliseconds(this.rnd.Next(200, 500));
+            this.moveOnce.Tick += this.MoveEnemies;
+            this.moveBossTimer = new DispatcherTimer();
+            this.moveBossTimer.Interval = TimeSpan.FromMilliseconds(800);
+            this.moveBossTimer.Tick += this.MoveBoss;
+            this.levelTimer = new DispatcherTimer();
+            this.levelTimer.Interval = TimeSpan.FromMilliseconds(200);
+            this.levelTimer.Tick += this.LevelTimer_Tick;
+            this.levelTimer.Start();
         }
 
         private void MoveBoss(object sender, EventArgs e)
         {
-            if (model.Boss != null)
+            if (this.model.Boss != null)
             {
-                if (model.Boss.PlayerInSight)
+                if (this.model.Boss.PlayerInSight)
                 {
-                    gameLogic.MoveRegularEnemy(model.Boss);
+                    this.gameLogic.MoveRegularEnemy(this.model.Boss);
                 }
                 else
                 {
-                    gameLogic.RandomBossMovement(model.Boss.Cords);
+                    this.gameLogic.RandomBossMovement(this.model.Boss.Cords);
                 }
             }
-            moveOnce.Stop();
+
+            this.moveOnce.Stop();
         }
 
         private void LevelTimer_Tick(object sender, EventArgs e)
         {
-            if (model.MyPlayer.Health == 0)
+            if (this.model.MyPlayer.Health == 0)
             {
-                levelTimer.Stop();
-                foreach (var item in model.Projectiles)
+                this.levelTimer.Stop();
+                foreach (var item in this.model.Projectiles)
                 {
                     item.Timer.Stop();
                     item.Timer = null;
                 }
-                shootOnce.Stop();
-                moveOnce.Stop();
-                updateTimer.Stop();
-                if (reloadTimer != null)
+
+                this.shootOnce.Stop();
+                this.moveOnce.Stop();
+                this.updateTimer.Stop();
+                if (this.reloadTimer != null)
                 {
-                    reloadTimer.Stop();
+                    this.reloadTimer.Stop();
                 }
 
-                saveGameRepo.Insert(null);
+                this.saveGameRepo.Insert(null);
 
-                GameOverWindow window = new GameOverWindow(loadigLogic, saveGameRepo);
+                GameOverWindow window = new GameOverWindow(this.loadigLogic, this.saveGameRepo);
                 window.Show();
                 Window win = Window.GetWindow(this);
                 win.Close();
             }
-            if (model.LevelFinished)
+
+            if (this.model.LevelFinished)
             {
-                levelTimer.Stop();
-                foreach (var item in model.Projectiles)
+                this.levelTimer.Stop();
+                foreach (var item in this.model.Projectiles)
                 {
                     item.Timer.Stop();
                     item.Timer = null;
                 }
-                shootOnce.Stop();
-                moveOnce.Stop();
-                updateTimer.Stop();
-                if (reloadTimer != null)
+
+                this.shootOnce.Stop();
+                this.moveOnce.Stop();
+                this.updateTimer.Stop();
+                if (this.reloadTimer != null)
                 {
-                    reloadTimer.Stop();
+                    this.reloadTimer.Stop();
                 }
-                gameLogic = null;
-                renderer = null;
-                loadigLogic.NextLevel();
-                gameLogic = new GameLogic(model);
-                renderer = new GameRenderer(model);
-                saveGameRepo.Insert(model as GameModel);
-                updateTimer.Start();
-                levelTimer.Start();
+
+                this.gameLogic = null;
+                this.renderer = null;
+                this.loadigLogic.NextLevel();
+                this.gameLogic = new GameLogic(this.model);
+                this.renderer = new GameRenderer(this.model);
+                this.saveGameRepo.Insert(this.model as GameModel);
+                this.updateTimer.Start();
+                this.levelTimer.Start();
             }
         }
 
         private void ShootingEnemies(object sender, EventArgs e)
         {
-            if (model.ShootingMonsters.Count != 0)
+            if (this.model.ShootingMonsters.Count != 0)
             {
-                int rndEnemy = rnd.Next(0, model.ShootingMonsters.Count);
-                Projectile enemyProjectile = gameLogic.EnemyShoot(model.ShootingMonsters[rndEnemy].Cords, rnd.Next(6, 8), model.ShootingMonsters[rndEnemy].Damage);
-                model.Projectiles.Add(enemyProjectile);
+                int rndEnemy = this.rnd.Next(0, this.model.ShootingMonsters.Count);
+                Projectile enemyProjectile = this.gameLogic.EnemyShoot(this.model.ShootingMonsters[rndEnemy].Cords, this.rnd.Next(6, 8), this.model.ShootingMonsters[rndEnemy].Damage);
+                this.model.Projectiles.Add(enemyProjectile);
                 enemyProjectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
                 enemyProjectile.Timer.Interval = TimeSpan.FromMilliseconds(20);
                 enemyProjectile.Timer.Tick += delegate
                 {
-                    gameLogic.MoveProjectile(ref enemyProjectile);
+                    this.gameLogic.MoveProjectile(ref enemyProjectile);
                 };
                 enemyProjectile.Timer.Start();
             }
-            if (model.Boss != null && !model.Boss.PlayerInSight)
+
+            if (this.model.Boss != null && !this.model.Boss.PlayerInSight)
             {
-                int rndNum = rnd.Next(0, 100);
+                int rndNum = this.rnd.Next(0, 100);
                 if (rndNum > 60)
                 {
-                    gameLogic.BossPatternShoot(model.Boss.Cords, rnd.Next(4, 6), model.Boss.Damage);
+                    this.gameLogic.BossPatternShoot(this.model.Boss.Cords, this.rnd.Next(4, 6), this.model.Boss.Damage);
                 }
                 else
                 {
-                    Projectile bossProjectile = gameLogic.BossShoot(model.Boss.Cords, rnd.Next(8, 10), model.Boss.Damage*2);
-                    model.Projectiles.Add(bossProjectile);
+                    Projectile bossProjectile = this.gameLogic.BossShoot(this.model.Boss.Cords, this.rnd.Next(8, 10), this.model.Boss.Damage * 2);
+                    this.model.Projectiles.Add(bossProjectile);
                     bossProjectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
                     bossProjectile.Timer.Interval = TimeSpan.FromMilliseconds(20);
                     bossProjectile.Timer.Tick += delegate
                     {
-                        gameLogic.MoveProjectile(ref bossProjectile);
+                        this.gameLogic.MoveProjectile(ref bossProjectile);
                     };
                     bossProjectile.Timer.Start();
                 }
             }
-            shootOnce.Stop();
+
+            this.shootOnce.Stop();
         }
 
         private void Win_MouseMove(object sender, MouseEventArgs e)
         {
-            model.MousePosition = e.GetPosition(this);
+            this.model.MousePosition = e.GetPosition(this);
         }
 
         private void UpdateScreen(object sender, EventArgs e)
         {
-            shootOnce.Start();
-            moveOnce.Start();
-            moveBossTimer.Start();
-            if (model.Boss != null)
+            this.shootOnce.Start();
+            this.moveOnce.Start();
+            this.moveBossTimer.Start();
+            if (this.model.Boss != null)
             {
-                gameLogic.UpdatePlayerInSight();
+                this.gameLogic.UpdatePlayerInSight();
             }
-            gameLogic.Updater();
-            try { this.Dispatcher.Invoke(() => this.InvalidateVisual()); } // update screen
-            catch (Exception) { }
-        }
 
-        protected override void OnRender(DrawingContext drawingContext)
-        {
-            if (renderer != null)
+            this.gameLogic.Updater();
+            try
             {
-                drawingContext.DrawDrawing(renderer.BuildDrawing());
+                this.Dispatcher.Invoke(() => this.InvalidateVisual());
+            } // update screen
+            catch (Exception)
+            {
             }
         }
 
         private void MoveEnemies(object sender, EventArgs e)
         {
-            if (model.TrackingMonsters.Count != 0)
+            if (this.model.TrackingMonsters.Count != 0)
             {
-                int rndTrackingEnemyInd = rnd.Next(0, model.TrackingMonsters.Count);
-                gameLogic.MoveRegularEnemy(model.TrackingMonsters[rndTrackingEnemyInd]);
+                int rndTrackingEnemyInd = this.rnd.Next(0, this.model.TrackingMonsters.Count);
+                this.gameLogic.MoveRegularEnemy(this.model.TrackingMonsters[rndTrackingEnemyInd]);
             }
-            if (model.FlyingMonsters.Count != 0)
+
+            if (this.model.FlyingMonsters.Count != 0)
             {
-                int rndFlyingEnemyInd = rnd.Next(0, model.FlyingMonsters.Count);
-                gameLogic.MoveFlyingEnemy(model.FlyingMonsters[rndFlyingEnemyInd]);
+                int rndFlyingEnemyInd = this.rnd.Next(0, this.model.FlyingMonsters.Count);
+                this.gameLogic.MoveFlyingEnemy(this.model.FlyingMonsters[rndFlyingEnemyInd]);
             }
         }
 
         private void Left_MouseButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (!model.MyPlayer.IsReloading && !model.GameIsPaused)
+            if (!this.model.MyPlayer.IsReloading && !this.model.GameIsPaused)
             {
-                reloadTimer = new DispatcherTimer();
+                this.reloadTimer = new DispatcherTimer();
                 Point mousePos = new Point(e.GetPosition((IInputElement)sender).X, e.GetPosition((IInputElement)sender).Y);
-                model.MyPlayer.IsReloading = true;
-                gameLogic.PlayerShoot(mousePos, 10);
-                reloadTimer.Tick += delegate
+                this.model.MyPlayer.IsReloading = true;
+                this.gameLogic.PlayerShoot(mousePos, 10);
+                this.reloadTimer.Tick += delegate
                 {
-                    model.MyPlayer.IsReloading = false;
-                    reloadTimer.Stop();
+                    this.model.MyPlayer.IsReloading = false;
+                    this.reloadTimer.Stop();
                 };
-                reloadTimer.Interval = TimeSpan.FromMilliseconds(500 / model.MyPlayer.FiringSpeed);
-                reloadTimer.Start();
+                this.reloadTimer.Interval = TimeSpan.FromMilliseconds(500 / this.model.MyPlayer.FiringSpeed);
+                this.reloadTimer.Start();
             }
         }
 
         private void Win_KeyDown(object sender, KeyEventArgs e)
         {
-            if (canmove && !model.GameIsPaused)
+            if (this.canmove && !this.model.GameIsPaused)
             {
                 switch (e.Key)
                 {
                     case Key.A:
-                        gameLogic.MovePlayer(-1, 0);
-                        canmove = false;
-                        moveOnce.Tick += delegate
+                        this.gameLogic.MovePlayer(-1, 0);
+                        this.canmove = false;
+                        this.moveOnce.Tick += delegate
                         {
-                            canmove = true;
-                            moveOnce.Stop();
+                            this.canmove = true;
+                            this.moveOnce.Stop();
                         };
-                        moveOnce.Interval = TimeSpan.FromMilliseconds(100);
-                        moveOnce.Start();
+                        this.moveOnce.Interval = TimeSpan.FromMilliseconds(100);
+                        this.moveOnce.Start();
                         break;
 
                     case Key.D:
-                        gameLogic.MovePlayer(1, 0);
-                        canmove = false;
-                        moveOnce.Tick += delegate
+                        this.gameLogic.MovePlayer(1, 0);
+                        this.canmove = false;
+                        this.moveOnce.Tick += delegate
                         {
-                            canmove = true;
-                            moveOnce.Stop();
+                            this.canmove = true;
+                            this.moveOnce.Stop();
                         };
-                        moveOnce.Interval = TimeSpan.FromMilliseconds(100);
-                        moveOnce.Start();
+                        this.moveOnce.Interval = TimeSpan.FromMilliseconds(100);
+                        this.moveOnce.Start();
                         break;
 
                     case Key.W:
-                        gameLogic.MovePlayer(0, -1);
-                        canmove = false;
-                        moveOnce.Tick += delegate
+                        this.gameLogic.MovePlayer(0, -1);
+                        this.canmove = false;
+                        this.moveOnce.Tick += delegate
                         {
-                            canmove = true;
-                            moveOnce.Stop();
+                            this.canmove = true;
+                            this.moveOnce.Stop();
                         };
-                        moveOnce.Interval = TimeSpan.FromMilliseconds(100);
-                        moveOnce.Start();
+                        this.moveOnce.Interval = TimeSpan.FromMilliseconds(100);
+                        this.moveOnce.Start();
                         break;
 
                     case Key.S:
-                        gameLogic.MovePlayer(0, 1);
-                        canmove = false;
-                        moveOnce.Tick += delegate
+                        this.gameLogic.MovePlayer(0, 1);
+                        this.canmove = false;
+                        this.moveOnce.Tick += delegate
                         {
-                            canmove = true;
-                            moveOnce.Stop();
+                            this.canmove = true;
+                            this.moveOnce.Stop();
                         };
-                        moveOnce.Interval = TimeSpan.FromMilliseconds(100);
-                        moveOnce.Start();
+                        this.moveOnce.Interval = TimeSpan.FromMilliseconds(100);
+                        this.moveOnce.Start();
                         break;
 
                     default:
                         break;
                 }
             }
+
             if (e.Key == Key.Escape)
             {
-                model.GameIsPaused = !model.GameIsPaused;
-                if (!model.GameIsPaused)
+                this.model.GameIsPaused = !this.model.GameIsPaused;
+                if (!this.model.GameIsPaused)
                 {
-                    foreach (var item in model.Projectiles)
+                    foreach (var item in this.model.Projectiles)
                     {
                         item.Timer.Start();
                     }
-                    updateTimer.Start();
-                    levelTimer.Start();
-                    if (reloadTimer != null)
+
+                    this.updateTimer.Start();
+                    this.levelTimer.Start();
+                    if (this.reloadTimer != null)
                     {
-                        reloadTimer.Start();
+                        this.reloadTimer.Start();
                     }
                 }
                 else
                 {
-                    levelTimer.Stop();
-                    foreach (var item in model.Projectiles)
+                    this.levelTimer.Stop();
+                    foreach (var item in this.model.Projectiles)
                     {
                         item.Timer.Stop();
                     }
-                    shootOnce.Stop();
-                    moveOnce.Stop();
-                    updateTimer.Stop();
-                    if (reloadTimer != null)
+
+                    this.shootOnce.Stop();
+                    this.moveOnce.Stop();
+                    this.updateTimer.Stop();
+                    if (this.reloadTimer != null)
                     {
-                        reloadTimer.Stop();
+                        this.reloadTimer.Stop();
                     }
                 }
-                InvalidateVisual();
+
+                this.InvalidateVisual();
             }
         }
     }
