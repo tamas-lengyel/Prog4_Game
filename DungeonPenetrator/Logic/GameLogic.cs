@@ -87,7 +87,7 @@ namespace Logic
                 projectile.Speed = speed;
                 projectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
                 projectile.Timer.Interval = TimeSpan.FromMilliseconds(20);
-                projectile.Timer.Tick += new EventHandler((sender, e) => this.ProjectileTick(this, e, ref projectile));
+                projectile.Timer.Tick += new EventHandler((sender, e) => this.ProjectileTick(ref projectile));
                 projectile.Timer.Start();
                 this.gameModel.Projectiles.Add(projectile);
             }
@@ -221,7 +221,7 @@ namespace Logic
 
             projectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
             projectile.Timer.Interval = TimeSpan.FromMilliseconds(20);
-            projectile.Timer.Tick += new EventHandler((sender, e) => this.ProjectileTick(this, e, ref projectile));
+            projectile.Timer.Tick += new EventHandler((sender, e) => this.ProjectileTick(ref projectile));
             Thread soundPlayThread = new Thread(() =>
             {
                 new System.Media.SoundPlayer(Assembly.LoadFrom("DungeonPenetrator").GetManifestResourceStream("DungeonPenetrator.Images.piu2.wav")).Play();
@@ -713,7 +713,7 @@ namespace Logic
             }
         }
 
-        private void ProjectileTick(object sender, EventArgs e, ref Projectile projectile)
+        private void ProjectileTick(ref Projectile projectile)
         {
             this.MoveProjectile(ref projectile);
         }
