@@ -125,9 +125,21 @@
             MainWindow
             </summary>
         </member>
-        <member name="M:DungeonPenetrator.MainWindow.#ctor">
+        <member name="M:DungeonPenetrator.MainWindow.#ctor(System.Boolean,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:DungeonPenetrator.MainWindow"/> class.
+            </summary>
+            <param name="autoOrManual">Auto or Manual saving.</param>
+            <param name="loadFilePath">File Path.</param>
+        </member>
+        <member name="P:DungeonPenetrator.MainWindow.AutoOrManual">
+            <summary>
+            Gets or sets a value indicating whether the saving is Auto or Manual.
+            </summary>
+        </member>
+        <member name="P:DungeonPenetrator.MainWindow.LoadFilePath">
+            <summary>
+            Gets or sets the file path.
             </summary>
         </member>
         <member name="M:DungeonPenetrator.MainWindow.InitializeComponent">

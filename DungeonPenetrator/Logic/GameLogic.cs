@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+[assembly: System.CLSCompliant(false)]
+
 namespace Logic
 {
     using System;
@@ -87,14 +89,14 @@ namespace Logic
                 projectile.Speed = speed;
                 projectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
                 projectile.Timer.Interval = TimeSpan.FromMilliseconds(20);
-                projectile.Timer.Tick += new EventHandler((sender, e) => this.ProjectileTick(this, e, ref projectile));
+                projectile.Timer.Tick += new EventHandler((sender, e) => this.ProjectileTick(projectile));
                 projectile.Timer.Start();
                 this.gameModel.Projectiles.Add(projectile);
             }
         }
 
         /// <inheritdoc/>
-        public Projectile EnemyShoot(Point enemyLocation, int speed, int damage)
+        public void EnemyShoot(Point enemyLocation, int speed, int damage)
         {
             Point enemLocationCord = new Point((enemyLocation.X * GameModel.TileSize) + (GameModel.TileSize / 2), (enemyLocation.Y * GameModel.TileSize) + (GameModel.TileSize / 2));
             Point playerLocationCord = new Point((this.gameModel.MyPlayer.Cords.X * GameModel.TileSize) + (GameModel.TileSize / 2), (this.gameModel.MyPlayer.Cords.Y * GameModel.TileSize) + (GameModel.TileSize / 2));
@@ -102,11 +104,18 @@ namespace Logic
             projectile.Type = ProjectileType.Enemy;
             projectile.Damage = damage;
             projectile.Speed = speed;
-            return projectile;
+            projectile.Type = ProjectileType.Enemy;
+            projectile.Damage = damage;
+            projectile.Speed = speed;
+            projectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
+            projectile.Timer.Interval = TimeSpan.FromMilliseconds(20);
+            projectile.Timer.Tick += new EventHandler((sender, e) => this.ProjectileTick(projectile));
+            projectile.Timer.Start();
+            this.gameModel.Projectiles.Add(projectile);
         }
 
         /// <inheritdoc/>
-        public Projectile BossShoot(Point bossLocation, int speed, int damage)
+        public void BossShoot(Point bossLocation, int speed, int damage)
         {
             Point enemLocationCord = new Point(bossLocation.X * GameModel.TileSize, bossLocation.Y * GameModel.TileSize);
             Point playerLocationCord = new Point((this.gameModel.MyPlayer.Cords.X * GameModel.TileSize) + (GameModel.TileSize / 2), (this.gameModel.MyPlayer.Cords.Y * GameModel.TileSize) + (GameModel.TileSize / 2));
@@ -114,7 +123,14 @@ namespace Logic
             projectile.Type = ProjectileType.Boss;
             projectile.Damage = damage;
             projectile.Speed = speed;
-            return projectile;
+            projectile.Type = ProjectileType.Enemy;
+            projectile.Damage = damage;
+            projectile.Speed = speed;
+            projectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
+            projectile.Timer.Interval = TimeSpan.FromMilliseconds(20);
+            projectile.Timer.Tick += new EventHandler((sender, e) => this.ProjectileTick(projectile));
+            projectile.Timer.Start();
+            this.gameModel.Projectiles.Add(projectile);
         }
 
         /// <inheritdoc/>
@@ -171,15 +187,16 @@ namespace Logic
         }
 
         /// <inheritdoc/>
-        public void MoveProjectile(ref Projectile projectile)
+        public void MoveProjectile(Projectile projectile)
         {
+            projectile = this.gameModel.Projectiles.Find(x => x == projectile);
+            if (projectile == null)
+            {
+                return;
+            }
+
             double x = projectile.Direction.X;
             double y = projectile.Direction.Y;
-            /*double magnetude = Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
-            double ux = x / magnetude;
-            double uy = y / magnetude;
-            double newX = projectile.Cords.X + (ux*projectile.Speed);
-            double newY = projectile.Cords.Y + (uy*projectile.Speed);*/
 
             double newX = projectile.Cords.X + (projectile.Direction.X * projectile.Speed);
             double newY = projectile.Cords.Y + (projectile.Direction.Y * projectile.Speed);
@@ -221,7 +238,7 @@ namespace Logic
 
             projectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
             projectile.Timer.Interval = TimeSpan.FromMilliseconds(20);
-            projectile.Timer.Tick += new EventHandler((sender, e) => this.ProjectileTick(this, e, ref projectile));
+            projectile.Timer.Tick += new EventHandler((sender, e) => this.ProjectileTick(projectile));
             Thread soundPlayThread = new Thread(() =>
             {
                 new System.Media.SoundPlayer(Assembly.LoadFrom("DungeonPenetrator").GetManifestResourceStream("DungeonPenetrator.Images.piu2.wav")).Play();
@@ -713,9 +730,9 @@ namespace Logic
             }
         }
 
-        private void ProjectileTick(object sender, EventArgs e, ref Projectile projectile)
+        private void ProjectileTick(Projectile projectile)
         {
-            this.MoveProjectile(ref projectile);
+            this.MoveProjectile(projectile);
         }
     }
 }
