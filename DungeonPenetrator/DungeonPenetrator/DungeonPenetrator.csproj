@@ -34,9 +34,16 @@
     <None Remove="Images\piu2.wav" />
     <None Remove="Images\redpotion.png" />
     <None Remove="Images\rock100.png" />
+    <None Remove="Images\rugoskes.mp4" />
     <None Remove="Images\stopped.png" />
     <None Remove="Images\water2.png" />
     <None Remove="Images\yellowpotion.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Images\rugoskes.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

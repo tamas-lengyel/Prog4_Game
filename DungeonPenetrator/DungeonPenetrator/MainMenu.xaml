@@ -15,7 +15,7 @@
         <VisualBrush>
             <VisualBrush.Visual>
                 <StackPanel Background="White">
-                    <MediaElement Source="pack://application:,,,/Images/rugoskes.mp4" IsMuted="True"></MediaElement>
+                    <MediaElement Name="VideoPlayer" Source="Images/rugoskes.mp4" IsMuted="True" MediaEnded="MediaElement_MediaEnded" LoadedBehavior="Manual"></MediaElement>
                 </StackPanel>
             </VisualBrush.Visual>
         </VisualBrush>
