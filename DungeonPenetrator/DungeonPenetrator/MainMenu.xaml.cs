@@ -30,16 +30,18 @@ namespace DungeonPenetrator
             if (this.asgRepo.GetSaveGame() == null)
             {
                 this.newOrContinue.Content = "New Game";
+                this.newGame.Visibility = Visibility.Hidden;
             }
             else
             {
                 this.newOrContinue.Content = "Continue Game";
+                this.newGame.Visibility = Visibility.Visible;
             }
 
             this.VideoPlayer.Play();
         }
 
-        private void NewGameBtn_Click(object sender, RoutedEventArgs e)
+        private void NewOrCountinue_Click(object sender, RoutedEventArgs e)
         {
             MainWindow mw = new MainWindow(false, "auto");
             mw.Show();
@@ -77,10 +79,38 @@ namespace DungeonPenetrator
 
         private void LoadGameManually(object sender, RoutedEventArgs e)
         {
-            LoadGameWindow load = new LoadGameWindow();
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.DefaultExt = ".json";
+            dlg.Filter = "Json File (*.json)|*.json";
+            dlg.FileName = "*.json";
+
+            // Show open file dialog box
+            bool? result = dlg.ShowDialog();
+
+            // Process open file dialog box results
+            if (result == true)
+            {
+                // Open document
+                MainWindow mw = new MainWindow(true, dlg.FileName);
+                mw.Show();
+                this.Close();
+            }
+
+            /*LoadGameWindow load = new LoadGameWindow();
             if (load.ShowDialog() == true)
             {
                 MainWindow mw = new MainWindow(true, load.FilePath);
+                mw.Show();
+                this.Close();
+            }*/
+        }
+
+        private void NewGame_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("You are going to delete any progress which is not manually saved.\nAre you sure to continue?", "New Game", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                this.asgRepo.Insert(null);
+                MainWindow mw = new MainWindow(false, "auto");
                 mw.Show();
                 this.Close();
             }

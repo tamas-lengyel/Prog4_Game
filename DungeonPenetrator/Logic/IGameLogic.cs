@@ -50,8 +50,7 @@ namespace Logic
         /// <param name="enemyLocation">Defines the starting location of the new projectile.</param>
         /// <param name="speed">Defines the speed of the new projectile.</param>
         /// <param name="damage">Defines the damage of the projectile.</param>
-        /// <returns>A projectile which is setup to be moved.</returns>
-        Projectile EnemyShoot(Point enemyLocation, int speed, int damage);
+        void EnemyShoot(Point enemyLocation, int speed, int damage);
 
         /// <summary>
         /// Updates the boss's sight whether the player is in range.
@@ -78,8 +77,7 @@ namespace Logic
         /// <param name="bossLocation">Defines the starting location of the new projectile.</param>
         /// <param name="speed">Defines the speed of the new projectile.</param>
         /// <param name="damage">Defines the damage of the projectile.</param>
-        /// <returns>A projectile which is setup to be moved.</returns>
-        Projectile BossShoot(Point bossLocation, int speed, int damage);
+        void BossShoot(Point bossLocation, int speed, int damage);
 
         /// <summary>
         /// The main updater of the game checks basic intersects and game states.
@@ -90,7 +88,7 @@ namespace Logic
         /// Moves a projectile torwards it's direction.
         /// </summary>
         /// <param name="projectile">Defines the projectile which should be moved.</param>
-        void MoveProjectile(ref Projectile projectile);
+        void MoveProjectile(Projectile projectile);
 
         /// <summary>
         /// Defines the behavior of powerups when the player collects them.

@@ -18,7 +18,8 @@ namespace DungeonPenetrator
     /// </summary>
     public partial class MainWindow : Window
     {
-        public bool AutoOrManual { get; set; }
+        public bool AutoOrManual { get; set; } // Manual = true auto=false
+
         public string LoadFilePath { get; set; }
 
         /// <summary>
@@ -30,18 +31,6 @@ namespace DungeonPenetrator
             this.LoadFilePath = loadFilePath;
 
             this.InitializeComponent();
-
-            this.exitButton.Visibility = Visibility.Hidden;
-
-            this.KeyDown += this.MainWindow_KeyDown;
-        }
-
-        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Escape)
-            {
-                this.exitButton.Visibility = Visibility.Visible;
-            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -52,11 +41,6 @@ namespace DungeonPenetrator
                 menu.Show();
                 this.Close();
             }
-        }
-
-        private void SaveGameClick(object sender, RoutedEventArgs e)
-        {
-            
         }
     }
 }

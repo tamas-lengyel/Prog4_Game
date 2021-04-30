@@ -15,8 +15,5 @@
         <Button Name="exitButton" Margin="650,761,0,0" FontSize="30" Background="#808080" FontFamily="Berlin Sans FB" Click="Button_Click" BorderThickness="5" BorderBrush="#666666" >
             Exit
         </Button>
-        <Button  Margin="474,825,105,0" FontSize="30" Background="#808080" FontFamily="Berlin Sans FB" Click="SaveGameClick" BorderThickness="5" BorderBrush="#666666" >
-            Save Game
-        </Button>
     </Grid>
 </Window>
