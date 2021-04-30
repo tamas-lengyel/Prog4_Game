@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+[assembly: System.CLSCompliant(false)]
+
 namespace LogicTest
 {
     using System.Collections.Generic;

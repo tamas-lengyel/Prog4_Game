@@ -40,7 +40,7 @@
         <member name="M:Logic.GameLogic.DropRandomCollectable">
             <inheritdoc/>
         </member>
-        <member name="M:Logic.GameLogic.MoveProjectile(Model.Projectile@)">
+        <member name="M:Logic.GameLogic.MoveProjectile(Model.Projectile)">
             <inheritdoc/>
         </member>
         <member name="M:Logic.GameLogic.MovePlayer(System.Int32,System.Int32)">
@@ -96,7 +96,6 @@
             <param name="enemyLocation">Defines the starting location of the new projectile.</param>
             <param name="speed">Defines the speed of the new projectile.</param>
             <param name="damage">Defines the damage of the projectile.</param>
-            <returns>A projectile which is setup to be moved.</returns>
         </member>
         <member name="M:Logic.IGameLogic.UpdatePlayerInSight">
             <summary>
@@ -124,14 +123,13 @@
             <param name="bossLocation">Defines the starting location of the new projectile.</param>
             <param name="speed">Defines the speed of the new projectile.</param>
             <param name="damage">Defines the damage of the projectile.</param>
-            <returns>A projectile which is setup to be moved.</returns>
         </member>
         <member name="M:Logic.IGameLogic.Updater">
             <summary>
             The main updater of the game checks basic intersects and game states.
             </summary>
         </member>
-        <member name="M:Logic.IGameLogic.MoveProjectile(Model.Projectile@)">
+        <member name="M:Logic.IGameLogic.MoveProjectile(Model.Projectile)">
             <summary>
             Moves a projectile torwards it's direction.
             </summary>

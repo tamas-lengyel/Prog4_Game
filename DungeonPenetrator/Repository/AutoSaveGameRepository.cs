@@ -1,4 +1,4 @@
-﻿// <copyright file="SaveGameRepository.cs" company="PlaceholderCompany">
+﻿// <copyright file="AutoSaveGameRepository.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -12,17 +12,17 @@ namespace Repository
     /// <summary>
     /// SaveGame repo, this manages the saves.
     /// </summary>
-    public class SaveGameRepository : StorageRepository<GameModel>, ISaveGameRepository
+    public class AutoSaveGameRepository : StorageRepository<GameModel>, ISaveGameRepository
     {
         private string filename;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SaveGameRepository"/> class.
+        /// Initializes a new instance of the <see cref="AutoSaveGameRepository"/> class.
         /// </summary>
-        public SaveGameRepository()
+        public AutoSaveGameRepository()
             : base()
         {
-            this.filename = "savegame.json";
+            this.filename = "autosavegame.json";
             if (!Directory.Exists(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + $@"\Saves\"))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + $@"\Saves\");

@@ -4,8 +4,10 @@
 
 namespace DungeonPenetrator
 {
+    using System;
     using System.Windows;
     using System.Windows.Media;
+    using Model;
     using Repository;
 
     /// <summary>
@@ -13,9 +15,7 @@ namespace DungeonPenetrator
     /// </summary>
     public partial class MainMenu : Window
     {
-        private SaveGameRepository sgRepo = new SaveGameRepository();
-
-        // private MediaPlayer player = new MediaPlayer();
+        private AutoSaveGameRepository asgRepo = new AutoSaveGameRepository();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainMenu"/> class.
@@ -24,45 +24,23 @@ namespace DungeonPenetrator
         {
             this.InitializeComponent();
 
-            if (this.sgRepo.GetSaveGame() == null)
+            if (this.asgRepo.GetSaveGame() == null)
             {
                 this.newOrContinue.Content = "New Game";
+                this.newGame.Visibility = Visibility.Hidden;
             }
             else
             {
                 this.newOrContinue.Content = "Continue Game";
+                this.newGame.Visibility = Visibility.Visible;
             }
 
-            // player.Open(new Uri("pack://application:,,,/Images/rugoskes.mp4", UriKind.Absolute));
-            // VideoDrawing drawing = new VideoDrawing { Rect = new Rect(0, 0, 800, 600), Player = player };
-            // player.Play();
-
-            ////GeometryDrawing geometryDrawing = new GeometryDrawing(Brushes.Red,null, new RectangleGeometry(new Rect(0,0,800,600)));
-
-            // DrawingBrush brush = new DrawingBrush(drawing);
-            // Background = brush;
-
-            //// Create a MediaTimeline.
-            // MediaTimeline mTimeline =
-            //    new MediaTimeline(new Uri("pack://application:,,,/Images/Niggacat.gif", UriKind.Absolute));
-
-            //// Set the timeline to repeat.
-            // mTimeline.RepeatBehavior = System.Windows.Media.Animation.RepeatBehavior.Forever;
-
-            //// Create a clock from the MediaTimeline.
-            // MediaClock mClock = mTimeline.CreateClock();
-
-            // MediaPlayer repeatingVideoDrawingPlayer = new MediaPlayer();
-            // repeatingVideoDrawingPlayer.Clock = mClock;
-
-            // VideoDrawing repeatingVideoDrawing = new VideoDrawing();
-            // repeatingVideoDrawing.Rect = new Rect(150, 0, 100, 100);
-            // repeatingVideoDrawing.Player = repeatingVideoDrawingPlayer;
+            this.VideoPlayer.Play();
         }
 
-        private void NewGameBtn_Click(object sender, RoutedEventArgs e)
+        private void NewOrCountinue_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow mw = new MainWindow();
+            MainWindow mw = new MainWindow(false, "auto");
             mw.Show();
             this.Close();
         }
@@ -88,6 +66,43 @@ namespace DungeonPenetrator
         {
             ControlsWindow win = new ControlsWindow();
             win.Show();
+        }
+
+        private void MediaElement_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            this.VideoPlayer.Position = TimeSpan.FromSeconds(0);
+            this.VideoPlayer.Play();
+        }
+
+        private void LoadGameManually(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.DefaultExt = ".json";
+            dlg.Filter = "Json File (*.json)|*.json";
+            dlg.FileName = "*.json";
+
+            // Show open file dialog box
+            bool? result = dlg.ShowDialog();
+
+            // Process open file dialog box results
+            if (result == true)
+            {
+                // Open document
+                MainWindow mw = new MainWindow(true, dlg.FileName);
+                mw.Show();
+                this.Close();
+            }
+        }
+
+        private void NewGame_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("You are going to delete any progress which is not manually saved.\nAre you sure to continue?", "New Game", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                this.asgRepo.Insert(null);
+                MainWindow mw = new MainWindow(false, "auto");
+                mw.Show();
+                this.Close();
+            }
         }
     }
 }
