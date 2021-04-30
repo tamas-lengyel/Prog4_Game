@@ -1,4 +1,4 @@
-﻿// <copyright file="SaveGameRepository.cs" company="PlaceholderCompany">
+﻿// <copyright file="AutoSaveGameRepository.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 

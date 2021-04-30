@@ -190,13 +190,13 @@ namespace Logic
         public void MoveProjectile(Projectile projectile)
         {
             projectile = this.gameModel.Projectiles.Find(x => x == projectile);
+            if (projectile == null)
+            {
+                return;
+            }
+
             double x = projectile.Direction.X;
             double y = projectile.Direction.Y;
-            /*double magnetude = Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
-            double ux = x / magnetude;
-            double uy = y / magnetude;
-            double newX = projectile.Cords.X + (ux*projectile.Speed);
-            double newY = projectile.Cords.Y + (uy*projectile.Speed);*/
 
             double newX = projectile.Cords.X + (projectile.Direction.X * projectile.Speed);
             double newY = projectile.Cords.Y + (projectile.Direction.Y * projectile.Speed);

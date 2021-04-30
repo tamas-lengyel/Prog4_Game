@@ -82,10 +82,16 @@
             </summary>
             <param name="entity">Generic type entity.</param>
         </member>
+        <member name="T:Repository.ManualSaveGameRepository">
+            <summary>
+            Repository for manual saving.
+            </summary>
+        </member>
         <member name="M:Repository.ManualSaveGameRepository.#ctor(System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Repository.ManualSaveGameRepository"/> class.
             </summary>
+            <param name="filename">Filename the user writes in the input field.</param>
         </member>
         <member name="M:Repository.ManualSaveGameRepository.GetSaveGame">
             <summary>

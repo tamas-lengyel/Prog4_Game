@@ -10,7 +10,6 @@
         WindowStartupLocation="CenterScreen">
 
     <Grid Background="LightGray">
-        <!--<local:Control/>-->
         <local:Control/>
         <Button Name="exitButton" Margin="650,761,0,0" FontSize="30" Background="#808080" FontFamily="Berlin Sans FB" Click="Button_Click" BorderThickness="5" BorderBrush="#666666" >
             Exit

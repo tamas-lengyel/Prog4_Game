@@ -1,10 +1,17 @@
-﻿using Model;
-using Newtonsoft.Json;
-using System.IO;
-using System.Reflection;
+﻿// <copyright file="ManualSaveGameRepository.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace Repository
 {
+    using System.IO;
+    using System.Reflection;
+    using Model;
+    using Newtonsoft.Json;
+
+    /// <summary>
+    /// Repository for manual saving.
+    /// </summary>
     public class ManualSaveGameRepository : StorageRepository<GameModel>, ISaveGameRepository
     {
         private string filename;
@@ -12,14 +19,11 @@ namespace Repository
         /// <summary>
         /// Initializes a new instance of the <see cref="ManualSaveGameRepository"/> class.
         /// </summary>
+        /// <param name="filename">Filename the user writes in the input field.</param>
         public ManualSaveGameRepository(string filename)
             : base()
         {
             this.filename = filename;
-            /*if (!Directory.Exists(filename))
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + $@"\Saves\");
-            }*/
 
             if (!File.Exists(filename))
             {
@@ -33,7 +37,7 @@ namespace Repository
         /// <returns>A GameModel.</returns>
         public GameModel GetSaveGame()
         {
-            if (File.ReadAllText(filename) == string.Empty)
+            if (File.ReadAllText(this.filename) == string.Empty)
             {
                 return default;
             }

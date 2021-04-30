@@ -17,9 +17,6 @@ namespace DungeonPenetrator
     {
         private AutoSaveGameRepository asgRepo = new AutoSaveGameRepository();
 
-
-        // private MediaPlayer player = new MediaPlayer();
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MainMenu"/> class.
         /// </summary>
@@ -95,14 +92,6 @@ namespace DungeonPenetrator
                 mw.Show();
                 this.Close();
             }
-
-            /*LoadGameWindow load = new LoadGameWindow();
-            if (load.ShowDialog() == true)
-            {
-                MainWindow mw = new MainWindow(true, load.FilePath);
-                mw.Show();
-                this.Close();
-            }*/
         }
 
         private void NewGame_Click(object sender, RoutedEventArgs e)
