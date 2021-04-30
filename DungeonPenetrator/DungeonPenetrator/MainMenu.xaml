@@ -47,6 +47,7 @@
         </Grid.Background>-->
         <StackPanel Margin="10,10,1435,492">
             <Button FontFamily="Berlin Sans FB" Name="newOrContinue" Height="100" Width="400" Margin="20" Click="NewGameBtn_Click"></Button>
+            <Button FontFamily="Berlin Sans FB" Name="load" Height="100" Width="400" Margin="20" Click="LoadGameManually"></Button>
             <Button FontFamily="Berlin Sans FB" Height="100" Width="400" Margin="20" Click="HighscoresBtn_Click">Highscores</Button>
             <Button FontFamily="Berlin Sans FB" Height="100" Width="400" Margin="20" Click="ControlsBtn_Click">Controls</Button>
             <Button FontFamily="Berlin Sans FB" Height="100" Width="400" Margin="20" Click="QuitGameBtn_Click">Quit Game</Button>

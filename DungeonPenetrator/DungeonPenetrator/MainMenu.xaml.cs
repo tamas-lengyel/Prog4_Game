@@ -7,6 +7,7 @@ namespace DungeonPenetrator
     using System;
     using System.Windows;
     using System.Windows.Media;
+    using Model;
     using Repository;
 
     /// <summary>
@@ -14,7 +15,8 @@ namespace DungeonPenetrator
     /// </summary>
     public partial class MainMenu : Window
     {
-        private SaveGameRepository sgRepo = new SaveGameRepository();
+        private AutoSaveGameRepository asgRepo = new AutoSaveGameRepository();
+
 
         // private MediaPlayer player = new MediaPlayer();
 
@@ -25,7 +27,7 @@ namespace DungeonPenetrator
         {
             this.InitializeComponent();
 
-            if (this.sgRepo.GetSaveGame() == null)
+            if (this.asgRepo.GetSaveGame() == null)
             {
                 this.newOrContinue.Content = "New Game";
             }
@@ -39,7 +41,7 @@ namespace DungeonPenetrator
 
         private void NewGameBtn_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow mw = new MainWindow();
+            MainWindow mw = new MainWindow(false, "auto");
             mw.Show();
             this.Close();
         }
@@ -71,6 +73,17 @@ namespace DungeonPenetrator
         {
             this.VideoPlayer.Position = TimeSpan.FromSeconds(0);
             this.VideoPlayer.Play();
+        }
+
+        private void LoadGameManually(object sender, RoutedEventArgs e)
+        {
+            LoadGameWindow load = new LoadGameWindow();
+            if (load.ShowDialog() == true)
+            {
+                MainWindow mw = new MainWindow(true, load.FilePath);
+                mw.Show();
+                this.Close();
+            }
         }
     }
 }

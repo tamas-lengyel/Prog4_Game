@@ -4,20 +4,31 @@
 
 namespace DungeonPenetrator
 {
+    using System;
+    using System.IO;
+    using System.Reflection;
     using System.Windows;
     using System.Windows.Input;
+    using Microsoft.Win32;
     using Model;
+    using Repository;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml.
     /// </summary>
     public partial class MainWindow : Window
     {
+        public bool AutoOrManual { get; set; }
+        public string LoadFilePath { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
         /// </summary>
-        public MainWindow()
+        public MainWindow(bool autoOrManual,string loadFilePath)
         {
+            this.AutoOrManual = autoOrManual;
+            this.LoadFilePath = loadFilePath;
+
             this.InitializeComponent();
 
             this.exitButton.Visibility = Visibility.Hidden;
@@ -41,6 +52,11 @@ namespace DungeonPenetrator
                 menu.Show();
                 this.Close();
             }
+        }
+
+        private void SaveGameClick(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

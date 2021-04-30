@@ -99,6 +99,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:DungeonPenetrator.LoadGameWindow">
+            <summary>
+            Interaction logic for LoadGameWindow.xaml
+            </summary>
+            <summary>
+            LoadGameWindow
+            </summary>
+        </member>
+        <member name="M:DungeonPenetrator.LoadGameWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:DungeonPenetrator.MainMenu">
             <summary>
             Interaction logic for MainMenu.xaml.
@@ -125,7 +138,7 @@
             MainWindow
             </summary>
         </member>
-        <member name="M:DungeonPenetrator.MainWindow.#ctor">
+        <member name="M:DungeonPenetrator.MainWindow.#ctor(System.Boolean,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:DungeonPenetrator.MainWindow"/> class.
             </summary>

@@ -4,6 +4,28 @@
         <name>Repository</name>
     </assembly>
     <members>
+        <member name="T:Repository.AutoSaveGameRepository">
+            <summary>
+            SaveGame repo, this manages the saves.
+            </summary>
+        </member>
+        <member name="M:Repository.AutoSaveGameRepository.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Repository.AutoSaveGameRepository"/> class.
+            </summary>
+        </member>
+        <member name="M:Repository.AutoSaveGameRepository.GetSaveGame">
+            <summary>
+            Gets a GameModel from a savegame.json file.
+            </summary>
+            <returns>A GameModel.</returns>
+        </member>
+        <member name="M:Repository.AutoSaveGameRepository.Insert(Model.GameModel)">
+            <summary>
+            Inserts a GameModel into the save file as json.
+            </summary>
+            <param name="entity">A GameModel type object.</param>
+        </member>
         <member name="T:Repository.HighscoreRepository">
             <summary>
             Highscore repo, this manages the highscores.
@@ -60,23 +82,18 @@
             </summary>
             <param name="entity">Generic type entity.</param>
         </member>
-        <member name="T:Repository.SaveGameRepository">
+        <member name="M:Repository.ManualSaveGameRepository.#ctor(System.String)">
             <summary>
-            SaveGame repo, this manages the saves.
+            Initializes a new instance of the <see cref="T:Repository.ManualSaveGameRepository"/> class.
             </summary>
         </member>
-        <member name="M:Repository.SaveGameRepository.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Repository.SaveGameRepository"/> class.
-            </summary>
-        </member>
-        <member name="M:Repository.SaveGameRepository.GetSaveGame">
+        <member name="M:Repository.ManualSaveGameRepository.GetSaveGame">
             <summary>
             Gets a GameModel from a savegame.json file.
             </summary>
             <returns>A GameModel.</returns>
         </member>
-        <member name="M:Repository.SaveGameRepository.Insert(Model.GameModel)">
+        <member name="M:Repository.ManualSaveGameRepository.Insert(Model.GameModel)">
             <summary>
             Inserts a GameModel into the save file as json.
             </summary>

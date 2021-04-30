@@ -52,6 +52,8 @@ namespace Logic
         public IGameModel Play()
         {
             this.gameModel = this.saveGameRepository.GetSaveGame();
+            AutoSaveGameRepository asgr = new AutoSaveGameRepository();
+            asgr.Insert(this.gameModel as GameModel);
             if (this.gameModel == null)
             {
                 this.GenerateMap();

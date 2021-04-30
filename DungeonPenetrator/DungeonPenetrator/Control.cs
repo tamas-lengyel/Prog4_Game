@@ -5,12 +5,15 @@
 namespace DungeonPenetrator
 {
     using System;
+    using System.IO;
+    using System.Reflection;
     using System.Timers;
     using System.Windows;
     using System.Windows.Input;
     using System.Windows.Media;
     using System.Windows.Threading;
     using Logic;
+    using Microsoft.Win32;
     using Model;
     using Renderer;
     using Repository;
@@ -59,13 +62,21 @@ namespace DungeonPenetrator
         private void Control_Loaded(object sender, RoutedEventArgs e)
         {
             this.model = new GameModel();
-            this.saveGameRepo = new SaveGameRepository();
             this.highscoreRepo = new HighscoreRepository();
+            Window win = Window.GetWindow(this);
+            if ((win as MainWindow).AutoOrManual)
+            {
+                this.saveGameRepo = new ManualSaveGameRepository((win as MainWindow).LoadFilePath);
+            }
+            else
+            {
+                this.saveGameRepo = new AutoSaveGameRepository();
+            }
+
             this.loadigLogic = new LoadingLogic(this.model, this.saveGameRepo, this.highscoreRepo);
             this.model = this.loadigLogic.Play();
             this.gameLogic = new GameLogic(this.model);
             this.renderer = new GameRenderer(this.model);
-            Window win = Window.GetWindow(this);
             if (win != null)
             {
                 win.KeyDown += this.Win_KeyDown;
@@ -77,7 +88,6 @@ namespace DungeonPenetrator
             this.updateTimer.Elapsed += new ElapsedEventHandler(this.UpdateScreen);
             this.updateTimer.Interval = 30;
             this.updateTimer.AutoReset = true;
-            this.updateTimer.Enabled = true;
             this.shootOnce = new DispatcherTimer();
             this.shootOnce.Interval = TimeSpan.FromMilliseconds(this.rnd.Next(1000, 2000));
             this.shootOnce.Tick += this.ShootingEnemies;
@@ -90,7 +100,14 @@ namespace DungeonPenetrator
             this.levelTimer = new DispatcherTimer();
             this.levelTimer.Interval = TimeSpan.FromMilliseconds(200);
             this.levelTimer.Tick += this.LevelTimer_Tick;
-            this.levelTimer.Start();
+
+            if (!this.model.GameIsPaused)
+            {
+                this.updateTimer.Enabled = true;
+                this.levelTimer.Start();
+            }
+
+            this.InvalidateVisual();
         }
 
         private void MoveBoss(object sender, EventArgs e)
@@ -319,6 +336,21 @@ namespace DungeonPenetrator
 
                     default:
                         break;
+                }
+            }
+
+            if (e.Key == Key.Return && this.model.GameIsPaused)
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                /*saveFileDialog.OverwritePrompt = true;
+                saveFileDialog.CreatePrompt = true;*/
+                saveFileDialog.Filter = "Json File (*.json)|*.json";
+                saveFileDialog.FileName = "*.json";
+                saveFileDialog.InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + $@"\Saves\";
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    ManualSaveGameRepository msgr = new ManualSaveGameRepository(saveFileDialog.FileName);
+                    msgr.Insert(this.model as GameModel);
                 }
             }
 
