@@ -104,9 +104,6 @@ namespace Logic
             projectile.Type = ProjectileType.Enemy;
             projectile.Damage = damage;
             projectile.Speed = speed;
-            projectile.Type = ProjectileType.Enemy;
-            projectile.Damage = damage;
-            projectile.Speed = speed;
             projectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
             projectile.Timer.Interval = TimeSpan.FromMilliseconds(20);
             projectile.Timer.Tick += new EventHandler((sender, e) => this.ProjectileTick(projectile));
@@ -121,9 +118,6 @@ namespace Logic
             Point playerLocationCord = new Point((this.gameModel.MyPlayer.Cords.X * GameModel.TileSize) + (GameModel.TileSize / 2), (this.gameModel.MyPlayer.Cords.Y * GameModel.TileSize) + (GameModel.TileSize / 2));
             Projectile projectile = new Projectile(enemLocationCord, playerLocationCord);
             projectile.Type = ProjectileType.Boss;
-            projectile.Damage = damage;
-            projectile.Speed = speed;
-            projectile.Type = ProjectileType.Enemy;
             projectile.Damage = damage;
             projectile.Speed = speed;
             projectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
