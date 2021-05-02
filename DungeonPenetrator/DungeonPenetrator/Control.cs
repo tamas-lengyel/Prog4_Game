@@ -341,6 +341,14 @@ namespace DungeonPenetrator
                 }
             }
 
+            if (e.Key == Key.Q && this.model.GameIsPaused)
+            {
+                Window win = Window.GetWindow(this);
+                MainMenu menu = new MainMenu();
+                menu.Show();
+                win.Close();
+            }
+
             if (e.Key == Key.Escape)
             {
                 this.model.GameIsPaused = !this.model.GameIsPaused;
