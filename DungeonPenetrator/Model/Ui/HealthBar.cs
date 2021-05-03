@@ -17,7 +17,7 @@ namespace Model.Ui
         /// <summary>
         /// Gets the HpBar Y coordinate.
         /// </summary>
-        public int HpBarY => 61;
+        public int HpBarY => 100;
 
         /// <summary>
         /// Gets the HpWidth.

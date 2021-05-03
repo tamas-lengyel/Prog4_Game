@@ -8,7 +8,7 @@
         Title="ControlsWindow" Height="1028" Width="1492"
         WindowStartupLocation="CenterScreen">
     <Window.Background>
-        <ImageBrush ImageSource="/Images/controls.png" />
+        <ImageBrush ImageSource="/Images/controls2.png" />
     </Window.Background>
     <Grid>
         <Button Content="Close" FontSize="40" FontFamily="Berlin Sans FB" Click="Button_Click" Margin="47,876,1205,55"/>

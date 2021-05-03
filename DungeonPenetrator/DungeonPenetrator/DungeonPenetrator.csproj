@@ -23,11 +23,11 @@
     <None Remove="Images\bluepotion.png" />
     <None Remove="Images\bossbullet.png" />
     <None Remove="Images\bullet3.png" />
-    <None Remove="Images\controls.png" />
+    <None Remove="Images\controls2.png" />
     <None Remove="Images\ct100big.png" />
     <None Remove="Images\goal.png" />
     <None Remove="Images\goallocked.png" />
-    <None Remove="Images\hoodghost.png" />
+    <None Remove="Images\hoodghost2.png" />
     <None Remove="Images\hoodtracker100100.png" />
     <None Remove="Images\lava.png" />
     <None Remove="Images\missle100.png" />
@@ -35,12 +35,15 @@
     <None Remove="Images\redpotion.png" />
     <None Remove="Images\rock100.png" />
     <None Remove="Images\rugoskes.mp4" />
-    <None Remove="Images\stopped.png" />
+    <None Remove="Images\stopped2.png" />
     <None Remove="Images\water2.png" />
     <None Remove="Images\yellowpotion.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Images\controls2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\rugoskes.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -58,18 +61,17 @@
     <EmbeddedResource Include="Images\bluepotion.png" />
     <EmbeddedResource Include="Images\bossbullet.png" />
     <EmbeddedResource Include="Images\bullet3.png" />
-    <Resource Include="Images\controls.png" />
+    <EmbeddedResource Include="Images\hoodghost2.png" />
+    <EmbeddedResource Include="Images\stopped2.png" />
     <EmbeddedResource Include="Images\ct100big.png" />
     <EmbeddedResource Include="Images\goal.png" />
     <EmbeddedResource Include="Images\goallocked.png" />
-    <EmbeddedResource Include="Images\hoodghost.png" />
     <EmbeddedResource Include="Images\hoodtracker100100.png" />
     <EmbeddedResource Include="Images\lava.png" />
     <EmbeddedResource Include="Images\missle100.png" />
     <EmbeddedResource Include="Images\piu2.wav" />
     <EmbeddedResource Include="Images\redpotion.png" />
     <EmbeddedResource Include="Images\rock100.png" />
-    <EmbeddedResource Include="Images\stopped.png" />
     <EmbeddedResource Include="Images\water2.png" />
     <EmbeddedResource Include="Images\yellowpotion.png" />
   </ItemGroup>
