@@ -339,7 +339,16 @@ namespace Renderer
             {
                 if (this.oldTrackingMonsters == null || !this.oldTrackingMonstersPosition.Contains(enemy.Cords))
                 {
-                    BitmapImage bmp = GetImage("hoodtracker100100.png");
+                    BitmapImage bmp;
+                    if (enemy.BeingDamagedByLava)
+                    {
+                        bmp = GetImage("hoodtracker100100onfire.png");
+                    }
+                    else
+                    {
+                        bmp = GetImage("hoodtracker100100.png");
+                    }
+
                     TransformedBitmap tb = new TransformedBitmap();
                     tb.BeginInit();
                     tb.Source = bmp;
@@ -553,8 +562,16 @@ namespace Renderer
             {
                 Point p = new Point(this.model.MousePosition.X - (this.model.MyPlayer.Cords.X * GameModel.TileSize), this.model.MousePosition.Y - (this.model.MyPlayer.Cords.Y * GameModel.TileSize));
                 double rotation = Math.Atan2(p.Y, p.X) * 180 / Math.PI;
+                BitmapImage bmp;
+                if (this.model.MyPlayer.BeingDamagedByLava)
+                {
+                    bmp = GetImage("100onfire.png");
+                }
+                else
+                {
+                    bmp = GetImage("100.png");
+                }
 
-                BitmapImage bmp = GetImage("100.png");
                 TransformedBitmap tb = new TransformedBitmap();
                 tb.BeginInit();
                 tb.Source = bmp;

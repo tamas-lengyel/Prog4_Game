@@ -198,7 +198,7 @@ namespace Logic
                             break;
 
                         case 'T':
-                            this.gameModel.TrackingMonsters.Add(new TrackingEnemy { Cords = new Point(x, y), Damage = 2, Health = 60 * ((int)(this.gameModel.LevelCounter / 10) + 1), CanAttack = true, });
+                            this.gameModel.TrackingMonsters.Add(new TrackingEnemy { Cords = new Point(x, y), Damage = 2, Health = 60 * ((int)(this.gameModel.LevelCounter / 10) + 1), CanAttack = true, BeingDamagedByLava = false });
                             break;
 
                         case 'S':
