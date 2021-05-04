@@ -38,5 +38,10 @@ namespace Model.Active
         /// Gets or sets a value indicating whether the enemy can attack.
         /// </summary>
         public bool CanAttack { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the enemy is being damaged by lava.
+        /// </summary>
+        public bool BeingDamagedByLava { get; set; }
     }
 }

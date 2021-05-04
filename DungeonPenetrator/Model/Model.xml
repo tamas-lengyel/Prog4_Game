@@ -179,6 +179,11 @@
             Gets or sets a value indicating whether the enemy can attack.
             </summary>
         </member>
+        <member name="P:Model.Active.TrackingEnemy.BeingDamagedByLava">
+            <summary>
+            Gets or sets a value indicating whether the enemy is being damaged by lava.
+            </summary>
+        </member>
         <member name="T:Model.ShootingEnemy">
             <summary>
             Shooting enemy class.

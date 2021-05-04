@@ -104,9 +104,6 @@ namespace Logic
             projectile.Type = ProjectileType.Enemy;
             projectile.Damage = damage;
             projectile.Speed = speed;
-            projectile.Type = ProjectileType.Enemy;
-            projectile.Damage = damage;
-            projectile.Speed = speed;
             projectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
             projectile.Timer.Interval = TimeSpan.FromMilliseconds(20);
             projectile.Timer.Tick += new EventHandler((sender, e) => this.ProjectileTick(projectile));
@@ -121,9 +118,6 @@ namespace Logic
             Point playerLocationCord = new Point((this.gameModel.MyPlayer.Cords.X * GameModel.TileSize) + (GameModel.TileSize / 2), (this.gameModel.MyPlayer.Cords.Y * GameModel.TileSize) + (GameModel.TileSize / 2));
             Projectile projectile = new Projectile(enemLocationCord, playerLocationCord);
             projectile.Type = ProjectileType.Boss;
-            projectile.Damage = damage;
-            projectile.Speed = speed;
-            projectile.Type = ProjectileType.Enemy;
             projectile.Damage = damage;
             projectile.Speed = speed;
             projectile.Timer = new DispatcherTimer(DispatcherPriority.Send);
@@ -362,6 +356,19 @@ namespace Logic
                             this.gameModel.LavaTickTimer.Start();
                         }
                     }
+
+                    foreach (var tracking in this.gameModel.TrackingMonsters)
+                    {
+                        if (tracking.IsCollision(item))
+                        {
+                            if (!tracking.BeingDamagedByLava)
+                            {
+                                this.DamageActiveGameObject(tracking, item.Damage);
+                                tracking.BeingDamagedByLava = true;
+                                this.gameModel.LavaTickTimer.Start();
+                            }
+                        }
+                    }
                 }
 
                 var flyings = this.gameModel.FlyingMonsters;
@@ -568,6 +575,11 @@ namespace Logic
             this.gameModel.LavaTickTimer.Tick += delegate
             {
                 this.gameModel.MyPlayer.BeingDamagedByLava = false;
+                foreach (var item in this.gameModel.TrackingMonsters)
+                {
+                    item.BeingDamagedByLava = false;
+                }
+
                 this.gameModel.LavaTickTimer.Stop();
             };
             this.gameModel.EnemyHitTickTimer = new DispatcherTimer();

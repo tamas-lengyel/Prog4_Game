@@ -117,14 +117,12 @@ namespace Renderer
         {
             if (!this.model.GameIsPaused)
             {
-                /*ImageDrawing drawing = new ImageDrawing(GetImage("stopped.png"), new Rect(1000, 1000, model.GameWidth, model.GameHeight));
-                oldPauseScreen = drawing;*/
                 return new ImageDrawing();
             }
 
             if (this.model.GameIsPaused)
             {
-                ImageDrawing drawing = new ImageDrawing(GetImage("stopped.png"), new Rect(0, 0, this.model.GameWidth, this.model.GameHeight));
+                ImageDrawing drawing = new ImageDrawing(GetImage("stopped2.png"), new Rect(0, 0, this.model.GameWidth, this.model.GameHeight));
                 this.oldPauseScreen = drawing;
             }
 
@@ -145,7 +143,7 @@ namespace Renderer
 
                 FormattedText text = new FormattedText(this.oldModelLvlCounter.ToString(), CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 30, Brushes.Black, 1);
                 text.TextAlignment = TextAlignment.Center;
-                Geometry geo = text.BuildGeometry(new Point(this.lvlCounter.LvlCounterX + (this.lvlCounter.LvlCounterWidth / 2), this.lvlCounter.LvlCounterY + (this.lvlCounter.LvlCounterHeight / 4.2)));
+                Geometry geo = text.BuildGeometry(new Point(this.lvlCounter.LvlCounterX + (this.lvlCounter.LvlCounterWidth / 2), this.lvlCounter.LvlCounterY + (this.lvlCounter.LvlCounterHeight / 3)));
                 GeometryDrawing textGeo = new GeometryDrawing(Brushes.Black, null, geo);
 
                 group.Children.Add(box);
@@ -339,7 +337,16 @@ namespace Renderer
             {
                 if (this.oldTrackingMonsters == null || !this.oldTrackingMonstersPosition.Contains(enemy.Cords))
                 {
-                    BitmapImage bmp = GetImage("hoodtracker100100.png");
+                    BitmapImage bmp;
+                    if (enemy.BeingDamagedByLava)
+                    {
+                        bmp = GetImage("hoodtracker100100onfire.png");
+                    }
+                    else
+                    {
+                        bmp = GetImage("hoodtracker100100.png");
+                    }
+
                     TransformedBitmap tb = new TransformedBitmap();
                     tb.BeginInit();
                     tb.Source = bmp;
@@ -480,7 +487,7 @@ namespace Renderer
             DrawingGroup g = new DrawingGroup();
             if (this.oldBoss == null || (this.model.Boss != null && this.oldBossPosition != this.model.Boss.Cords))
             {
-                ImageDrawing drawing = new ImageDrawing(GetImage("hoodghost.png"), new Rect((this.model.Boss.Cords.X * GameModel.TileSize) - ((GameModel.TileSize * 3) / 2), (this.model.Boss.Cords.Y * GameModel.TileSize) - ((GameModel.TileSize * 3) / 2), GameModel.TileSize * 3, GameModel.TileSize * 3));
+                ImageDrawing drawing = new ImageDrawing(GetImage("hoodghost2.png"), new Rect((this.model.Boss.Cords.X * GameModel.TileSize) - ((GameModel.TileSize * 3) / 2), (this.model.Boss.Cords.Y * GameModel.TileSize) - ((GameModel.TileSize * 3) / 2), GameModel.TileSize * 3, GameModel.TileSize * 3));
 
                 g.Children.Add(drawing);
 
@@ -553,8 +560,16 @@ namespace Renderer
             {
                 Point p = new Point(this.model.MousePosition.X - (this.model.MyPlayer.Cords.X * GameModel.TileSize), this.model.MousePosition.Y - (this.model.MyPlayer.Cords.Y * GameModel.TileSize));
                 double rotation = Math.Atan2(p.Y, p.X) * 180 / Math.PI;
+                BitmapImage bmp;
+                if (this.model.MyPlayer.BeingDamagedByLava)
+                {
+                    bmp = GetImage("100onfire.png");
+                }
+                else
+                {
+                    bmp = GetImage("100.png");
+                }
 
-                BitmapImage bmp = GetImage("100.png");
                 TransformedBitmap tb = new TransformedBitmap();
                 tb.BeginInit();
                 tb.Source = bmp;
