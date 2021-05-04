@@ -15,18 +15,21 @@
         <VisualBrush>
             <VisualBrush.Visual>
                 <StackPanel Background="White">
-                    <MediaElement Name="VideoPlayer" Source="Images/rugoskes.mp4" IsMuted="True" MediaEnded="MediaElement_MediaEnded" LoadedBehavior="Manual"></MediaElement>
+                    <MediaElement Name="VideoPlayer" Source="Images/dungeonpenetrator.mp4" MediaEnded="MediaElement_MediaEnded" LoadedBehavior="Manual"></MediaElement>
                 </StackPanel>
             </VisualBrush.Visual>
         </VisualBrush>
     </Window.Background>
 
-    <StackPanel Margin="10,10,1435,88">
+    <StackPanel Margin="10,10,1435,8">
         <Button FontFamily="Berlin Sans FB" Name="newGame" Height="100" Width="400" Margin="20" Click="NewGame_Click">New Game</Button>
         <Button FontFamily="Berlin Sans FB" Name="newOrContinue" Height="100" Width="400" Margin="20" Click="NewOrCountinue_Click"></Button>
         <Button FontFamily="Berlin Sans FB" Height="100" Width="400" Margin="20" Click="LoadGameManually">Load Game</Button>
         <Button FontFamily="Berlin Sans FB" Height="100" Width="400" Margin="20" Click="HighscoresBtn_Click">Highscores</Button>
         <Button FontFamily="Berlin Sans FB" Height="100" Width="400" Margin="20" Click="ControlsBtn_Click">Controls</Button>
         <Button FontFamily="Berlin Sans FB" Height="100" Width="400" Margin="20" Click="QuitGameBtn_Click">Quit Game</Button>
+        <Button FontFamily="Berlin Sans FB" Height="100" Width="100" Margin="70" HorizontalAlignment="Left" Click="Mute_Click">
+            <Image Name="muteImage" Source="Images/nomute.png"></Image>
+        </Button>
     </StackPanel>
 </Window>

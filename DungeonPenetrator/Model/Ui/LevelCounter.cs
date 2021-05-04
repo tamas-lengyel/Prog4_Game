@@ -27,6 +27,6 @@ namespace Model.Ui
         /// <summary>
         /// Gets the LvlCounterHeight.
         /// </summary>
-        public int LvlCounterHeight => 60;
+        public int LvlCounterHeight => 99;
     }
 }

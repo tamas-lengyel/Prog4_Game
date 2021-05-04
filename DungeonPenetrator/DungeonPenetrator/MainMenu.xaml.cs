@@ -5,8 +5,11 @@
 namespace DungeonPenetrator
 {
     using System;
+    using System.Drawing;
+    using System.Reflection;
     using System.Windows;
     using System.Windows.Media;
+    using System.Windows.Media.Imaging;
     using Model;
     using Repository;
 
@@ -16,6 +19,7 @@ namespace DungeonPenetrator
     public partial class MainMenu : Window
     {
         private AutoSaveGameRepository asgRepo = new AutoSaveGameRepository();
+        private bool mutedState;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainMenu"/> class.
@@ -102,6 +106,28 @@ namespace DungeonPenetrator
                 MainWindow mw = new MainWindow(false, "auto");
                 mw.Show();
                 this.Close();
+            }
+        }
+
+        private void Mute_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.mutedState == true)
+            {
+                this.VideoPlayer.IsMuted = false;
+                this.mutedState = false;
+
+                ImageSource vmi = new BitmapImage(new Uri(@"/Images/nomute.png", UriKind.Relative));
+
+                this.muteImage.Source = vmi;
+            }
+            else
+            {
+                this.VideoPlayer.IsMuted = true;
+                this.mutedState = true;
+
+                ImageSource vmi = new BitmapImage(new Uri(@"/Images/mute.png", UriKind.Relative));
+
+                this.muteImage.Source = vmi;
             }
         }
     }
