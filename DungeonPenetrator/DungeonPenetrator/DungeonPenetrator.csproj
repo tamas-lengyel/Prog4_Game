@@ -26,6 +26,7 @@
     <None Remove="Images\bullet3.png" />
     <None Remove="Images\controls2.png" />
     <None Remove="Images\ct100big.png" />
+    <None Remove="Images\dungeonpenetrator.mp4" />
     <None Remove="Images\goal.png" />
     <None Remove="Images\goallocked.png" />
     <None Remove="Images\hoodghost2.png" />
@@ -33,10 +34,11 @@
     <None Remove="Images\hoodtracker100100onfire.png" />
     <None Remove="Images\lava.png" />
     <None Remove="Images\missle100.png" />
+    <None Remove="Images\mute.png" />
+    <None Remove="Images\nomute.png" />
     <None Remove="Images\piu2.wav" />
     <None Remove="Images\redpotion.png" />
     <None Remove="Images\rock100.png" />
-    <None Remove="Images\rugoskes.mp4" />
     <None Remove="Images\stopped2.png" />
     <None Remove="Images\water2.png" />
     <None Remove="Images\yellowpotion.png" />
@@ -46,9 +48,15 @@
     <Content Include="Images\controls2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\rugoskes.mp4">
+    <Content Include="Images\dungeonpenetrator.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Images\mute.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\nomute.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
