@@ -127,32 +127,6 @@ namespace Logic
 
             if (this.gameModel.LevelCounter % 10 == 0)
             {
-                /*for (int y = 1; y <= gameModel.GameAreaChar.GetLength(1) - 2; y += 6)
-                {
-                    int[] EmptySpaceCords = GenerateEmptySpacesForRow();
-                    for (int x = 0; x < gameModel.GameAreaChar.GetLength(0); x++)
-                    {
-                        if (!EmptySpaceCords.Contains(x))
-                        {
-                            int randomProp = rnd.Next(0, 200);
-                            switch (randomProp)
-                            {
-                                case < 150:
-                                    gameModel.GameAreaChar[x, y] = 'W'; // Generates Wall
-                                    break;
-
-                                case > 150 and < 180:
-                                    gameModel.GameAreaChar[x, y] = 'P'; // Generates "Puddle" (Water)
-                                    break;
-
-                                case > 180 and < 200:
-                                    gameModel.GameAreaChar[x, y] = 'L'; // Generates Lava
-                                    break;
-                            }
-                        }
-                    }
-                }
-                GenerateCollectables();*/
                 this.gameModel.GameAreaChar[(int)((this.gameModel.GameWidth / GameModel.TileSize) / 2), (int)((this.gameModel.GameHeight / GameModel.TileSize) / 2)] = 'B';
             }
             else

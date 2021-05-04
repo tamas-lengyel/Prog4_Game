@@ -117,8 +117,6 @@ namespace Renderer
         {
             if (!this.model.GameIsPaused)
             {
-                /*ImageDrawing drawing = new ImageDrawing(GetImage("stopped.png"), new Rect(1000, 1000, model.GameWidth, model.GameHeight));
-                oldPauseScreen = drawing;*/
                 return new ImageDrawing();
             }
 
