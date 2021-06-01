@@ -9,3 +9,6 @@ A játékról a bemutató videót itt lehet megnézni:</p> (https://youtu.be/mNx
 
  - [Ács Péter](https://github.com/tsaskater)
  - [Lengyel Tamás](https://github.com/tamas-lengyel)
+
+
+*Prog4 verseny megosztott első helyezett.*
